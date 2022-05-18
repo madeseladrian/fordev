@@ -13,7 +13,7 @@
 6. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor (Internal Server Error - 500)
-7. Sistema retorna uma mensagem de erro inesperado
+7. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Credenciais inválidas (Unauthorized - 401)
 8. Sistema retorna uma mensagem de erro informando que as credenciais estão erradas
