@@ -45,4 +45,9 @@ void main() {
       body: {"email": params.email, "password": params.password}
     ));
   });
+
+  test('4 - Should return an Account if HttpClient returns 200', () async {
+    final account = await sut.authenticate(params);
+    expect(account.token, apiResult['accessToken']);
+  });
 }
