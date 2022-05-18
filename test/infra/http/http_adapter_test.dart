@@ -25,11 +25,13 @@ class HttpAdapter  {
     };
     var response = Response('', 500);
     try {
-      response = await client.post(
-        Uri.parse(url),
-        headers: headers,
-        body: body
-      );
+      if (method == 'post') {
+        response = await client.post(
+          Uri.parse(url),
+          headers: headers,
+          body: body
+        );
+      }
     } catch (error) {
       throw HttpError.serverError;
     }
@@ -166,6 +168,13 @@ void main() {
       mockPostError(); 
       final future = sut.request(url: url, method: 'post');
       expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
+  group('shared', () {
+    test('16 - Should throw ServerError if invalid method is provided', () {
+      final future = sut.request(url: url, method: 'invalid_method');
+      expect(() => future, throwsA(HttpError.serverError));
     });
   });
 }
