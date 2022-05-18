@@ -41,8 +41,10 @@ class HttpAdapter  {
       throw HttpError.badRequest;
     } else if (response.statusCode == 401) {
       throw HttpError.unauthorized;
-    } else {
+    } else if (response.statusCode == 403) {
       throw HttpError.forbidden;
+    } else {
+      throw HttpError.notFound;
     } 
   }
 }
@@ -133,5 +135,12 @@ void main() {
       final future = sut.request(url: url, method: 'post');
       expect(future, throwsA(HttpError.forbidden));
     });
+
+    test('12 - Should return NotFoundError if post returns 404', () async {
+      mockPost(404); 
+      final future = sut.request(url: url, method: 'post');
+      expect(future, throwsA(HttpError.notFound));
+    });
+
   });
 }
