@@ -11,7 +11,9 @@ class HttpAdapter  {
   HttpAdapter({required this.client});
 
   Future<void> request({
-    required String url
+    required String url,
+    required String method,
+    Map? body
   }) async {
     final headers = {
       'Content-Type': 'application/json',
@@ -19,7 +21,8 @@ class HttpAdapter  {
     };
     await client.post(
       Uri.parse(url),
-      headers: headers  
+      headers: headers,
+      body: body
     );
   }
 }
@@ -32,7 +35,8 @@ void main() {
   When mockPostCall() => when(() => 
     client.post(
       any(),
-      headers: any(named: 'headers')
+      headers: any(named: 'headers'),
+      body: any(named: 'body')
     ));
 
   void mockPost(int statusCode, {String body = '{"any_key":"any_value"}'}) => 
@@ -50,14 +54,15 @@ void main() {
   });
 
   group('post', () {
-    test('1,2 - Should call post with correct values', () async { 
-      sut.request(url: url);
+    test('1,2,3 - Should call post with correct values', () async { 
+      sut.request(url: url, method: 'post', body: {"any_key":"any_value"});
       verify(() => client.post(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
           'accept': 'application/json'
         },
+        body: {"any_key":"any_value"}
       ));
     });
   });
