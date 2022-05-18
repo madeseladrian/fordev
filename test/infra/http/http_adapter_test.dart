@@ -39,8 +39,10 @@ class HttpAdapter  {
       return null;
     } else if (response.statusCode == 400) {
       throw HttpError.badRequest;
-    } else {
+    } else if (response.statusCode == 401) {
       throw HttpError.unauthorized;
+    } else {
+      throw HttpError.forbidden;
     } 
   }
 }
@@ -124,6 +126,12 @@ void main() {
       mockPost(401); 
       final future = sut.request(url: url, method: 'post');
       expect(future, throwsA(HttpError.unauthorized));
+    });
+
+    test('11 - Should return ForbiddenError if post returns 403', () async {
+      mockPost(403); 
+      final future = sut.request(url: url, method: 'post');
+      expect(future, throwsA(HttpError.forbidden));
     });
   });
 }
