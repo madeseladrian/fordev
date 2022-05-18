@@ -149,5 +149,12 @@ void main() {
       final future = sut.request(url: url, method: 'post');
       expect(future, throwsA(HttpError.serverError));
     });
+
+    // Is an error different from the others
+    test('14 - Should return ServerError if post throws with 422', () async {
+      mockPost(422); 
+      final future = sut.request(url: url, method: 'post');
+      expect(future, throwsA(HttpError.serverError));
+    });
   });
 }
