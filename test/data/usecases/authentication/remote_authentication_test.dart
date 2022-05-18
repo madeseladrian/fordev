@@ -6,7 +6,8 @@ import 'package:fordev/domain/params/params.dart';
 
 abstract class HttpClient{
   Future<dynamic> request({
-    required String url
+    required String url,
+    required String method
   });
 }
 
@@ -19,7 +20,7 @@ class RemoteAuthentication {
   RemoteAuthentication({required this.url, required this.httpClient});
 
   Future<void> authenticate(AuthenticationParams params) async {
-    await httpClient.request(url: url);
+    await httpClient.request(url: url, method: 'post');
   }
 }
 
@@ -31,7 +32,8 @@ void main() {
   late AuthenticationParams params;
 
   When mockRequestCall() => when(() => httpClient.request(
-    url: any(named: 'url')
+    url: any(named: 'url'),
+    method: any(named: 'method')
   ));
 
   void mockRequest(dynamic data) => 
@@ -49,8 +51,11 @@ void main() {
     sut = RemoteAuthentication(url: url, httpClient: httpClient);
   });
  
-  test('1 - Should call HttpClient with correct url', () async {
+  test('1,2 - Should call HttpClient with correct values', () async {
     await sut.authenticate(params);
-    verify(() => httpClient.request(url: url));
+    verify(() => httpClient.request(
+      url: url,
+      method: 'post' 
+    ));
   });
 }
