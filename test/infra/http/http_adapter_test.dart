@@ -21,12 +21,22 @@ class HttpAdapter  {
       'Content-Type': 'application/json',
       'accept': 'application/json'
     };
-    final response =await client.post(
+
+    final response = await client.post(
       Uri.parse(url),
       headers: headers,
       body: body
     );
-    return response.body.isEmpty ? null : jsonDecode(response.body);
+
+    return _handleResponse(response);
+  }
+
+  Map? _handleResponse(Response response) {
+    if (response.statusCode == 200) {
+      return response.body.isEmpty ? null : jsonDecode(response.body);
+    } else {
+      return null;
+    } 
   }
 }
 
@@ -82,6 +92,12 @@ void main() {
 
     test('6 - Should return null if post returns 204', () async {
       mockPost(204, body: ''); 
+      final response = await sut.request(url: url, method: 'post');
+      expect(response, null);
+    });
+    
+    test('7 - Should return null if post returns 204 with data', () async {
+      mockPost(204); 
       final response = await sut.request(url: url, method: 'post');
       expect(response, null);
     });

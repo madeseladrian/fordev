@@ -7,7 +7,7 @@
 4. ✅ Ok - 200 e resposta com dados
 5. ✅ Ok - 200 e sem body
 6. ✅ No content - 204 e resposta sem dados
-7. No content - 204 e resposta com dados
+7. ✅ No content - 204 e resposta com dados
 
 > ## Erros
 8. Bad request - 400 with body
