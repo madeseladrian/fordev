@@ -26,7 +26,7 @@ class HttpAdapter  {
       headers: headers,
       body: body
     );
-    return jsonDecode(response.body);
+    return response.body.isEmpty ? null : jsonDecode(response.body);
   }
 }
 
@@ -72,6 +72,12 @@ void main() {
     test('4 - Should return data if post returns 200', () async { 
       final response = await sut.request(url: url, method: 'post');
       expect(response, {"any_key":"any_value"});
+    });
+
+    test('5 - Should return null if post returns 200 with no data', () async {
+      mockPost(200, body: ''); 
+      final response = await sut.request(url: url, method: 'post');
+      expect(response, null);
     });
   });
 }
