@@ -5,6 +5,8 @@ import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/data/http/http.dart';
+
 class ClientSpy extends Mock implements Client {}
 
 class HttpAdapter  {
@@ -21,7 +23,6 @@ class HttpAdapter  {
       'Content-Type': 'application/json',
       'accept': 'application/json'
     };
-
     final response = await client.post(
       Uri.parse(url),
       headers: headers,
@@ -34,8 +35,10 @@ class HttpAdapter  {
   Map? _handleResponse(Response response) {
     if (response.statusCode == 200) {
       return response.body.isEmpty ? null : jsonDecode(response.body);
-    } else {
+    } else if (response.statusCode == 204) {
       return null;
+    } else {
+      throw HttpError.badRequest;
     } 
   }
 }
@@ -100,6 +103,13 @@ void main() {
       mockPost(204); 
       final response = await sut.request(url: url, method: 'post');
       expect(response, null);
+    });
+
+    // Tests with body is not necessary, because it is the same as without body
+    test('8 - Should return BadRequestError if post returns 400 with body', () async {
+      mockPost(400, body: ''); 
+      final future = sut.request(url: url, method: 'post');
+      expect(future, throwsA(HttpError.badRequest));
     });
   });
 }
