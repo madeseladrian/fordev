@@ -11,7 +11,7 @@
 
 > ## Erros
 8. ✅ Bad request - 400 with body
-9. Bad request - 400
+9. ✅ Bad request - 400
 10. Unauthorized - 401
 11. Forbidden - 403
 12. Not found - 404
