@@ -18,6 +18,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  faker:  
+  mocktail:
+  test:
 
   flutter_lints: ^1.0.0
 
