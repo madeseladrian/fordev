@@ -4,30 +4,10 @@ import 'package:test/test.dart';
 
 import 'package:fordev/domain/params/params.dart';
 
-abstract class HttpClient{
-  Future<dynamic> request({
-    required String url,
-    required String method,
-    Map? body
-  });
-}
+import 'package:fordev/data/http/http.dart';
+import 'package:fordev/data/usecases/usecases.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {}
-
-class RemoteAuthentication {
-  final String url;
-  final HttpClient httpClient;
-
-  RemoteAuthentication({required this.url, required this.httpClient});
-
-  Future<void> authenticate(AuthenticationParams params) async {
-    final body = {
-      'email': params.email,
-      'password': params.password
-    };
-    await httpClient.request(url: url, method: 'post', body: body);
-  }
-}
 
 void main() {
   late String url;
