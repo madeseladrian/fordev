@@ -16,7 +16,7 @@
 7. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Credenciais inválidas (Unauthorized - 401)
-8. Sistema retorna uma mensagem de erro informando que as credenciais estão erradas
+8. ✅ Sistema retorna uma mensagem de erro informando que as credenciais estão erradas
 
 > ## Exceção - Resposta inválida (OK - 200)
 9. Sistema retorna uma mensagem de erro inesperado
