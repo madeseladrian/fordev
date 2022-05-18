@@ -10,7 +10,7 @@
 5. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - URL inválida (Not Found - 404)
-6. Sistema retorna uma mensagem de erro inesperado
+6. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor (Internal Server Error - 500)
 7. Sistema retorna uma mensagem de erro inesperado
