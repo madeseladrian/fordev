@@ -23,12 +23,17 @@ class HttpAdapter  {
       'Content-Type': 'application/json',
       'accept': 'application/json'
     };
-    final response = await client.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body
-    );
-
+    var response = Response('', 500);
+    try {
+      response = await client.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body
+      );
+    } catch (error) {
+      throw HttpError.serverError;
+    }
+    
     return _handleResponse(response);
   }
 
@@ -62,9 +67,9 @@ void main() {
       headers: any(named: 'headers'),
       body: any(named: 'body')
     ));
-
   void mockPost(int statusCode, {String body = '{"any_key":"any_value"}'}) => 
     mockPostCall().thenAnswer((_) async => Response(body, statusCode));
+  void mockPostError() => when(() => mockPostCall().thenThrow(Exception()));
 
   setUp(() {
     client = ClientSpy();
@@ -153,6 +158,12 @@ void main() {
     // Is an error different from the others
     test('14 - Should return ServerError if post throws with 422', () async {
       mockPost(422); 
+      final future = sut.request(url: url, method: 'post');
+      expect(future, throwsA(HttpError.serverError));
+    });
+
+    test('15 - Should return ServerError if post throws', () async {
+      mockPostError(); 
       final future = sut.request(url: url, method: 'post');
       expect(future, throwsA(HttpError.serverError));
     });
