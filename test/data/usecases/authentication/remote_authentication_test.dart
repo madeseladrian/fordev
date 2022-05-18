@@ -75,4 +75,10 @@ void main() {
     final future = sut.authenticate(params);
     expect(future, throwsA(DomainError.invalidCredentials));
   });
+  
+  test('9 - Should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {
+    mockRequest({'invalid_key': 'invalid_value'});
+    final future = sut.authenticate(params);
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }
