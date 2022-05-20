@@ -35,5 +35,14 @@ void main() {
       reason: 'When a TextFormField has only one text child, means it has no errors, ' 
       'since one of the childs is always the label text'  
     );
+
+    final passwordTextChildren = find.descendant(
+      of: find.bySemanticsLabel('Senha'),
+      matching: find.byType(Text),
+    );
+    expect(
+      passwordTextChildren, 
+      findsOneWidget,  
+    );
   });
 }
