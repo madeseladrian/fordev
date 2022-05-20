@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fordev/ui/helpers/errors/errors.dart';
 
+import '../../helpers/helpers.dart';
+import '../../components/components.dart';
 import 'login_presenter.dart';
 
 class LoginPage extends StatelessWidget {
@@ -13,6 +14,12 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Builder(
         builder: (context) {
+          presenter.isLoadingStream.listen((isLoading) {
+              if (isLoading == true) {
+                showLoading(context);
+              } 
+            });
+
           return GestureDetector(
             onTap: () {},
             child: SingleChildScrollView(
