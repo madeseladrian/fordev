@@ -245,4 +245,16 @@ void main() {
     await tester.pumpAndSettle();
     expect(Get.currentRoute, '/login');
   });
+  
+  testWidgets('22 - Should call gotoSignUp on link click', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    await tester.pump();
+    final button = find.text('Criar conta');
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+
+    verify(() => presenter.goToSignUp()).called(1);
+  });
 }

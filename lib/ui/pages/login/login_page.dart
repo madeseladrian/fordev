@@ -117,9 +117,9 @@ class LoginPage extends StatelessWidget {
                             }
                           ),
                           TextButton.icon(
-                            onPressed: (){},
+                            onPressed: presenter.goToSignUp,
                             icon: const Icon(Icons.person),
-                            label: const Text('Adicionar conta')
+                            label: const Text('Criar conta')
                           )
                         ],
                       ),
