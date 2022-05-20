@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../ui/pages/login/login.dart';
+import '../ui/pages/pages.dart';
 
 void main() {
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return LoginPage();
+    return const MaterialApp(
+      title: '4Dev',
+      debugShowCheckedModeBanner: false,
+      home: LoginPage(),
+    );
   }
 }
