@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import '../ui/components/components.dart';
 import '../ui/pages/pages.dart';
 
 void main() {
@@ -11,10 +13,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
+    return MaterialApp(
       title: '4Dev',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      theme: makeAppTheme(),
+      home: const LoginPage(),
     );
   }
 }
