@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart';
 
 import '../../helpers/helpers.dart';
 import '../../components/components.dart';
+import 'components/components.dart';
 import 'login_presenter.dart';
 
 class LoginPage extends StatelessWidget {
@@ -40,88 +42,26 @@ class LoginPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    height: 240,
-                    margin: const EdgeInsets.only(bottom: 32),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                          Theme.of(context).primaryColorLight,
-                          Theme.of(context).primaryColorDark
-                        ]
-                      ),
-                      boxShadow: const [
-                        BoxShadow(
-                          offset: Offset(0, 0),
-                          spreadRadius: 0,
-                          blurRadius: 4,
-                          color: Colors.black
-                        )
-                      ],
-                      borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(80))
-                    ),
-                    child: const Image(image: AssetImage('lib/ui/assets/logo.png')),
-                  ),
-                  Text(
-                    'LOGIN',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline1
-                  ),
+                children: [
+                  const LoginHeader(),
+                  const Headline1(),
                   Padding(
                     padding: const EdgeInsets.all(32),
-                    child: Form(
-                      child: Column(
-                        children: <Widget>[
-                          StreamBuilder<UIError?>(
-                            stream: presenter.emailErrorStream,
-                            builder: (context, snapshot) {
-                              return TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Email',
-                                  icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),
-                                  errorText: snapshot.data?.description
-                                ),
-                                keyboardType: TextInputType.emailAddress,
-                                onChanged: presenter.validateEmail,
-                              );
-                            }
-                          ),
-                          StreamBuilder<UIError?>(
-                            stream: presenter.passwordErrorStream,
-                            builder: (context, snapshot) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 8, bottom: 32),
-                                child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Senha',
-                                  icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
-                                  errorText: snapshot.data?.description
-                                ),
-                                obscureText: true,
-                                onChanged: presenter.validatePassword,
-                              ),
-                              );
-                            }
-                          ),
-                          StreamBuilder<bool>(
-                            stream: presenter.isFormValidStream,
-                            builder: (context, snapshot) {
-                              return ElevatedButton(
-                                onPressed: snapshot.data == true
-                                  ? presenter.authenticate : null,
-                                child: const Text('ENTRAR'),
-                              );
-                            }
-                          ),
-                          TextButton.icon(
-                            onPressed: presenter.goToSignUp,
-                            icon: const Icon(Icons.person),
-                            label: const Text('Criar conta')
-                          )
-                        ],
+                    child: ListenableProvider(
+                      create: (_) => presenter,
+                      child: Form(
+                        child: Column(
+                          children: [
+                            const EmailInput(),
+                            const PasswordInput(),
+                            const LoginButton(),
+                            TextButton.icon(
+                              onPressed: presenter.goToSignUp,
+                              icon: const Icon(Icons.person),
+                              label: const Text('Criar conta')
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   )
