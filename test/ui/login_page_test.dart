@@ -15,15 +15,18 @@ void main() {
   late LoginPresenter presenter;
   late StreamController<UIError?> emailErrorController;
   late StreamController<UIError?> passwordErrorController; 
+  late StreamController<bool> isFormValidController;
   
   Future<void> _testLoginPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
     emailErrorController = StreamController<UIError?>();
     passwordErrorController = StreamController<UIError?>();
+    isFormValidController = StreamController<bool>();
 
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
-
+    when(() => presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
+    
     final loginPage = GetMaterialApp(
       initialRoute: '/login',
       getPages: [
@@ -132,5 +135,15 @@ void main() {
       find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
       findsOneWidget
     );
+  });
+  
+  testWidgets('11 - Should enable button if form is valid', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pump();
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, isNotNull);
   });
 }
