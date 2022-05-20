@@ -26,7 +26,7 @@ void main() {
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
     when(() => presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
-    
+
     final loginPage = GetMaterialApp(
       initialRoute: '/login',
       getPages: [
@@ -145,5 +145,15 @@ void main() {
 
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, isNotNull);
+  });
+
+  testWidgets('12 - Should disable button if form is invalid', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    isFormValidController.add(false);
+    await tester.pump();
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, null);
   });
 }
