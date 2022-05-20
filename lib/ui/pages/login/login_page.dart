@@ -67,16 +67,22 @@ class LoginPage extends StatelessWidget {
                               );
                             }
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8, bottom: 32),
-                            child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Senha',
-                              icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
-                            ),
-                            obscureText: true,
-                            onChanged: presenter.validatePassword,
-                          ),
+                          StreamBuilder<UIError?>(
+                            stream: presenter.passwordErrorStream,
+                            builder: (context, snapshot) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8, bottom: 32),
+                                child: TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'Senha',
+                                  icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
+                                  errorText: snapshot.data?.description
+                                ),
+                                obscureText: true,
+                                onChanged: presenter.validatePassword,
+                              ),
+                              );
+                            }
                           ),
                           const ElevatedButton(
                             onPressed: null,

@@ -14,12 +14,15 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {}
 void main() {
   late LoginPresenter presenter;
   late StreamController<UIError?> emailErrorController;
+  late StreamController<UIError?> passwordErrorController; 
   
   Future<void> _testLoginPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
     emailErrorController = StreamController<UIError?>();
+    passwordErrorController = StreamController<UIError?>();
 
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
+    when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
 
     final loginPage = GetMaterialApp(
       initialRoute: '/login',
@@ -108,5 +111,14 @@ void main() {
       find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
       findsOneWidget
     );
+  });
+  
+  testWidgets('9 - Should present error if password is empty', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    passwordErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 }
