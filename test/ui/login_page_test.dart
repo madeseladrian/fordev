@@ -22,7 +22,7 @@ void main() {
     await tester.pumpWidget(loginPage);
   }
 
-  testWidgets('1 - Should load with correct initial state', (WidgetTester tester) async {
+  testWidgets('1,2,3 - Should load with correct initial state', (WidgetTester tester) async {
     await _testLoginPage(tester);
 
     final emailTextChildren = find.descendant(
@@ -44,5 +44,9 @@ void main() {
       passwordTextChildren, 
       findsOneWidget,  
     );
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, null);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }
