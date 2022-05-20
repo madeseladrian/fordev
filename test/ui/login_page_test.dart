@@ -1,18 +1,25 @@
+import 'dart:async';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
  
 class LoginPresenterSpy extends Mock implements LoginPresenter {}
 
 void main() {
   late LoginPresenter presenter;
+  late StreamController<UIError?> emailErrorController;
   
   Future<void> _testLoginPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
+    emailErrorController = StreamController<UIError?>();
+
+    when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
 
     final loginPage = GetMaterialApp(
       initialRoute: '/login',
@@ -22,6 +29,10 @@ void main() {
     );
     await tester.pumpWidget(loginPage);
   }
+
+  tearDown(() {
+    emailErrorController.close();
+  });
 
   testWidgets('1,2,3 - Should load with correct initial state', (WidgetTester tester) async {
     await _testLoginPage(tester);
@@ -65,5 +76,14 @@ void main() {
     final password = faker.internet.password();
     await tester.enterText(find.bySemanticsLabel('Senha'), password);
     verify(() => presenter.validatePassword(password));
+  });
+
+  testWidgets('6 - Should present error if email is invalid', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    emailErrorController.add(UIError.invalidField);
+    await tester.pump();
+
+    expect(find.text('Campo inválido'), findsOneWidget);
   });
 }
