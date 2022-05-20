@@ -16,7 +16,7 @@
 13.✅ Chamar o método de autenticar
 14.✅ Exibir loading no início da ação de login
 15.✅ Esconder loading no fim da ação de login
-16. Exibir mensagem de erro caso o login falhe
+16.✅ Exibir mensagem de erro caso o login falhe
 17. Exibir mensagem de erro caso o login apresente algum error inesperado
 18. Garantir que para qualquer rota selecionada, muda-se de página
 19. Ficar na mesma página, caso a rota esteja errada

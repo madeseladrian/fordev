@@ -15,12 +15,18 @@ class LoginPage extends StatelessWidget {
       body: Builder(
         builder: (context) {
           presenter.isLoadingStream.listen((isLoading) {
-              if (isLoading == true) {
-                showLoading(context);
-              } else {
-                hideLoading(context);
-              }
-            });
+            if (isLoading == true) {
+              showLoading(context);
+            } else {
+              hideLoading(context);
+            }
+          });
+
+          presenter.mainErrorStream.listen((error) {
+            if (error != null) {
+              showErrorMessage(context, error.description);
+            }
+          });
 
           return GestureDetector(
             onTap: () {},

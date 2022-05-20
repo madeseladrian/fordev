@@ -15,6 +15,7 @@ void main() {
   late LoginPresenter presenter;
   late StreamController<UIError?> emailErrorController;
   late StreamController<UIError?> passwordErrorController; 
+  late StreamController<UIError?> mainErrorController; 
   late StreamController<bool> isFormValidController;
   late StreamController<bool> isLoadingController; 
   
@@ -22,12 +23,14 @@ void main() {
     presenter = LoginPresenterSpy();
     emailErrorController = StreamController<UIError?>();
     passwordErrorController = StreamController<UIError?>();
+    mainErrorController = StreamController<UIError?>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
 
     when(() => presenter.authenticate()).thenAnswer((_) async => _);
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
+    when(() => presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
     when(() => presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
     when(() => presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
 
@@ -45,6 +48,7 @@ void main() {
     passwordErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
+    mainErrorController.close();
   });
 
   testWidgets('1,2,3 - Should load with correct initial state', (WidgetTester tester) async {
@@ -195,5 +199,14 @@ void main() {
     await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('16 - Should present error message if authentication fails', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    mainErrorController.add(UIError.invalidCredentials);
+    await tester.pump();
+
+    expect(find.text('Credenciais inválidas.'), findsOneWidget);
   });
 }
