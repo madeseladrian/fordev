@@ -10,7 +10,7 @@
 7. ✅ Mostrar mensagem de erro se o email for vazio
 8. ✅ Remover mensagem de erro se o email for válido
 9. ✅ Mostrar mensagem de erro se a senha for vazia
-10. Remover mensagem de erro se a senha for válida
+10.✅ Remover mensagem de erro se a senha for válida
 11. Habilitar o botão de fazer login se todos os campos forem válidos
 12. Desabilitar o botão de fazer login se algum campo for inválido
 13. Chamar o método de autenticar

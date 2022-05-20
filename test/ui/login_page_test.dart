@@ -121,4 +121,16 @@ void main() {
 
     expect(find.text('Campo obrigatório'), findsOneWidget);
   });
+
+  testWidgets('10 - Should present no error if password is valid', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    passwordErrorController.add(null);
+    await tester.pump();
+
+    expect(
+      find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
+      findsOneWidget
+    );
+  });
 }
