@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 import '../../helpers/helpers.dart';
 import '../../components/components.dart';
@@ -25,6 +26,12 @@ class LoginPage extends StatelessWidget {
           presenter.mainErrorStream.listen((error) {
             if (error != null) {
               showErrorMessage(context, error.description);
+            }
+          });
+
+          presenter.navigateToStream.listen((page) {
+            if (page != null && page.isNotEmpty) {
+              Get.toNamed(page);
             }
           });
 

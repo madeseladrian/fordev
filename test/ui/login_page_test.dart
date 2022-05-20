@@ -16,6 +16,7 @@ void main() {
   late StreamController<UIError?> emailErrorController;
   late StreamController<UIError?> passwordErrorController; 
   late StreamController<UIError?> mainErrorController; 
+  late StreamController<String?> navigateToController;
   late StreamController<bool> isFormValidController;
   late StreamController<bool> isLoadingController; 
   
@@ -24,6 +25,7 @@ void main() {
     emailErrorController = StreamController<UIError?>();
     passwordErrorController = StreamController<UIError?>();
     mainErrorController = StreamController<UIError?>();
+    navigateToController = StreamController<String?>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
 
@@ -31,6 +33,7 @@ void main() {
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
     when(() => presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
+    when(() => presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
     when(() => presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
     when(() => presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
 
@@ -38,6 +41,7 @@ void main() {
       initialRoute: '/login',
       getPages: [
         GetPage(name: '/login', page: () => LoginPage(presenter: presenter)),
+        GetPage(name: '/any_route', page: () => const Scaffold(body: Text('fake page')))
       ]  
     );
     await tester.pumpWidget(loginPage);
@@ -49,6 +53,7 @@ void main() {
     isFormValidController.close();
     isLoadingController.close();
     mainErrorController.close();
+    navigateToController.close();
   });
 
   testWidgets('1,2,3 - Should load with correct initial state', (WidgetTester tester) async {
@@ -217,5 +222,15 @@ void main() {
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+  });
+  
+  testWidgets('18 - Should change page', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    navigateToController.add('any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, 'any_route');
+    expect(find.text('fake page'), findsOneWidget);
   });
 }
