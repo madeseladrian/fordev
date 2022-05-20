@@ -1,7 +1,7 @@
 # Login Presenter
 
 > ## Regras
-1. Chamar Validation ao alterar o email
+1. ✅ Chamar Validation ao alterar o email
 2. Notificar o emailErrorStream com o mesmo erro do Validation, caso retorne 
 erro
 3. Não notificar o emailErrorStream se o valor for igual ao último
