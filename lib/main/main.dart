@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/route_manager.dart';
 
 import '../ui/components/components.dart';
-import '../ui/pages/pages.dart';
 
 void main() {
   runApp(const App());
@@ -15,11 +15,12 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
-    return MaterialApp(
+    return GetMaterialApp(
       title: '4Dev',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
-      home: const LoginPage(),
+      initialRoute: '/',
+      getPages: const []
     );
   }
 }

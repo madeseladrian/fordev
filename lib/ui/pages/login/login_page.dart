@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'login_presenter.dart';
+
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final LoginPresenter presenter;
+
+  const LoginPage({Key? key, required this.presenter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +69,9 @@ class LoginPage extends StatelessWidget {
                             obscureText: true
                           ),
                           ),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('ENTRAR'),
+                          const ElevatedButton(
+                            onPressed: null,
+                            child: Text('ENTRAR'),
                           ),
                           TextButton.icon(
                             onPressed: (){},
