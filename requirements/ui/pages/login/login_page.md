@@ -7,7 +7,7 @@
 4. ✅ Validar email quando o usuário digitar no campo
 5. ✅ Validar senha quando o usuário digitar no campo
 6. ✅ Mostrar mensagem de erro se o email for inválido
-7. Mostrar mensagem de erro se o email for vazio
+7. ✅ Mostrar mensagem de erro se o email for vazio
 8. Remover mensagem de erro se o email for válido
 9. Mostrar mensagem de erro se a senha for vazia
 10. Remover mensagem de erro se a senha for válida
