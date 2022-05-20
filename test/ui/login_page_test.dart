@@ -50,13 +50,20 @@ void main() {
     expect(button.onPressed, null);
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
-
   
-  testWidgets('2 - Should call validate with correct email', (WidgetTester tester) async {
+  testWidgets('4 - Should call validate with correct email', (WidgetTester tester) async {
     await _testLoginPage(tester);
 
     final email = faker.internet.email();
     await tester.enterText(find.bySemanticsLabel('Email'), email);
     verify(() => presenter.validateEmail(email));
+  });
+
+  testWidgets('5 - Should call validate with correct password', (WidgetTester tester) async {
+    await _testLoginPage(tester);
+
+    final password = faker.internet.password();
+    await tester.enterText(find.bySemanticsLabel('Senha'), password);
+    verify(() => presenter.validatePassword(password));
   });
 }

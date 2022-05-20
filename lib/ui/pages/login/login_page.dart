@@ -67,7 +67,8 @@ class LoginPage extends StatelessWidget {
                               labelText: 'Senha',
                               icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
                             ),
-                            obscureText: true
+                            obscureText: true,
+                            onChanged: presenter.validatePassword,
                           ),
                           ),
                           const ElevatedButton(
