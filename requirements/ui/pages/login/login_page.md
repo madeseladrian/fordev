@@ -4,7 +4,7 @@
 1. ✅ O campo email deve começar sem exibir mensagem de erro
 2. ✅ O campo senha deve começar sem exibir mensagem de erro
 3. ✅ O botão de fazer login deve começar desabilitado
-4. Validar email quando o usuário digitar no campo
+4. ✅ Validar email quando o usuário digitar no campo
 5. Validar senha quando o usuário digitar no campo
 6. Mostrar mensagem de erro se o email for inválido
 7. Mostrar mensagem de erro se o email for vazio

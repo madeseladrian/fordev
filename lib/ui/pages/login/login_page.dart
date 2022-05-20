@@ -58,6 +58,7 @@ class LoginPage extends StatelessWidget {
                               icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),
                             ),
                             keyboardType: TextInputType.emailAddress,
+                            onChanged: presenter.validateEmail,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 32),
