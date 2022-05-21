@@ -20,12 +20,14 @@ class GetxLoginPresenter extends GetxController {
   final _emailError = Rx<UIError?>(null);
   final _passwordError = Rx<UIError?>(null);
   final _mainError = Rx<UIError?>(null);
+  final _navigateTo = Rx<String?>(null);
   final _isFormValid = Rx<bool>(false);
   final _isLoading = Rx<bool>(false);
 
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
   Stream<UIError?> get mainErrorStream => _mainError.stream;
+  Stream<String?> get navigateToStream => _navigateTo.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
@@ -70,6 +72,7 @@ class GetxLoginPresenter extends GetxController {
         AuthenticationParams(email: _email, password: _password)
       );
       await saveCurrentAccount.save(account);
+      _navigateTo.value = '/surveys';
     } on DomainError catch(error) {
       switch (error) {
         case DomainError.invalidCredentials:

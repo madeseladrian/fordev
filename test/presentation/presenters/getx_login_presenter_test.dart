@@ -192,4 +192,13 @@ void main() {
 
     await sut.authenticate();
   });
+  
+  test('18 - Should change page on success authentication', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
+
+    await sut.authenticate();
+  });
 } 
