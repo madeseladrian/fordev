@@ -25,7 +25,7 @@ false no fim do Authentication
 InvalidCredentials 
 15.✅ Notificar o mainErrorStream caso o Authentication retorne erro: 
 UnexpectedError
-16. Gravar o Account no cache em caso de sucesso
+16.✅ Gravar o Account no cache em caso de sucesso
 17. Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
 18. Levar o usuário pra tela de Inicial em caso de sucesso
 19. Levar o usuário pra tela de Criar conta

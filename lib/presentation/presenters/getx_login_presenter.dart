@@ -12,6 +12,7 @@ import '../protocols/protocols.dart';
 class GetxLoginPresenter extends GetxController {
   final Authentication authentication;
   final Validation validation;
+  final SaveCurrentAccount saveCurrentAccount;
   
   String? _email;
   String? _password;
@@ -30,7 +31,8 @@ class GetxLoginPresenter extends GetxController {
 
   GetxLoginPresenter({
     required this.authentication,
-    required this.validation
+    required this.validation,
+    required this.saveCurrentAccount
   });
 
   UIError? _validateField({required String field, required String value}) {
@@ -64,9 +66,10 @@ class GetxLoginPresenter extends GetxController {
   Future<void> authenticate() async {
     try {
       _isLoading.value = true;
-      await authentication.authenticate(
+      final account = await authentication.authenticate(
         AuthenticationParams(email: _email, password: _password)
       );
+      await saveCurrentAccount.save(account);
     } on DomainError catch(error) {
       switch (error) {
         case DomainError.invalidCredentials:

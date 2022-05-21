@@ -13,17 +13,24 @@ import 'package:fordev/presentation/protocols/protocols.dart';
 
 import 'package:fordev/ui/helpers/helpers.dart';
 
-class ValidationSpy extends Mock implements Validation {}
 class AuthenticationSpy extends Mock implements Authentication {}
+class ValidationSpy extends Mock implements Validation {}
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 
 void main() {
   late String email;
   late String password;
   late AccountEntity accountEntity;
-  late ValidationSpy validation;
   late AuthenticationSpy authentication;
+  late ValidationSpy validation;
+  late SaveCurrentAccountSpy saveCurrentAccount;
   late GetxLoginPresenter sut;
  
+  When mockAuthenticationCall() => when(() => authentication.authenticate(any()));
+  void mockAuthentication(AccountEntity data) => 
+    mockAuthenticationCall().thenAnswer((_) async => data);
+  void mockAuthenticationError(DomainError error) => mockAuthenticationCall().thenThrow(error);
+    
   When mockValidationCall(String? field) => when(() => validation.validate(
     field: field ?? any(named: 'field'),
     value: any(named: 'value'),
@@ -31,12 +38,10 @@ void main() {
   void mockValidation({String? field}) => mockValidationCall(field).thenReturn(null);
   void mockValidationError({String? field, required ValidationError value}) => 
     mockValidationCall(field).thenReturn(value);
-    
-  When mockAuthenticationCall() => when(() => authentication.authenticate(any()));
-  void mockAuthentication(AccountEntity data) => 
-    mockAuthenticationCall().thenAnswer((_) async => data);
-  void mockAuthenticationError(DomainError error) => mockAuthenticationCall().thenThrow(error);
   
+  When mockSaveCall() => when(() => saveCurrentAccount.save(any()));
+  void mockSave() => mockSaveCall().thenAnswer((_) async => _);
+
   AccountEntity makeAccount() => AccountEntity(token: faker.guid.guid());
 
   AuthenticationParams makeAuthentication() => AuthenticationParams(
@@ -48,13 +53,16 @@ void main() {
     email = faker.internet.email();
     password = faker.internet.password();
     accountEntity = makeAccount();
-    validation = ValidationSpy();
-    mockValidation();
     authentication = AuthenticationSpy();
+    validation = ValidationSpy();
+    saveCurrentAccount = SaveCurrentAccountSpy();
     mockAuthentication(accountEntity);
+    mockValidation();
+    mockSave();
     sut = GetxLoginPresenter(
       authentication: authentication,
-      validation: validation 
+      validation: validation,
+      saveCurrentAccount: saveCurrentAccount
     );
   });
 
@@ -161,5 +169,14 @@ void main() {
       expect(error, UIError.unexpected)));
 
     await sut.authenticate();
+  });
+
+  test('16 - Should call SaveCurrentAccount with correct values', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    
+    await sut.authenticate();
+
+    verify(() => saveCurrentAccount.save(accountEntity)).called(1);
   });
 } 
