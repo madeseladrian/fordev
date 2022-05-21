@@ -12,6 +12,7 @@ class ValidationSpy extends Mock implements Validation {}
 
 void main() {
   late String email;
+  late String password;
   late ValidationSpy validation;
   late GetxLoginPresenter sut;
  
@@ -25,6 +26,7 @@ void main() {
     
   setUp(() {
     email = faker.internet.email();
+    password = faker.internet.password();
     validation = ValidationSpy();
     mockValidation();
     
@@ -55,5 +57,19 @@ void main() {
     
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('6 - Should call Validation with correct password', () async {
+    sut.validatePassword(password);
+    
+    verify(() => validation.validate(field: 'password', value: password)).called(1);
+  });
+
+  test('7 - Should requiredFieldError if password is null', () async {
+    mockValidationError(value: ValidationError.requiredField);
+   
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    
+    sut.validatePassword(password);
   });
 } 

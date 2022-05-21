@@ -12,9 +12,11 @@ class GetxLoginPresenter extends GetxController {
   String? _password;
 
   final _emailError = Rx<UIError?>(null);
+  final _passwordError = Rx<UIError?>(null);
   final _isFormValid = Rx<bool>(false);
 
   Stream<UIError?> get emailErrorStream => _emailError.stream;
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   GetxLoginPresenter({
@@ -25,6 +27,7 @@ class GetxLoginPresenter extends GetxController {
     final error = validation.validate(field: field, value: value);
     switch(error) {
       case ValidationError.invalidField: return UIError.invalidField;
+      case ValidationError.requiredField: return UIError.requiredField;
       default: return null;
     }
   }
@@ -39,5 +42,9 @@ class GetxLoginPresenter extends GetxController {
     _email = email;
     _emailError.value = _validateField(field: 'email', value: email);
     _validateForm();
+  }
+
+  void validatePassword(String password) {
+    _passwordError.value = _validateField(field: 'password', value: password);
   }
 }
