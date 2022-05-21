@@ -13,7 +13,7 @@ class RequiredFieldValidation {
   const RequiredFieldValidation(this.field);
  
   ValidationError? validate(String? value) {
-    return null;
+    return value?.isNotEmpty == true ? null : ValidationError.requiredField;
   }
 }
 
@@ -27,5 +27,10 @@ void main() {
   test('1 - Should return null if value is not empty', () async {
     final error = sut.validate('any_value');
     expect(error, null);
+  });
+
+  test('2 - Should return error if value is empty', () async {
+    final error = sut.validate('');
+    expect(error, ValidationError.requiredField);
   });
 }
