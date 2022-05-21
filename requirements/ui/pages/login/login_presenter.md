@@ -19,7 +19,7 @@ o isFormValidStream se o valor for igual ao último
 11.✅ Para o formulário estar válido todos os Streams de erro precisam estar null 
 e todos os campos obrigatórios não podem estar vazios
 12.✅ Chamar o Authentication com email e senha corretos
-13. Notificar o isLoadingStream como true antes de chamar o Authentication e 
+13.✅ Notificar o isLoadingStream como true antes de chamar o Authentication e 
 false no fim do Authentication
 14. Notificar o mainErrorStream caso o Authentication retorne erro: 
 InvalidCredentials 

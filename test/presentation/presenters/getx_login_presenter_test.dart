@@ -127,4 +127,13 @@ void main() {
       AuthenticationParams(email: email, password: password)
     )).called(1);
   });
+
+  test('13 - Should emit correct events on Authentication success', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    
+    expectLater(sut.isLoadingStream, emits(true));
+
+    await sut.authenticate();
+  });
 } 

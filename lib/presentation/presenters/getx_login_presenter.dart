@@ -18,10 +18,12 @@ class GetxLoginPresenter extends GetxController {
   final _emailError = Rx<UIError?>(null);
   final _passwordError = Rx<UIError?>(null);
   final _isFormValid = Rx<bool>(false);
+  final _isLoading = Rx<bool>(false);
 
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxLoginPresenter({
     required this.authentication,
@@ -57,6 +59,7 @@ class GetxLoginPresenter extends GetxController {
   }
 
   Future<void> authenticate() async {
+    _isLoading.value = true;
     await authentication.authenticate(
       AuthenticationParams(email: _email, password: _password)
     );
