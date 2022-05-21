@@ -1,3 +1,4 @@
+import 'package:fordev/domain/helpers/domain_error.dart';
 import 'package:get/get.dart';
 
 import '../../domain/params/params.dart';
@@ -17,11 +18,13 @@ class GetxLoginPresenter extends GetxController {
 
   final _emailError = Rx<UIError?>(null);
   final _passwordError = Rx<UIError?>(null);
+  final _mainError = Rx<UIError?>(null);
   final _isFormValid = Rx<bool>(false);
   final _isLoading = Rx<bool>(false);
 
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
+  Stream<UIError?> get mainErrorStream => _mainError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
@@ -59,9 +62,14 @@ class GetxLoginPresenter extends GetxController {
   }
 
   Future<void> authenticate() async {
-    _isLoading.value = true;
-    await authentication.authenticate(
-      AuthenticationParams(email: _email, password: _password)
-    );
+    try {
+      _isLoading.value = true;
+      await authentication.authenticate(
+        AuthenticationParams(email: _email, password: _password)
+      );
+    } on DomainError {
+      _mainError.value = UIError.invalidCredentials;
+      _isLoading.value = false;
+    }
   }
 }

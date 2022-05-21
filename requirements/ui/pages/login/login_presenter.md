@@ -21,7 +21,7 @@ e todos os campos obrigatórios não podem estar vazios
 12.✅ Chamar o Authentication com email e senha corretos
 13.✅ Notificar o isLoadingStream como true antes de chamar o Authentication e 
 false no fim do Authentication
-14. Notificar o mainErrorStream caso o Authentication retorne erro: 
+14.✅ Notificar o mainErrorStream caso o Authentication retorne erro: 
 InvalidCredentials 
 15. Notificar o mainErrorStream caso o Authentication retorne erro: 
 UnexpectedError
