@@ -33,7 +33,8 @@ class GetxLoginPresenter extends GetxController {
   }
 
   void _validateForm() {
-    _isFormValid.value = _emailError.value == null 
+    _isFormValid.value = _emailError.value == null
+      && _passwordError.value == null 
       && _email != null
       && _password != null;
   }
@@ -45,6 +46,8 @@ class GetxLoginPresenter extends GetxController {
   }
 
   void validatePassword(String password) {
+    _password = password;
     _passwordError.value = _validateField(field: 'password', value: password);
+    _validateForm();
   }
 }

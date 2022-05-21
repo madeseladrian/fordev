@@ -65,11 +65,12 @@ void main() {
     verify(() => validation.validate(field: 'password', value: password)).called(1);
   });
 
-  test('7,8,9 - Should requiredFieldError if password is null', () async {
+  test('7,8,9,10 - Should returns requiredFieldError if password is null', () async {
     mockValidationError(value: ValidationError.requiredField);
    
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
-    
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
     sut.validatePassword(password);
     sut.validatePassword(password);
   });
