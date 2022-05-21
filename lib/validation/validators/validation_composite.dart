@@ -9,6 +9,13 @@ class ValidationComposite implements Validation{
 
   @override
   ValidationError? validate({required String field, required String value}) {
-    return null;
+    ValidationError? error;
+    for (final validation in validations.where((v) => v.field == field)) {
+      error = validation.validate(value);
+      if (error != null) {
+        return error;
+      }
+    }
+    return error;
   } 
 }

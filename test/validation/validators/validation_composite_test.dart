@@ -37,4 +37,13 @@ void main() {
     expect(error, null);
   });
 
+  test('2 - Should return the first error', () async {
+    mockValidation1(ValidationError.invalidField);
+    mockValidation2(ValidationError.requiredField);
+    mockValidation3(ValidationError.invalidField);
+
+    final error = sut.validate(field: 'any_field', value: 'any_value');
+
+    expect(error, ValidationError.requiredField);
+  });
 }
