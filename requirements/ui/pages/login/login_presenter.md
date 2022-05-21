@@ -28,5 +28,4 @@ UnexpectedError
 16.✅ Gravar o Account no cache em caso de sucesso
 17.✅ Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
 18.✅ Levar o usuário pra tela de Inicial em caso de sucesso
-19. Levar o usuário pra tela de Criar conta
-20. Levar o usuário pra tela de Criar conta várias vezes seguidas
+19.✅ Levar o usuário pra tela de Criar conta
