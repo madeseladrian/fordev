@@ -67,8 +67,12 @@ class GetxLoginPresenter extends GetxController {
       await authentication.authenticate(
         AuthenticationParams(email: _email, password: _password)
       );
-    } on DomainError {
-      _mainError.value = UIError.invalidCredentials;
+    } on DomainError catch(error) {
+      switch (error) {
+        case DomainError.invalidCredentials:
+          _mainError.value = UIError.invalidCredentials; break;
+        default: _mainError.value = UIError.unexpected;
+      }
       _isLoading.value = false;
     }
   }

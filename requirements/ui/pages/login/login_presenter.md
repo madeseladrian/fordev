@@ -23,7 +23,7 @@ e todos os campos obrigatórios não podem estar vazios
 false no fim do Authentication
 14.✅ Notificar o mainErrorStream caso o Authentication retorne erro: 
 InvalidCredentials 
-15. Notificar o mainErrorStream caso o Authentication retorne erro: 
+15.✅ Notificar o mainErrorStream caso o Authentication retorne erro: 
 UnexpectedError
 16. Gravar o Account no cache em caso de sucesso
 17. Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
