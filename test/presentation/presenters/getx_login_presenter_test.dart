@@ -39,10 +39,11 @@ void main() {
     verify(() => validation.validate(field: 'email', value: email)).called(1);
   });
 
-  test('2,3 - Should requiredFieldError if email is empty', () async {
+  test('2,3,4 - Should requiredFieldError if email is empty', () async {
     mockValidationError(value: ValidationError.invalidField);
    
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
     
     sut.validateEmail(email);
     sut.validateEmail(email);
