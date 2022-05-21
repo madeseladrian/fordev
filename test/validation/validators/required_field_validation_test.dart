@@ -1,21 +1,7 @@
 import 'package:test/test.dart';
 
 import 'package:fordev/presentation/helpers/helpers.dart';
-
-abstract class FieldValidation {
-  String get field;
-  ValidationError? validate(String value);
-}
-
-class RequiredFieldValidation {
-  final String field;
- 
-  const RequiredFieldValidation(this.field);
- 
-  ValidationError? validate(String? value) {
-    return value?.isNotEmpty == true ? null : ValidationError.requiredField;
-  }
-}
+import 'package:fordev/validation/validators/validators.dart';
 
 void main() {
   late RequiredFieldValidation sut;
