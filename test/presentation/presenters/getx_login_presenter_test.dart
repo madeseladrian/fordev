@@ -2,6 +2,10 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/params/params.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
+
 import 'package:fordev/presentation/helpers/helpers.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
 import 'package:fordev/presentation/protocols/protocols.dart';
@@ -9,11 +13,14 @@ import 'package:fordev/presentation/protocols/protocols.dart';
 import 'package:fordev/ui/helpers/helpers.dart';
 
 class ValidationSpy extends Mock implements Validation {}
+class AuthenticationSpy extends Mock implements Authentication {}
 
 void main() {
   late String email;
   late String password;
+  late AccountEntity accountEntity;
   late ValidationSpy validation;
+  late AuthenticationSpy authentication;
   late GetxLoginPresenter sut;
  
   When mockValidationCall(String? field) => when(() => validation.validate(
@@ -24,15 +31,34 @@ void main() {
   void mockValidationError({String? field, required ValidationError value}) => 
     mockValidationCall(field).thenReturn(value);
     
+  When mockAuthenticationCall() => when(() => authentication.authenticate(any()));
+  void mockAuthentication(AccountEntity data) => 
+    mockAuthenticationCall().thenAnswer((_) async => data);
+  
+  AccountEntity makeAccount() => AccountEntity(token: faker.guid.guid());
+
+  AuthenticationParams makeAuthentication() => AuthenticationParams(
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  );
+
   setUp(() {
     email = faker.internet.email();
     password = faker.internet.password();
+    accountEntity = makeAccount();
     validation = ValidationSpy();
     mockValidation();
-    
+    authentication = AuthenticationSpy();
+    mockAuthentication(accountEntity);
     sut = GetxLoginPresenter(
+      authentication: authentication,
       validation: validation 
     );
+  });
+
+  setUpAll(() {
+    registerFallbackValue(makeAccount());
+    registerFallbackValue(makeAuthentication());
   });
 
   test('1 - Should call Validation with correct email', () async {
@@ -89,5 +115,16 @@ void main() {
 
     sut.validateEmail(email);
     sut.validatePassword(password);
+  });
+
+  test('12 - Should call Authentication with correct values', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    
+    await sut.authenticate();
+
+    verify(() => authentication.authenticate(
+      AuthenticationParams(email: email, password: password)
+    )).called(1);
   });
 } 

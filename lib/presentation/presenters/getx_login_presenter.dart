@@ -1,11 +1,15 @@
 import 'package:get/get.dart';
 
+import '../../domain/params/params.dart';
+import '../../domain/usecases/usecases.dart';
+
 import '../../ui/helpers/helpers.dart';
 
 import '../helpers/helpers.dart';
 import '../protocols/protocols.dart';
 
 class GetxLoginPresenter extends GetxController {
+  final Authentication authentication;
   final Validation validation;
   
   String? _email;
@@ -20,7 +24,8 @@ class GetxLoginPresenter extends GetxController {
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   GetxLoginPresenter({
-    required this.validation,
+    required this.authentication,
+    required this.validation
   });
 
   UIError? _validateField({required String field, required String value}) {
@@ -49,5 +54,11 @@ class GetxLoginPresenter extends GetxController {
     _password = password;
     _passwordError.value = _validateField(field: 'password', value: password);
     _validateForm();
+  }
+
+  Future<void> authenticate() async {
+    await authentication.authenticate(
+      AuthenticationParams(email: _email, password: _password)
+    );
   }
 }
