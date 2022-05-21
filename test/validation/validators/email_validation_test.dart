@@ -13,4 +13,10 @@ void main() {
     final error = sut.validate('');
     expect(error, null);
   });
+
+  test('2 - Should return null if email is null', () async {
+    final error = sut.validate(null);
+    expect(error, null);
+  });
+ 
 }
