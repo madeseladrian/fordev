@@ -5,11 +5,12 @@ import '../../domain/params/params.dart';
 import '../../domain/usecases/usecases.dart';
 
 import '../../ui/helpers/helpers.dart';
+import '../../ui/pages/pages.dart';
 
 import '../helpers/helpers.dart';
 import '../protocols/protocols.dart';
 
-class GetxLoginPresenter extends GetxController {
+class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Authentication authentication;
   final Validation validation;
   final SaveCurrentAccount saveCurrentAccount;
@@ -24,11 +25,17 @@ class GetxLoginPresenter extends GetxController {
   final _isFormValid = Rx<bool>(false);
   final _isLoading = Rx<bool>(false);
 
+  @override
   Stream<UIError?> get emailErrorStream => _emailError.stream;
+  @override
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
+  @override
   Stream<UIError?> get mainErrorStream => _mainError.stream;
+  @override
   Stream<String?> get navigateToStream => _navigateTo.stream;
+  @override
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  @override
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxLoginPresenter({
@@ -53,18 +60,21 @@ class GetxLoginPresenter extends GetxController {
       && _password != null;
   }
 
+  @override
   void validateEmail(String email) {
     _email = email;
     _emailError.value = _validateField(field: 'email', value: email);
     _validateForm();
   }
 
+  @override
   void validatePassword(String password) {
     _password = password;
     _passwordError.value = _validateField(field: 'password', value: password);
     _validateForm();
   }
 
+  @override
   Future<void> authenticate() async {
     try {
       _isLoading.value = true;
@@ -83,6 +93,7 @@ class GetxLoginPresenter extends GetxController {
     }
   }
 
+  @override
   void goToSignUp() {
     _navigateTo.value = '/signup';
   }
