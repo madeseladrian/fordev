@@ -41,6 +41,7 @@ void main() {
   
   When mockSaveCall() => when(() => saveCurrentAccount.save(any()));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
+  void mockSaveError() => mockSaveCall().thenThrow(DomainError.unexpected);
 
   AccountEntity makeAccount() => AccountEntity(token: faker.guid.guid());
 
@@ -178,5 +179,17 @@ void main() {
     await sut.authenticate();
 
     verify(() => saveCurrentAccount.save(accountEntity)).called(1);
+  });
+
+  test('17 - Should emit UnexpectedError if SaveCurrentAccount fails', () async {
+    mockSaveError();
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream.listen(expectAsync1((error) => 
+      expect(error, UIError.unexpected)));
+
+    await sut.authenticate();
   });
 } 
