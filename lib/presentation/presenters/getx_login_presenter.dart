@@ -8,6 +8,9 @@ import '../protocols/protocols.dart';
 class GetxLoginPresenter extends GetxController {
   final Validation validation;
   
+  String? _email;
+  String? _password;
+
   final _emailError = Rx<UIError?>(null);
   final _isFormValid = Rx<bool>(false);
 
@@ -27,10 +30,13 @@ class GetxLoginPresenter extends GetxController {
   }
 
   void _validateForm() {
-    _isFormValid.value = _emailError.value == null;
+    _isFormValid.value = _emailError.value == null 
+      && _email != null
+      && _password != null;
   }
 
   void validateEmail(String email) {
+    _email = email;
     _emailError.value = _validateField(field: 'email', value: email);
     _validateForm();
   }
