@@ -33,4 +33,9 @@ void main() {
     final error = sut.validate('');
     expect(error, ValidationError.requiredField);
   });
+
+  test('3 - Should return error if value is null', () async {
+    final error = sut.validate(null);
+    expect(error, ValidationError.requiredField);
+  });
 }
