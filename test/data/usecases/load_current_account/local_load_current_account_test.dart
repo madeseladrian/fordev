@@ -17,6 +17,7 @@ class LocalLoadCurrentAccount {
   Future<AccountEntity> load() async {
     try {
       final token = await fetchSecureCacheStorage.fetchSecure('token');
+      if (token == null) throw Error();
       return AccountEntity(token: token);
     } catch (error) {
       throw DomainError.unexpected;
@@ -54,6 +55,12 @@ void main() {
 
   test('3 - Should throw UnexpectedError if FetchSecureCacheStorage throws', () async {
     mockFetchError();
+    final future = sut.load();
+    expect(future, throwsA(DomainError.unexpected));
+  });
+  
+  test('4 - Should throw UnexpectedError if FetchSecureCacheStorage returns null', () async {
+    mockFetch(null);
     final future = sut.load();
     expect(future, throwsA(DomainError.unexpected));
   });

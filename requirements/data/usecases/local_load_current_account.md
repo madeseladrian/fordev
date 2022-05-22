@@ -6,4 +6,4 @@
 
 > ## Exceção - Falha ao carregar dados do cache
 3. ✅ Sistema retorna uma mensagem de erro inesperado
-4. Sistema retorna uma mensagem de erro caso o token seja nulo
+4. ✅ Sistema retorna uma mensagem de erro caso o token seja nulo
