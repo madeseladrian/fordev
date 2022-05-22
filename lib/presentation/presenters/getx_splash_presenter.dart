@@ -12,7 +12,11 @@ class GetxSplashPresenter {
   Stream<String?> get navigateToStream => _navigateTo.stream;
 
   Future<void> checkAccount() async {
-    await loadCurrentAccount.load();
-    _navigateTo.value = '/surveys';
+    try {
+      await loadCurrentAccount.load();
+      _navigateTo.value = '/surveys';
+    } catch (error) {
+      _navigateTo.value = '/login';
+    }
   }
 }

@@ -17,7 +17,8 @@ void main() {
   When mockLoadCall() => when(() => loadCurrentAccount.load());
   void mockLoad({required AccountEntity account}) => 
     mockLoadCall().thenAnswer((_) async => account);
-  
+  void mockLoadError() => mockLoadCall().thenThrow(Exception());
+
   AccountEntity makeAccount() => AccountEntity(token: faker.guid.guid());
 
   setUp(() {
@@ -38,6 +39,14 @@ void main() {
 
   test('2 - Should go to initial page on success', () async {
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
+
+    await sut.checkAccount();
+  });
+
+   test('3,4 - Should go to login page on error', () async {
+    mockLoadError();
+  
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 
     await sut.checkAccount();
   });
