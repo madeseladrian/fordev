@@ -18,11 +18,15 @@ void main() {
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
   void mockSaveError() => when(() => mockSaveCall().thenThrow(Exception()));
   
+  When mockFetchCall() => when(() => secureStorage.read(key: any(named: 'key')));
+  void mockFetch(String? data) => mockFetchCall().thenAnswer((_) async => data);
+
   setUp(() {
     key = faker.lorem.word();
     value = faker.guid.guid();
     secureStorage = FlutterSecureStorageSpy();
     mockSave();
+    mockFetch(key);
     sut = LocalStorageAdapter(secureStorage: secureStorage);
   });
 
@@ -36,6 +40,13 @@ void main() {
       mockSaveError();
       final future = sut.saveSecure(key: key, value: value);
       expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
+  });
+
+  group('fetchSecure', () {
+    test('1 - Should call save secure with correct value', () async {
+      await sut.fetchSecure(key);
+      verify(() => secureStorage.read(key: key));
     });
   });
 }
