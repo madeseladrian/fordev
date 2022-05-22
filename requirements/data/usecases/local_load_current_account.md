@@ -5,5 +5,5 @@
 2. ✅ Sistema retorna os dados da conta do usuário
 
 > ## Exceção - Falha ao carregar dados do cache
-3. Sistema retorna uma mensagem de erro inesperado
+3. ✅ Sistema retorna uma mensagem de erro inesperado
 4. Sistema retorna uma mensagem de erro caso o token seja nulo
