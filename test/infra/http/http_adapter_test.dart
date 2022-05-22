@@ -40,10 +40,10 @@ void main() {
       verify(() => client.post(
         Uri.parse(url),
         headers: {
-          'Content-Type': 'application/json',
+          'content-type': 'application/json',
           'accept': 'application/json'
         },
-        body: {"any_key":"any_value"}
+        body: '{"any_key":"any_value"}'
       ));
     });
 

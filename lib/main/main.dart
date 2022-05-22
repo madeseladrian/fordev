@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
 
 import '../ui/components/components.dart';
+import 'factories/factories.dart';
 
 void main() {
   runApp(const App());
@@ -19,8 +20,12 @@ class App extends StatelessWidget {
       title: '4Dev',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
-      initialRoute: '/',
-      getPages: const []
+      initialRoute: '/login',
+      getPages: [
+        GetPage(name: '/login', page: makeLoginPage),
+        GetPage(name: '/surveys', page: () => const Scaffold(body: Center(child: Text('Pesquisa')))),
+        GetPage(name: '/singup', page: () => const Scaffold(body: Center(child: Text('Pesquisa')))),
+      ]
     );
   }
 }
