@@ -35,4 +35,10 @@ void main() {
     await sut.checkAccount();
     verify(() => loadCurrentAccount.load()).called(1);
   });
+
+  test('2 - Should go to initial page on success', () async {
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
+
+    await sut.checkAccount();
+  });
 }
