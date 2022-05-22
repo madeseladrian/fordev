@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 
 import 'package:fordev/data/cache/cache.dart';
 import 'package:fordev/data/usecases/usecases.dart';
@@ -16,6 +17,7 @@ void main() {
 
   When mockSaveCall() => when(() => saveSecureCacheStorage.saveSecure(key: any(named: 'key'), value: any(named: 'value')));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
+  void mockSaveError() => mockSaveCall().thenThrow(Exception());
 
   setUp(() {
     saveSecureCacheStorage = SaveSecureCacheStorageSpy();
@@ -29,5 +31,11 @@ void main() {
     verify(() => saveSecureCacheStorage.saveSecure(
       key: 'token', value: account.token
     ));
+  });
+
+  test('2 - Should throw UnexpectedError if SaveSecureCacheStorage throws', () async {
+    mockSaveError();
+    final future = sut.save(account);
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
