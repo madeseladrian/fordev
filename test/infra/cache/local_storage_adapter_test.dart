@@ -16,7 +16,8 @@ void main() {
   When mockSaveCall() => when(() => 
     secureStorage.write(key: any(named: 'key'), value: any(named: 'value')));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
-
+  void mockSaveError() => when(() => mockSaveCall().thenThrow(Exception()));
+  
   setUp(() {
     key = faker.lorem.word();
     value = faker.guid.guid();
@@ -29,6 +30,12 @@ void main() {
     test('1 - Should call save secure with correct values', () async {
       await sut.saveSecure(key: key, value: value);
       verify(() => secureStorage.write(key: key, value: value));
+    });
+
+    test('2 - Should throw if save secure throws', () async {
+      mockSaveError();
+      final future = sut.saveSecure(key: key, value: value);
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 }
