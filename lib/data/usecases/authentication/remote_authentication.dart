@@ -1,11 +1,11 @@
-import '../../domain/entities/entities.dart';
-import '../../domain/helpers/helpers.dart';
-import '../../domain/params/params.dart';
-import '../../domain/usecases/usecases.dart';
+import '../../../domain/entities/entities.dart';
+import '../../../domain/helpers/helpers.dart';
+import '../../../domain/params/params.dart';
+import '../../../domain/usecases/usecases.dart';
 
-import '../http/http.dart';
-import '../models/models.dart';
-import '../params/params.dart';
+import '../../http/http.dart';
+import '../../models/models.dart';
+import '../../params/params.dart';
 
 class RemoteAuthentication implements Authentication {
   final String url;

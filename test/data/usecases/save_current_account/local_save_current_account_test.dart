@@ -1,0 +1,33 @@
+import 'package:faker/faker.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
+
+import 'package:fordev/domain/entities/entities.dart';
+
+import 'package:fordev/data/cache/cache.dart';
+import 'package:fordev/data/usecases/usecases.dart';
+
+class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {}
+
+void main() {
+  late SaveSecureCacheStorageSpy saveSecureCacheStorage;
+  late LocalSaveCurrentAccount sut;
+  late AccountEntity account;
+
+  When mockSaveCall() => when(() => saveSecureCacheStorage.saveSecure(key: any(named: 'key'), value: any(named: 'value')));
+  void mockSave() => mockSaveCall().thenAnswer((_) async => _);
+
+  setUp(() {
+    saveSecureCacheStorage = SaveSecureCacheStorageSpy();
+    sut = LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
+    account = AccountEntity(token: faker.guid.guid());
+    mockSave();
+  });
+
+  test('1 - Should call SaveSecureCacheStorage with correct values', () async {
+    await sut.save(account);
+    verify(() => saveSecureCacheStorage.saveSecure(
+      key: 'token', value: account.token
+    ));
+  });
+}
