@@ -15,14 +15,17 @@ void main() {
   late SignUpPresenter presenter;
   late StreamController<UIError?> nameErrorController;
   late StreamController<UIError?> emailErrorController;
+  late StreamController<UIError?> passwordErrorController;
 
   Future<void> _testPage(WidgetTester tester) async {
     presenter = SignUpPresenterSpy();
     nameErrorController = StreamController<UIError?>();
     emailErrorController = StreamController<UIError?>();
+    passwordErrorController = StreamController<UIError?>();
 
     when(() => presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
+    when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
 
     final signUpPage = GetMaterialApp(
       initialRoute: '/signup',
@@ -150,7 +153,7 @@ void main() {
     expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 
-  testWidgets('8 - Should present no error if email is valid', (WidgetTester tester) async {
+  testWidgets('15 - Should present no error if email is valid', (WidgetTester tester) async {
     await _testPage(tester);
 
     emailErrorController.add(null);
@@ -160,5 +163,14 @@ void main() {
       find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
       findsOneWidget
     );
+  });
+  
+  testWidgets('16 - Should present error if password is empty', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    passwordErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 }
