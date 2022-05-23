@@ -22,7 +22,7 @@
 19.✅ Remover mensagem de erro se a confirmação de senha for válida
 20.✅ Habilitar o botão de criar conta se todos os campos forem válidos
 21.✅ Desabilitar o botão de criar conta se algum campo for inválido
-22. Chamar o método de criar conta
+22.✅ Chamar o método de criar conta
 23. Exibir loading no início da ação de criar conta
 24. Esconder loading no fim da ação de criar conta
 25. Exibir mensagem de erro caso a criação de conta falhe

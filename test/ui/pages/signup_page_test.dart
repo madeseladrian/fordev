@@ -27,6 +27,7 @@ void main() {
     passwordConfirmationErrorController = StreamController<UIError?>();
     isFormValidController = StreamController<bool>();
 
+    when(() => presenter.signUp()).thenAnswer((_) async => _);
     when(() => presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
@@ -232,5 +233,18 @@ void main() {
 
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, null);
+  });
+  
+  testWidgets('22 - Should call add account on form submit', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pump();
+    final button = find.byType(ElevatedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+
+    verify(() => presenter.signUp()).called(1);
   });
 }
