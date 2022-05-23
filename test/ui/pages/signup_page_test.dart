@@ -60,11 +60,19 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('4 - Should call validate with correct name', (WidgetTester tester) async {
+  testWidgets('6 - Should call validate with correct name', (WidgetTester tester) async {
     await _testPage(tester);
 
     final name = faker.person.name();
     await tester.enterText(find.bySemanticsLabel('Nome'), name);
     verify(() => presenter.validateName(name));
+  });
+  
+  testWidgets('7 - Should call validate with correct email', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    final email = faker.internet.email();
+    await tester.enterText(find.bySemanticsLabel('Email'), email);
+    verify(() => presenter.validateEmail(email));
   });
 }

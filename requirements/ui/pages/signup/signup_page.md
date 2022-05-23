@@ -7,7 +7,7 @@
 4. ✅ O campo confirmar senha deve começar sem exibir mensagem de erro
 5. ✅ O botão de criar conta deve começar desabilitado
 6. ✅ Validar nome quando o usuário digitar no campo
-7. Validar email quando o usuário digitar no campo
+7. ✅ Validar email quando o usuário digitar no campo
 8. Validar senha quando o usuário digitar no campo
 9. Validar confirmar senha quando o usuário digitar no campo
 10. Mostrar mensagem de erro se o nome for inválido
