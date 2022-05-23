@@ -51,4 +51,9 @@ void main() {
       }
     ));
   });
+
+  test('3,4 - Should return an Account if HttpClient returns 200', () async {
+    final account = await sut.add(params);
+    expect(account.token, apiResult['accessToken']);
+  });
 }
