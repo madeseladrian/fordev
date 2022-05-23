@@ -14,7 +14,7 @@
 11.✅ Mostrar mensagem de erro se o nome for vazio
 12.✅ Remover mensagem de erro se o nome for válido
 13.✅ Mostrar mensagem de erro se o email for inválido
-14. Mostrar mensagem de erro se o email for vazio
+14.✅ Mostrar mensagem de erro se o email for vazio
 15. Remover mensagem de erro se o email for válido
 16. Mostrar mensagem de erro se a senha for vazia
 17. Remover mensagem de erro se a senha for válida

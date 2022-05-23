@@ -132,12 +132,21 @@ void main() {
     );
   });
 
-  testWidgets('6 - Should present error if email is invalid', (WidgetTester tester) async {
+  testWidgets('13 - Should present error if email is invalid', (WidgetTester tester) async {
     await _testPage(tester);
 
     emailErrorController.add(UIError.invalidField);
     await tester.pump();
 
     expect(find.text('Campo inválido'), findsOneWidget);
+  });
+
+  testWidgets('14 - Should present error if email is empty', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    emailErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 }
