@@ -17,7 +17,7 @@
 14.✅ Mostrar mensagem de erro se o email for vazio
 15.✅ Remover mensagem de erro se o email for válido
 16.✅ Mostrar mensagem de erro se a senha for vazia
-17. Remover mensagem de erro se a senha for válida
+17.✅ Remover mensagem de erro se a senha for válida
 18. Mostrar mensagem de erro se a confirmação de senha for inválida
 19. Remover mensagem de erro se a confirmação de senha for válida
 20. Habilitar o botão de criar conta se todos os campos forem válidos
