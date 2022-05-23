@@ -17,6 +17,7 @@ void main() {
   late StreamController<UIError?> emailErrorController;
   late StreamController<UIError?> passwordErrorController;
   late StreamController<UIError?> passwordConfirmationErrorController;
+  late StreamController<bool> isFormValidController;
 
   Future<void> _testPage(WidgetTester tester) async {
     presenter = SignUpPresenterSpy();
@@ -24,11 +25,14 @@ void main() {
     emailErrorController = StreamController<UIError?>();
     passwordErrorController = StreamController<UIError?>();
     passwordConfirmationErrorController = StreamController<UIError?>();
+    isFormValidController = StreamController<bool>();
 
     when(() => presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
     when(() => presenter.passwordConfirmationErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
+    when(() => presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
+
 
     final signUpPage = GetMaterialApp(
       initialRoute: '/signup',
@@ -208,5 +212,15 @@ void main() {
       find.descendant(of: find.bySemanticsLabel('Confirmar senha'), matching: find.byType(Text)),
       findsOneWidget
     );
+  });
+
+  testWidgets('20 - Should enable button if form is valid', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pump();
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, isNotNull);
   });
 }
