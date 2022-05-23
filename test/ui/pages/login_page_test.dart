@@ -244,7 +244,7 @@ void main() {
     expect(Get.currentRoute, '/login');
   });
   
-  testWidgets('20 - Should call gotoSignUp on link click', (WidgetTester tester) async {
+  testWidgets('20 - Should call goToSignUp on link click', (WidgetTester tester) async {
     await _testPage(tester);
 
     await tester.pump();
