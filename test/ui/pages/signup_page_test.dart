@@ -1,15 +1,23 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:fordev/ui/pages/pages.dart';
 
+class SignUpPresenterSpy extends Mock implements SignUpPresenter {}
+
 void main() {
+  late SignUpPresenter presenter;
+
   Future<void> _testPage(WidgetTester tester) async {
+    presenter = SignUpPresenterSpy();
+
     final signUpPage = GetMaterialApp(
       initialRoute: '/signup',
       getPages: [
-        GetPage(name: '/signup', page: () => const SignUpPage()),  
+        GetPage(name: '/signup', page: () => SignUpPage(presenter: presenter)),  
       ]  
     );
     await tester.pumpWidget(signUpPage);
@@ -50,5 +58,13 @@ void main() {
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, null);
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('4 - Should call validate with correct name', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    final name = faker.person.name();
+    await tester.enterText(find.bySemanticsLabel('Nome'), name);
+    verify(() => presenter.validateName(name));
   });
 }
