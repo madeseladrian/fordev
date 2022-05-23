@@ -116,4 +116,16 @@ void main() {
 
     expect(find.text('Campo obrigatório'), findsOneWidget);
   });
+
+  testWidgets('12 - Should present no error if name is valid', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    nameErrorController.add(null);
+    await tester.pump();
+
+    expect(
+      find.descendant(of: find.bySemanticsLabel('Nome'), matching: find.byType(Text)),
+      findsOneWidget
+    );
+  });
 }
