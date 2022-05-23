@@ -26,7 +26,7 @@
 23.✅ Exibir loading no início da ação de criar conta
 24.✅ Esconder loading no fim da ação de criar conta
 25.✅ Exibir mensagem de erro caso a criação de conta falhe
-26. Exibir mensagem de erro caso o login apresente algum error inesperado
+26.✅ Exibir mensagem de erro caso o login apresente algum error inesperado
 27. Garantir que para qualquer rota selecionada, muda-se de página
 28. Ficar na mesma página, caso a rota esteja errada
 29. Chamar o método de Login ao clicar no link

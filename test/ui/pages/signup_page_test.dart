@@ -273,12 +273,21 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('16 - Should present error message if add account fails', (WidgetTester tester) async {
+  testWidgets('25 - Should present error message if add account fails', (WidgetTester tester) async {
     await _testPage(tester);
 
     mainErrorController.add(UIError.invalidCredentials);
     await tester.pump();
 
     expect(find.text('Credenciais inválidas.'), findsOneWidget);
+  });
+
+  testWidgets('26 - Should present error message if add account throws', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    mainErrorController.add(UIError.unexpected);
+    await tester.pump();
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
   });
 }
