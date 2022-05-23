@@ -31,6 +31,12 @@ class SignUpPage extends StatelessWidget with NavigationManager {
               hideLoading(context);
             }
           });
+
+          presenter.mainErrorStream.listen((error) {
+            if (error != null) {
+              showErrorMessage(context, error.description);
+            }
+          });
           
           return GestureDetector(
             onTap: _hideKeyboard,
