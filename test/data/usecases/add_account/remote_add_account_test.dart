@@ -76,4 +76,12 @@ void main() {
     final future = sut.add(params);
     expect(future, throwsA(DomainError.unexpected));
   });
+
+  test('8 - Should throw InvalidCredentialsError if HttpClient returns 403', () async {
+    mockError(HttpError.forbidden);
+
+    final future = sut.add(params);
+
+    expect(future, throwsA(DomainError.emailInUse));
+  });
 }

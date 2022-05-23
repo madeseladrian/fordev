@@ -19,7 +19,9 @@ class RemoteAddAccount {
       final httpResponse = await httpClient.request(url: url, method: 'post', body: body);
       return RemoteAccountModel.fromJson(httpResponse).toEntity();
     } catch (error) {
-      throw DomainError.unexpected;
+      throw error == HttpError.forbidden
+        ? DomainError.emailInUse
+        : DomainError.unexpected;
     }
   }
 }
