@@ -10,13 +10,13 @@
 5. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - URL inválida (Not Found - 404)
-6. Sistema retorna uma mensagem de erro inesperado
+6. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor (Internal Server Error - 500)
-7. Sistema retorna uma mensagem de erro inesperado
-
-> ## Exceção - Resposta inválida (OK - 200)
-8. Sistema retorna uma mensagem de erro inesperado
+7. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Email em uso
-9. Sistema retorna uma mensagem de erro informando que o email já está em uso
+8. Sistema retorna uma mensagem de erro informando que o email já está em uso
+
+> ## Exceção - Resposta inválida (OK - 200)
+9. Sistema retorna uma mensagem de erro inesperado
