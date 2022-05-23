@@ -27,6 +27,8 @@ class SignUpPage extends StatelessWidget with NavigationManager {
           presenter.isLoadingStream.listen((isLoading) {
             if (isLoading == true) {
               showLoading(context);
+            } else {
+              hideLoading(context);
             }
           });
           
