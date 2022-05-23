@@ -19,4 +19,4 @@
 8. ✅ Sistema retorna uma mensagem de erro informando que o email já está em uso
 
 > ## Exceção - Resposta inválida (OK - 200)
-9. Sistema retorna uma mensagem de erro inesperado
+9. ✅ Sistema retorna uma mensagem de erro inesperado
