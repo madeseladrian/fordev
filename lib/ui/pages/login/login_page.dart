@@ -14,6 +14,13 @@ class LoginPage extends StatelessWidget with NavigationManager {
 
   @override
   Widget build(BuildContext context) {
+    void _hideKeyboard() {
+      final currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
+    }
+
     return Scaffold(
       body: Builder(
         builder: (context) {
@@ -34,7 +41,7 @@ class LoginPage extends StatelessWidget with NavigationManager {
           handleNavigation(presenter.navigateToStream, clear: true);
 
           return GestureDetector(
-            onTap: () {},
+            onTap: _hideKeyboard,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
