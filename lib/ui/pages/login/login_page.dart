@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/helpers.dart';
 import '../../components/components.dart';
+import '../../mixins/mixins.dart';
 import 'components/components.dart';
 import 'login_presenter.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatelessWidget with NavigationManager {
   final LoginPresenter presenter;
 
   const LoginPage({Key? key, required this.presenter}) : super(key: key);
@@ -31,11 +31,7 @@ class LoginPage extends StatelessWidget {
             }
           });
 
-          presenter.navigateToStream.listen((page) {
-            if (page != null && page.isNotEmpty) {
-              Get.toNamed(page);
-            }
-          });
+          handleNavigation(presenter.navigateToStream, clear: true);
 
           return GestureDetector(
             onTap: () {},

@@ -20,11 +20,12 @@ class App extends StatelessWidget {
       title: '4Dev',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
-      initialRoute: '/login',
+      initialRoute: '/',
       getPages: [
+        GetPage(name: '/', page: makeSplashPage),
         GetPage(name: '/login', page: makeLoginPage),
         GetPage(name: '/surveys', page: () => const Scaffold(body: Center(child: Text('Pesquisa')))),
-        GetPage(name: '/singup', page: () => const Scaffold(body: Center(child: Text('Pesquisa')))),
+        GetPage(name: '/signup', page: () => const Scaffold(body: Center(child: Text('Criar conta')))),
       ]
     );
   }
