@@ -28,5 +28,5 @@
 25.✅ Exibir mensagem de erro caso a criação de conta falhe
 26.✅ Exibir mensagem de erro caso o login apresente algum error inesperado
 27.✅ Garantir que para qualquer rota selecionada, muda-se de página
-28. Ficar na mesma página, caso a rota esteja errada
+28.✅ Ficar na mesma página, caso a rota esteja errada
 29. Chamar o método de Login ao clicar no link

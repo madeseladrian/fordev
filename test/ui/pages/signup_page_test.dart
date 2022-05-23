@@ -304,4 +304,16 @@ void main() {
     expect(Get.currentRoute, 'any_route');
     expect(find.text('fake page'), findsOneWidget);
   });
+
+  testWidgets('28 - Should not change page', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    navigateToController.add('');
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, '/signup');
+
+    navigateToController.add(null);
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, '/signup');
+  });
 }
