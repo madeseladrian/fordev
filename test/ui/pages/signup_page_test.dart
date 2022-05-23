@@ -53,6 +53,17 @@ void main() {
     await tester.pumpWidget(signUpPage);
   }
 
+  tearDown(() {
+    nameErrorController.close();
+    emailErrorController.close();
+    passwordErrorController.close();
+    passwordConfirmationErrorController.close();
+    mainErrorController.close();
+    navigateToController.close();
+    isFormValidController.close();
+    isLoadingController.close();
+  });
+
   testWidgets('1,2,3,4,5 - Should load with correct initial state', (WidgetTester tester) async {
     await _testPage(tester);
 
