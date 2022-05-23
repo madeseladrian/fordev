@@ -4,7 +4,7 @@ mixin NavigationManager {
   void handleNavigation(Stream<String?> stream, {bool clear = false}) {
     stream.listen((page) {
       if (page != null && page.isNotEmpty) {
-        if (clear == true) {
+        if (clear == true && page != '/signup') {
           Get.offAllNamed(page);
         } else {
           Get.toNamed(page);
