@@ -14,12 +14,15 @@ class SignUpPresenterSpy extends Mock implements SignUpPresenter {}
 void main() {
   late SignUpPresenter presenter;
   late StreamController<UIError?> nameErrorController;
+  late StreamController<UIError?> emailErrorController;
 
   Future<void> _testPage(WidgetTester tester) async {
     presenter = SignUpPresenterSpy();
     nameErrorController = StreamController<UIError?>();
+    emailErrorController = StreamController<UIError?>();
 
     when(() => presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
+    when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
 
     final signUpPage = GetMaterialApp(
       initialRoute: '/signup',
@@ -127,5 +130,14 @@ void main() {
       find.descendant(of: find.bySemanticsLabel('Nome'), matching: find.byType(Text)),
       findsOneWidget
     );
+  });
+
+  testWidgets('6 - Should present error if email is invalid', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    emailErrorController.add(UIError.invalidField);
+    await tester.pump();
+
+    expect(find.text('Campo inválido'), findsOneWidget);
   });
 }
