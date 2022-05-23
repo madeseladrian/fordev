@@ -16,16 +16,19 @@ void main() {
   late StreamController<UIError?> nameErrorController;
   late StreamController<UIError?> emailErrorController;
   late StreamController<UIError?> passwordErrorController;
+  late StreamController<UIError?> passwordConfirmationErrorController;
 
   Future<void> _testPage(WidgetTester tester) async {
     presenter = SignUpPresenterSpy();
     nameErrorController = StreamController<UIError?>();
     emailErrorController = StreamController<UIError?>();
     passwordErrorController = StreamController<UIError?>();
+    passwordConfirmationErrorController = StreamController<UIError?>();
 
     when(() => presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
     when(() => presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(() => presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
+    when(() => presenter.passwordConfirmationErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
 
     final signUpPage = GetMaterialApp(
       initialRoute: '/signup',
@@ -184,5 +187,14 @@ void main() {
       find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
       findsOneWidget
     );
+  });
+
+  testWidgets('18 - Should present error if passwordConfirmation is empty', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    passwordConfirmationErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 }
