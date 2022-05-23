@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/params/params.dart';
 
 import 'package:fordev/data/http/http.dart';
@@ -23,6 +24,7 @@ void main() {
   ));
   void mockRequest(dynamic data) => 
     mockRequestCall().thenAnswer((_) async => data);
+  void mockError(HttpError error) => mockRequestCall().thenThrow(error);
 
   setUp(() {
     params = AddAccountParams(
@@ -55,5 +57,11 @@ void main() {
   test('3,4 - Should return an Account if HttpClient returns 200', () async {
     final account = await sut.add(params);
     expect(account.token, apiResult['accessToken']);
+  });
+
+  test('5 - Should throw UnexpectedError if HttpClient returns 400', () async {
+    mockError(HttpError.badRequest);
+    final future = sut.add(params);
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
