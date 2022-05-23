@@ -47,7 +47,7 @@ class LoginPage extends StatelessWidget with NavigationManager {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const LoginHeader(),
-                  const Headline1(),
+                  Headline1(text: R.string.login.toUpperCase(),),
                   Padding(
                     padding: const EdgeInsets.all(32),
                     child: ListenableProvider(
