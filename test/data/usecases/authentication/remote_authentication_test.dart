@@ -38,7 +38,7 @@ void main() {
     sut = RemoteAuthentication(url: url, httpClient: httpClient);
   });
  
-  test('1,2,3 - Should call HttpClient with correct values', () async {
+  test('1,2 - Should call HttpClient with correct values', () async {
     await sut.authenticate(params);
     verify(() => httpClient.request(
       url: url,
@@ -47,7 +47,7 @@ void main() {
     ));
   });
 
-  test('4 - Should return an Account if HttpClient returns 200', () async {
+  test('3,4 - Should return an Account if HttpClient returns 200', () async {
     final account = await sut.authenticate(params);
     expect(account.token, apiResult['accessToken']);
   });
