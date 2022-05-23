@@ -34,6 +34,10 @@ void main() {
     presenter = SplashPresenterSpy();
   });
 
+  tearDown(() {
+    navigateToController.close();
+  });
+
   testWidgets('1 - Should call loadCurrentAccount on page load', (WidgetTester tester) async {
     await _testSplashPage(tester);
 

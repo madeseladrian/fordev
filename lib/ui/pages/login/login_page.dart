@@ -54,7 +54,7 @@ class LoginPage extends StatelessWidget with NavigationManager {
                             TextButton.icon(
                               onPressed: presenter.goToSignUp,
                               icon: const Icon(Icons.person),
-                              label: const Text('Criar conta')
+                              label: Text(R.string.addAccount)
                             )
                           ],
                         ),

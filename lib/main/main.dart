@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
 
 import '../ui/components/components.dart';
+import '../ui/helpers/helpers.dart';
 import 'factories/factories.dart';
 
 void main() {
+  R.load(const Locale('pt', 'BR'));
+  //R.load(const Locale('en', 'US'));
   runApp(const App());
 }
 

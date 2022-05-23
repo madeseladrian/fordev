@@ -17,7 +17,7 @@ class PasswordInput extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8, bottom: 32),
           child: TextFormField(
           decoration: InputDecoration(
-            labelText: 'Senha',
+            labelText: R.string.password,
             icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
             errorText: snapshot.data?.description
           ),
