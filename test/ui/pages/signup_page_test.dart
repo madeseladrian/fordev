@@ -1,18 +1,25 @@
+import 'dart:async';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
 class SignUpPresenterSpy extends Mock implements SignUpPresenter {}
 
 void main() {
   late SignUpPresenter presenter;
+  late StreamController<UIError?> nameErrorController;
 
   Future<void> _testPage(WidgetTester tester) async {
     presenter = SignUpPresenterSpy();
+    nameErrorController = StreamController<UIError?>();
+
+    when(() => presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
 
     final signUpPage = GetMaterialApp(
       initialRoute: '/signup',
@@ -90,5 +97,14 @@ void main() {
     final passwordConfirmation = faker.internet.password();
     await tester.enterText(find.bySemanticsLabel('Confirmar senha'), passwordConfirmation);
     verify(() => presenter.validatePasswordConfirmation(passwordConfirmation));
+  });
+
+  testWidgets('10 - Should present error if name is invalid', (WidgetTester tester) async {
+    await _testPage(tester);
+
+    nameErrorController.add(UIError.invalidField);
+    await tester.pump();
+
+    expect(find.text('Campo inválido'), findsOneWidget);
   });
 }

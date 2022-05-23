@@ -10,7 +10,7 @@
 7. ✅ Validar email quando o usuário digitar no campo
 8. ✅ Validar senha quando o usuário digitar no campo
 9. ✅ Validar confirmar senha quando o usuário digitar no campo
-10. Mostrar mensagem de erro se o nome for inválido
+10.✅ Mostrar mensagem de erro se o nome for inválido
 11. Mostrar mensagem de erro se o nome for vazio
 12. Remover mensagem de erro se o nome for válido
 10. Mostrar mensagem de erro se o email for inválido

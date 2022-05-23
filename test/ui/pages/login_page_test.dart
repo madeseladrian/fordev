@@ -109,7 +109,6 @@ void main() {
     expect(find.text('Campo inválido'), findsOneWidget);
   });
 
-  
   testWidgets('7 - Should present error if email is empty', (WidgetTester tester) async {
     await _testPage(tester);
 
@@ -119,7 +118,6 @@ void main() {
     expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 
-  
   testWidgets('8 - Should present no error if email is valid', (WidgetTester tester) async {
     await _testPage(tester);
 
