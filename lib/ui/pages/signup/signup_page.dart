@@ -24,6 +24,12 @@ class SignUpPage extends StatelessWidget with NavigationManager {
     return Scaffold(
       body: Builder(
         builder: (context) {
+          presenter.isLoadingStream.listen((isLoading) {
+            if (isLoading == true) {
+              showLoading(context);
+            }
+          });
+          
           return GestureDetector(
             onTap: _hideKeyboard,
             child: SingleChildScrollView(
