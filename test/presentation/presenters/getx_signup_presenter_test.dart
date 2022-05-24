@@ -133,12 +133,12 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('15 - Should emailErrorStream returns null if validation email succeeds', () async {
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+  test('15 - Should passwordErrorStream returns null if validation email succeeds', () async {
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
     
-    sut.validateEmail(email);
-    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePassword(password);
   });
 
   test('16 - Should call Validation with correct passwordConfirmation', () async {
@@ -167,6 +167,25 @@ void main() {
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
     
     sut.validatePasswordConfirmation(passwordConfirmation);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+  });
+
+  test('20 - Should passwordConfirmationErrorStream returns null if validation passwordconfirmation succeeds', () async {
+    sut.passwordConfirmationErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    
+    sut.validatePasswordConfirmation(passwordConfirmation);
+  });
+
+  
+  test('21 - Should isFormValidStream disable form button if any field is invalid', () async {
+    mockValidationError(field: 'email', value: ValidationError.requiredField);
+    
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
     sut.validatePasswordConfirmation(passwordConfirmation);
   });
 } 
