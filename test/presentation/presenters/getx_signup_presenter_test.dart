@@ -149,4 +149,14 @@ void main() {
       value: passwordConfirmation 
     )).called(1);
   });
+
+  test('17,18,19 - Should passwordConfirmationErrorStream returns invalidFieldError if password is empty', () async {
+    mockValidationError(value: ValidationError.invalidField);
+   
+    sut.passwordConfirmationErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+  });
 } 
