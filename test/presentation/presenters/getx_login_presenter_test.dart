@@ -112,7 +112,7 @@ void main() {
     verify(() => validation.validate(field: 'password', value: password)).called(1);
   });
 
-  test('7,8,9 - Should returns invalidFieldError if password is empty', () async {
+  test('7,8,9 - Should passwordErrorStream returns invalidFieldError if password is empty', () async {
     mockValidationError(value: ValidationError.invalidField);
    
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -122,7 +122,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('7,8,9 - Should returns requiredFieldError if password is null', () async {
+  test('7,8,9 - Should passwordErrorStream returns requiredFieldError if password is null', () async {
     mockValidationError(value: ValidationError.requiredField);
    
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
@@ -140,7 +140,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('11 - Should disable form button if any field is invalid', () async {
+  test('11 - Should isFormValidStream disable form button if any field is invalid', () async {
     mockValidationError(field: 'email', value: ValidationError.requiredField);
     
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
@@ -149,7 +149,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('11 - Should enable form button if all fields are valid', () async {
+  test('11 - Should isFormValidStream enable form button if all fields are valid', () async {
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
     sut.validateEmail(email);

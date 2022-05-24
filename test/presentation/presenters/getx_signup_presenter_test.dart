@@ -44,7 +44,7 @@ void main() {
   });
 
   
-  test('2,3,4 - Should returns invalidFieldError if name is empty', () async {
+  test('2,3,4 - Should nameErrorStream returns invalidFieldError if name is empty', () async {
     mockValidationError(value: ValidationError.invalidField);
    
     sut.nameErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -54,7 +54,7 @@ void main() {
     sut.validateName(name);
   });
 
-  test('2,3,4 - Should returns requiredFieldError if name is null', () async {
+  test('2,3,4 - Should nameErrorStream returns requiredFieldError if name is null', () async {
     mockValidationError(value: ValidationError.requiredField);
    
     sut.nameErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
@@ -64,7 +64,7 @@ void main() {
     sut.validateName(name);
   });
 
-  test('5 - Should returns null if validation name succeeds', () async {
+  test('5 - Should nameErrorStream returns null if validation name succeeds', () async {
     sut.nameErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
     
@@ -78,7 +78,7 @@ void main() {
     verify(() => validation.validate(field: 'email', value: email)).called(1);
   });
 
-  test('7,8,9 - Should returns invalidFieldError if email is empty', () async {
+  test('7,8,9 - Should emailErrorStream returns invalidFieldError if email is empty', () async {
     mockValidationError(value: ValidationError.invalidField);
    
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -87,7 +87,7 @@ void main() {
     sut.validateEmail(email);
     sut.validateEmail(email);
   });
-  test('7,8,9 - Should returns requiredFieldError if email is null', () async {
+  test('7,8,9 - Should emailErrorStream returns requiredFieldError if email is null', () async {
     mockValidationError(value: ValidationError.requiredField);
    
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
@@ -97,7 +97,7 @@ void main() {
     sut.validateEmail(email);
   });
 
-  test('10 - Should returns null if validation email succeeds', () async {
+  test('10 - Should emailErrorStream returns null if validation email succeeds', () async {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
     
@@ -111,7 +111,7 @@ void main() {
     verify(() => validation.validate(field: 'password', value: password)).called(1);
   });
 
-  test('12,13,14 - Should returns invalidFieldError if password is empty', () async {
+  test('12,13,14 - Should passwordErrorStream returns invalidFieldError if password is empty', () async {
     mockValidationError(value: ValidationError.invalidField);
    
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -121,7 +121,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('12,13,14 - Should returns requiredFieldError if password is null', () async {
+  test('12,13,14 - Should passwordErrorStream returns requiredFieldError if password is null', () async {
     mockValidationError(value: ValidationError.requiredField);
    
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
@@ -129,5 +129,13 @@ void main() {
 
     sut.validatePassword(password);
     sut.validatePassword(password);
+  });
+
+  test('15 - Should emailErrorStream returns null if validation email succeeds', () async {
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    
+    sut.validateEmail(email);
+    sut.validateEmail(email);
   });
 } 
