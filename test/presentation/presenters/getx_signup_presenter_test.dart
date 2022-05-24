@@ -313,4 +313,10 @@ void main() {
 
     await sut.signUp();
   });
+
+  test('31 - Should change page on success', () async {
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
+
+    await sut.signUp();
+  });
 } 

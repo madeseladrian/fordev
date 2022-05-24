@@ -24,6 +24,7 @@ class GetxSignUpPresenter extends GetxController {
   final _passwordError = Rx<UIError?>(null);
   final _passwordConfirmationError = Rx<UIError?>(null);
   final _mainError = Rx<UIError?>(null);
+  final _navigateTo = Rx<String?>(null);
   final _isFormValid = Rx<bool>(false);
   final _isLoading = Rx<bool>(false);
 
@@ -32,6 +33,7 @@ class GetxSignUpPresenter extends GetxController {
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
   Stream<UIError?> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
   Stream<UIError?> get mainErrorStream => _mainError.stream;
+  Stream<String?> get navigateToStream => _navigateTo.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
@@ -101,6 +103,7 @@ class GetxSignUpPresenter extends GetxController {
         )
       );
       await saveCurrentAccount.save(accountEntity);
+      _navigateTo.value = '/surveys';
     } on DomainError catch (error) {
       switch (error) {
         case DomainError.emailInUse: _mainError.value = UIError.emailInUse; break;
