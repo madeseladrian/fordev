@@ -28,8 +28,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   void _validateForm() {
-    _isFormValid.value = _nameError.value == null;
-    
+    _isFormValid.value = false; 
   }
 
   void validateName(String name) {

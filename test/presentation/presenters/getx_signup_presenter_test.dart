@@ -40,7 +40,7 @@ void main() {
   });
 
   
-  test('2,3,4 - Should invalidFieldError if name is empty', () async {
+  test('2,3,4 - Should returns invalidFieldError if name is empty', () async {
     mockValidationError(value: ValidationError.invalidField);
    
     sut.nameErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -50,4 +50,11 @@ void main() {
     sut.validateName(name);
   });
 
+  test('5 - Should returns null if validation name succeeds', () async {
+    sut.nameErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    
+    sut.validateName(name);
+    sut.validateName(name);
+  });
 } 
