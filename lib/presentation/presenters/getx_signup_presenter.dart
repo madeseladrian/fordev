@@ -39,6 +39,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   void validateEmail(String email) {
-    _validateField(field: 'email', value: email);
+    _emailError.value = _validateField(field: 'email', value: email);
+    _validateForm();
   }
 }
