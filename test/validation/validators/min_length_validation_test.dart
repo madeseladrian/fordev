@@ -8,7 +8,7 @@ void main() {
   late MinLengthValidation sut;
 
   setUp(() {
-    sut = MinLengthValidation(field: 'any_field', size: 3);
+    sut = const MinLengthValidation(field: 'any_field', size: 3);
   });
 
   test('1 - Should return error if value is empty', () {
