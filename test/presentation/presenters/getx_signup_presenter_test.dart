@@ -247,7 +247,7 @@ void main() {
     sut.validateEmail(email);
     sut.validatePassword(password);
     sut.validatePasswordConfirmation(passwordConfirmation);
-
+    
     await sut.signUp();
 
     verify(() => addAccount.add(AddAccountParams(
@@ -266,10 +266,6 @@ void main() {
 
   test('26,27 - Should emit correct events on UnexpectedError', () async {
     mockAddAccountError(DomainError.unexpected);
-    sut.validateName(name);
-    sut.validateEmail(email);
-    sut.validatePassword(password);
-    sut.validatePasswordConfirmation(passwordConfirmation);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
@@ -279,10 +275,6 @@ void main() {
 
   test('28 - Should emit correct events on EmailInUseError', () async {
     mockAddAccountError(DomainError.emailInUse);
-    sut.validateName(name);
-    sut.validateEmail(email);
-    sut.validatePassword(password);
-    sut.validatePasswordConfirmation(passwordConfirmation);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.emailInUse]));
@@ -291,11 +283,6 @@ void main() {
   });
 
   test('29 - Should call SaveCurrentAccount with correct value', () async {
-    sut.validateName(name);
-    sut.validateEmail(email);
-    sut.validatePassword(password);
-    sut.validatePasswordConfirmation(passwordConfirmation);
-
     await sut.signUp();
 
     verify(() => saveCurrentAccount.save(accountEntity)).called(1);
@@ -303,11 +290,7 @@ void main() {
 
   test('30 - Should emit UnexpectedError if SaveCurrentAccount fails', () async {
     mockSaveError();
-    sut.validateName(name);
-    sut.validateEmail(email);
-    sut.validatePassword(password);
-    sut.validatePasswordConfirmation(passwordConfirmation);
-
+    
     expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
 
