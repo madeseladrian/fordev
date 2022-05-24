@@ -23,8 +23,8 @@
 20.✅ Notificar o passwordConfirmationErrorStream com null, caso o Validation não retorne erro
 21.✅ Notificar o isFormValidStream desabilita o butão se qualquer campo estiver inválido
 22.✅ Notificar o isFormValidStream habilita o butão se os campos estiverem válidos
-23. Não notificar o isFormValidStream se o valor for igual ao último
-24. Chamar o Add Account com os valores corretos
+23.✅ Não notificar o isFormValidStream se o valor for igual ao último
+24.✅ Chamar o Add Account com os valores corretos
 25. Notificar o isLoadingStream como true antes de chamar o Authentication e false no fim do Authentication
 26. Notificar o mainErrorStream caso o Add Account retorne erro: UnexpectedError
 27. Gravar o Account no cache em caso de sucesso

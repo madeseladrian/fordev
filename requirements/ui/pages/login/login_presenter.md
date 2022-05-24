@@ -13,11 +13,12 @@
 10.✅ Notificar o passwordErrorStream com null, caso o Validation não retorne erro
 11.✅ Notificar o isFormValidStream desabilita o butão se qualquer campo estiver inválido
 12.✅ Notificar o isFormValidStream habilita o butão se os campos estiverem válidos
-13.✅ Chamar o Authentication com email e senha corretos
-14.✅ Notificar o isLoadingStream como true antes de chamar o Authentication e false no fim do Authentication
-15.✅ Notificar o mainErrorStream caso o Authentication retorne erro: InvalidCredentials 
-16.✅ Notificar o mainErrorStream caso o Authentication retorne erro: UnexpectedError
-17.✅ Gravar o Account no cache em caso de sucesso
-18.✅ Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
-19.✅ Levar o usuário pra tela de Inicial em caso de sucesso
-20.✅ Levar o usuário pra tela de Criar conta
+13.✅ Não notificar o isFormValidStream se o valor for igual ao último
+14.✅ Chamar o Authentication com email e senha corretos
+15.✅ Notificar o isLoadingStream como true antes de chamar o Authentication e false no fim do Authentication
+16.✅ Notificar o mainErrorStream caso o Authentication retorne erro: InvalidCredentials 
+17.✅ Notificar o mainErrorStream caso o Authentication retorne erro: UnexpectedError
+18.✅ Gravar o Account no cache em caso de sucesso
+19.✅ Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
+20.✅ Levar o usuário pra tela de Inicial em caso de sucesso
+21.✅ Levar o usuário pra tela de Criar conta

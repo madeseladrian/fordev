@@ -2,12 +2,17 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/params/params.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
+
 import 'package:fordev/presentation/helpers/helpers.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
 import 'package:fordev/presentation/protocols/protocols.dart';
 
-import 'package:fordev/ui/helpers/errors/ui_error.dart';
+import 'package:fordev/ui/helpers/helpers.dart';
 
+class AddAccountSpy extends Mock implements AddAccount {}
 class ValidationSpy extends Mock implements Validation {}
 
 void main() {
@@ -15,10 +20,13 @@ void main() {
   late String email;
   late String password;
   late String passwordConfirmation;
+  late AddAccountSpy addAccount;
   late ValidationSpy validation;
   late GetxSignUpPresenter sut;
  
-  
+  When mockAddAccountCall() => when(() => addAccount.add(any()));
+  void mockAddAccount(AccountEntity data) => mockAddAccountCall().thenAnswer((_) async => data);
+
   When mockValidationCall(String? field) => when(() => validation.validate(
     field: field ?? any(named: 'field'),
     value: any(named: 'value'),
@@ -27,16 +35,35 @@ void main() {
   void mockValidationError({String? field, required ValidationError value}) => 
     mockValidationCall(field).thenReturn(value);
     
+  AccountEntity makeAccount() => AccountEntity(
+    token: faker.guid.guid()
+  );
+
+  AddAccountParams makeAddAccount() => AddAccountParams(
+    name: faker.person.name(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+    passwordConfirmation: faker.internet.password()
+  );
+
   setUp(() {
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
     passwordConfirmation = faker.internet.password();
+    addAccount = AddAccountSpy();
     validation = ValidationSpy();
+    mockAddAccount(makeAccount());
     mockValidation();
     sut = GetxSignUpPresenter(
+      addAccount: addAccount,
       validation: validation
     );
+  });
+
+  setUpAll(() {
+    registerFallbackValue(makeAccount());
+    registerFallbackValue(makeAddAccount());
   });
 
   test('1 - Should call Validation with correct name', () async {
@@ -189,12 +216,32 @@ void main() {
     sut.validatePasswordConfirmation(passwordConfirmation);
   });
   
-  test('22 - Should isFormValidStream enable form button if all fields are valid', () async {
+  test('22,23 - Should isFormValidStream enable form button if all fields are valid', () async {
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
     sut.validateName(name);
     sut.validateEmail(email);
     sut.validatePassword(password);
     sut.validatePasswordConfirmation(passwordConfirmation);
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+  });
+
+  test('24 - Should call AddAccount with correct values', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    await sut.signUp();
+
+    verify(() => addAccount.add(AddAccountParams(
+      name: name,
+      email: email,
+      password: password,
+      passwordConfirmation: passwordConfirmation
+    ))).called(1);
   });
 } 

@@ -149,14 +149,16 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('12 - Should isFormValidStream enable form button if all fields are valid', () async {
+  test('12,13 - Should isFormValidStream enable form button if all fields are valid', () async {
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
     sut.validateEmail(email);
     sut.validatePassword(password);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
   });
 
-  test('13 - Should call Authentication with correct values', () async {
+  test('14 - Should call Authentication with correct values', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
     
@@ -167,7 +169,7 @@ void main() {
     )).called(1);
   });
 
-  test('14 - Should emit correct events on Authentication success', () async {
+  test('15 - Should emit correct events on Authentication success', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
     
@@ -176,7 +178,7 @@ void main() {
     await sut.authenticate();
   });
 
-  test('15 - Should emit correct events on InvalidCredentialsError', () async {
+  test('16 - Should emit correct events on InvalidCredentialsError', () async {
     mockAuthenticationError(DomainError.invalidCredentials);
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -188,7 +190,7 @@ void main() {
     await sut.authenticate();
   });
 
-  test('16 - Should emit correct events on UnexpectedError', () async {
+  test('17 - Should emit correct events on UnexpectedError', () async {
     mockAuthenticationError(DomainError.unexpected);
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -200,7 +202,7 @@ void main() {
     await sut.authenticate();
   });
 
-  test('17 - Should call SaveCurrentAccount with correct values', () async {
+  test('18 - Should call SaveCurrentAccount with correct values', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
     
@@ -209,7 +211,7 @@ void main() {
     verify(() => saveCurrentAccount.save(accountEntity)).called(1);
   });
 
-  test('18 - Should emit UnexpectedError if SaveCurrentAccount fails', () async {
+  test('19 - Should emit UnexpectedError if SaveCurrentAccount fails', () async {
     mockSaveError();
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -221,7 +223,7 @@ void main() {
     await sut.authenticate();
   });
   
-  test('19 - Should change page on success authentication', () async {
+  test('20 - Should change page on success authentication', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
     
@@ -230,7 +232,7 @@ void main() {
     await sut.authenticate();
   });
 
-  test('20 - Should go to SignUpPage on link click', () async {
+  test('21 - Should go to SignUpPage on link click', () async {
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/signup')));
 
     sut.goToSignUp();
