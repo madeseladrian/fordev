@@ -159,4 +159,14 @@ void main() {
     sut.validatePasswordConfirmation(passwordConfirmation);
     sut.validatePasswordConfirmation(passwordConfirmation);
   });
+
+  test('17,18,19 - Should passwordConfirmationErrorStream returns requiredFieldError if password is null', () async {
+    mockValidationError(value: ValidationError.requiredField);
+   
+    sut.passwordConfirmationErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+  });
 } 
