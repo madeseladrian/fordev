@@ -32,7 +32,9 @@ void main() {
   });
  
   test('1 - Should return null if all validations returns null', () async {
-    final error = sut.validate(field: 'any_field', value: 'any_value');
+    final formData = {'any_field': 'any_value'};
+    
+    final error = sut.validate(field: 'any_field', input: formData);
 
     expect(error, null);
   });
@@ -42,7 +44,8 @@ void main() {
     mockValidation2(ValidationError.requiredField);
     mockValidation3(ValidationError.invalidField);
 
-    final error = sut.validate(field: 'any_field', value: 'any_value');
+    final formData = {'any_field': 'any_value'};
+    final error = sut.validate(field: 'any_field', input: formData);
 
     expect(error, ValidationError.requiredField);
   });

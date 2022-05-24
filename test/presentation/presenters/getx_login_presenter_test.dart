@@ -33,7 +33,7 @@ void main() {
     
   When mockValidationCall(String? field) => when(() => validation.validate(
     field: field ?? any(named: 'field'),
-    value: any(named: 'value'),
+    input: any(named: 'input'),
   ));
   void mockValidation({String? field}) => mockValidationCall(field).thenReturn(null);
   void mockValidationError({String? field, required ValidationError value}) => 
@@ -73,9 +73,11 @@ void main() {
   });
 
   test('1 - Should call Validation with correct email', () async {
+    final formData = {'email': email, 'password': null};
+
     sut.validateEmail(email);
     
-    verify(() => validation.validate(field: 'email', value: email)).called(1);
+    verify(() => validation.validate(field: 'email', input: formData)).called(1);
   });
 
   test('2,3,4 - Should emailErrorStream returns invalidFieldError if email is empty', () async {
@@ -107,9 +109,11 @@ void main() {
   });
 
   test('6 - Should call Validation with correct password', () async {
+    final formData = {'email': null, 'password': password};
+    
     sut.validatePassword(password);
     
-    verify(() => validation.validate(field: 'password', value: password)).called(1);
+    verify(() => validation.validate(field: 'password', input: formData)).called(1);
   });
 
   test('7,8,9 - Should passwordErrorStream returns invalidFieldError if password is empty', () async {

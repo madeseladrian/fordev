@@ -1,22 +1,22 @@
-import 'package:test/test.dart';
-
 import 'package:fordev/presentation/helpers/helpers.dart';
 import 'package:fordev/validation/validators/validators.dart';
+
+import 'package:test/test.dart';
 
 void main() {
   late CompareFieldsValidation sut;
 
   setUp(() {
-    sut = const CompareFieldsValidation(field: 'any_field', valueToCompare: 'any_value');
+    sut = const CompareFieldsValidation(field: 'any_field', fieldToCompare: 'other_field');
   });
 
   test('1 - Should return error if values are not equal', () {
-    final error = sut.validate('wrong_value');
-    expect(error, ValidationError.invalidField);
+    final formData = {'any_field': 'any_value', 'other_field': 'other_value'};
+    expect(sut.validate(formData), ValidationError.invalidField);
   });
 
-  test('2 - Should return error if values are not equal', () {
-    final error = sut.validate('any_value');
-    expect(error, null);
+  test('2 - Should return null if values are equal', () {
+    final formData = {'any_field': 'any_value', 'other_field': 'any_value'};
+    expect(sut.validate(formData), null);
   });
 }
