@@ -11,6 +11,7 @@ import '../protocols/protocols.dart';
 
 class GetxSignUpPresenter extends GetxController {
   final AddAccount addAccount;
+  final SaveCurrentAccount saveCurrentAccount;
   final Validation validation;
 
   String? _name;
@@ -36,6 +37,7 @@ class GetxSignUpPresenter extends GetxController {
 
   GetxSignUpPresenter({
     required this.addAccount,
+    required this.saveCurrentAccount,
     required this.validation
   });
 
@@ -90,7 +92,7 @@ class GetxSignUpPresenter extends GetxController {
     try {
       _mainError.value = null;
       _isLoading.value = true;
-      await addAccount.add(
+      final accountEntity = await addAccount.add(
         AddAccountParams(
           name: _name,
           email: _email,
@@ -98,6 +100,7 @@ class GetxSignUpPresenter extends GetxController {
           passwordConfirmation: _passwordConfirmation
         )
       );
+      await saveCurrentAccount.save(accountEntity);
     } on DomainError catch (error) {
       switch (error) {
         case DomainError.emailInUse: _mainError.value = UIError.emailInUse; break;

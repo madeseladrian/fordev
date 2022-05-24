@@ -14,6 +14,7 @@ import 'package:fordev/presentation/protocols/protocols.dart';
 import 'package:fordev/ui/helpers/helpers.dart';
 
 class AddAccountSpy extends Mock implements AddAccount {}
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 class ValidationSpy extends Mock implements Validation {}
 
 void main() {
@@ -21,13 +22,19 @@ void main() {
   late String email;
   late String password;
   late String passwordConfirmation;
+  late AccountEntity accountEntity;
   late AddAccountSpy addAccount;
+  late SaveCurrentAccountSpy saveCurrentAccount;
   late ValidationSpy validation;
   late GetxSignUpPresenter sut;
  
   When mockAddAccountCall() => when(() => addAccount.add(any()));
   void mockAddAccount(AccountEntity data) => mockAddAccountCall().thenAnswer((_) async => data);
   void mockAddAccountError(DomainError error) => mockAddAccountCall().thenThrow(error);
+
+  When mockSaveCall() => when(() => saveCurrentAccount.save(any()));
+  void mockSave() => mockSaveCall().thenAnswer((_) async => _);
+  void mockSaveError() => mockSaveCall().thenThrow(DomainError.unexpected);
 
   When mockValidationCall(String? field) => when(() => validation.validate(
     field: field ?? any(named: 'field'),
@@ -53,12 +60,16 @@ void main() {
     email = faker.internet.email();
     password = faker.internet.password();
     passwordConfirmation = faker.internet.password();
+    accountEntity = makeAccount();
     addAccount = AddAccountSpy();
+    saveCurrentAccount = SaveCurrentAccountSpy();
     validation = ValidationSpy();
-    mockAddAccount(makeAccount());
+    mockAddAccount(accountEntity);
+    mockSave();
     mockValidation();
     sut = GetxSignUpPresenter(
       addAccount: addAccount,
+      saveCurrentAccount: saveCurrentAccount,
       validation: validation
     );
   });
@@ -277,5 +288,16 @@ void main() {
     expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.emailInUse]));
 
     await sut.signUp();
+  });
+
+  test('29 - Should call SaveCurrentAccount with correct value', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    await sut.signUp();
+
+    verify(() => saveCurrentAccount.save(accountEntity)).called(1);
   });
 } 
