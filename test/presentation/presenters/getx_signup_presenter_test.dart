@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/params/params.dart';
 import 'package:fordev/domain/usecases/usecases.dart';
 
@@ -26,6 +27,7 @@ void main() {
  
   When mockAddAccountCall() => when(() => addAccount.add(any()));
   void mockAddAccount(AccountEntity data) => mockAddAccountCall().thenAnswer((_) async => data);
+  void mockAddAccountError(DomainError error) => mockAddAccountCall().thenThrow(error);
 
   When mockValidationCall(String? field) => when(() => validation.validate(
     field: field ?? any(named: 'field'),
@@ -247,6 +249,19 @@ void main() {
 
   test('25 - Should emit correct events on AddAccount success', () async {  
     expectLater(sut.isLoadingStream, emits(true));
+
+    await sut.signUp();
+  });
+
+  test('26,27 - Should emit correct events on UnexpectedError', () async {
+    mockAddAccountError(DomainError.unexpected);
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.signUp();
   });
