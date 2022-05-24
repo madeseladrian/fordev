@@ -6,7 +6,7 @@
 3. ✅ Não notificar o nameErrorStream se o valor for igual ao último
 4. ✅ Notificar o isFormValidStream após alterar o nome, mas não notificar o isFormValidStream se o valor for igual ao último
 5. ✅ Notificar o nameErrorStream com null, caso o Validation não retorne erro
-6. Chamar Validation ao alterar o email
+6. ✅ Chamar Validation ao alterar o email
 7. Notificar o emailErrorStream com o mesmo erro do Validation, caso retorne erro
 8. Não notificar o emailErrorStream se o valor for igual ao último
 9. Notificar o isFormValidStream após alterar o email, mas não notificar o isFormValidStream se o valor for igual ao último

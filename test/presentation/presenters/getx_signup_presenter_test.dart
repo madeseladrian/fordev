@@ -12,6 +12,7 @@ class ValidationSpy extends Mock implements Validation {}
 
 void main() {
   late String name;
+  late String email;
   late ValidationSpy validation;
   late GetxSignUpPresenter sut;
  
@@ -26,6 +27,7 @@ void main() {
     
   setUp(() {
     name = faker.person.name();
+    email = faker.internet.email();
     validation = ValidationSpy();
     mockValidation();
     sut = GetxSignUpPresenter(
@@ -56,5 +58,11 @@ void main() {
     
     sut.validateName(name);
     sut.validateName(name);
+  });
+
+  test('6 - Should call Validation with correct email', () async {
+    sut.validateEmail(email);
+    
+    verify(() => validation.validate(field: 'email', value: email)).called(1);
   });
 } 
