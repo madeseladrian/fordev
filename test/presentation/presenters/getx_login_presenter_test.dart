@@ -78,7 +78,7 @@ void main() {
     verify(() => validation.validate(field: 'email', value: email)).called(1);
   });
 
-  test('2,3,4 - Should returns invalidFieldError if email is empty', () async {
+  test('2,3,4 - Should emailErrorStream returns invalidFieldError if email is empty', () async {
     mockValidationError(value: ValidationError.invalidField);
    
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -88,7 +88,17 @@ void main() {
     sut.validateEmail(email);
   });
 
-  test('5 - Should returns null if validation email succeeds', () async {
+  test('2,3,4 - Should emailErrorStream returns requiredField if email is null', () async {
+    mockValidationError(value: ValidationError.requiredField);
+   
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
+    sut.validateEmail(email);
+  });
+
+  test('5 - Should emailErrorStream returns null if validation email succeeds', () async {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
     
@@ -102,12 +112,30 @@ void main() {
     verify(() => validation.validate(field: 'password', value: password)).called(1);
   });
 
-  test('7,8,9,10 - Should returns requiredFieldError if password is null', () async {
+  test('7,8,9 - Should returns invalidFieldError if password is empty', () async {
+    mockValidationError(value: ValidationError.invalidField);
+   
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+  test('7,8,9 - Should returns requiredFieldError if password is null', () async {
     mockValidationError(value: ValidationError.requiredField);
    
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+  test('10 - Should passwordErrorStream returns null if validation password succeeds', () async {
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    
     sut.validatePassword(password);
     sut.validatePassword(password);
   });
