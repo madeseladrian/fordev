@@ -15,7 +15,7 @@
 12.✅ Notificar o isFormValidStream habilita o butão se os campos estiverem válidos
 13.✅ Não notificar o isFormValidStream se o valor for igual ao último
 14.✅ Chamar o Authentication com email e senha corretos
-15.✅ Notificar o isLoadingStream como true antes de chamar o Authentication e false no fim do Authentication
+15.✅ Notificar o isLoadingStream como true antes de chamar o Authentication
 16.✅ Notificar o mainErrorStream caso o Authentication retorne erro: InvalidCredentials 
 17.✅ Notificar o mainErrorStream caso o Authentication retorne erro: UnexpectedError
 18.✅ Gravar o Account no cache em caso de sucesso

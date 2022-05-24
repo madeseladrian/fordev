@@ -24,10 +24,12 @@
 21.✅ Notificar o isFormValidStream desabilita o butão se qualquer campo estiver inválido
 22.✅ Notificar o isFormValidStream habilita o butão se os campos estiverem válidos
 23.✅ Não notificar o isFormValidStream se o valor for igual ao último
-24.✅ Chamar o Add Account com os valores corretos
-25. Notificar o isLoadingStream como true antes de chamar o Authentication e false no fim do Authentication
-26. Notificar o mainErrorStream caso o Add Account retorne erro: UnexpectedError
-27. Gravar o Account no cache em caso de sucesso
-28. Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
-29. Levar o usuário pra tela de Enquetes em caso de sucesso
-30. Levar o usuário pra tela de Login ao clicar no link de voltar para login
+24.✅ Chamar o AddAccount com os valores corretos
+25.✅ Notificar o isLoadingStream como true antes de chamar o AddAccount
+25. Notificar o isLoadingStream como false no fim do AddAccount
+26. Notificar o mainErrorStream caso o AddAccount retorne erro: EmailInUseError
+27. Notificar o mainErrorStream caso o AddAccount retorne erro: UnexpectedError
+28. Gravar o Account no cache em caso de sucesso
+29. Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
+30. Levar o usuário pra tela de Enquetes em caso de sucesso
+31. Levar o usuário pra tela de Login ao clicar no link de voltar para login

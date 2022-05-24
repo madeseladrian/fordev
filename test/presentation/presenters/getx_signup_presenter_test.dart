@@ -244,4 +244,10 @@ void main() {
       passwordConfirmation: passwordConfirmation
     ))).called(1);
   });
+
+  test('25 - Should emit correct events on AddAccount success', () async {  
+    expectLater(sut.isLoadingStream, emits(true));
+
+    await sut.signUp();
+  });
 } 

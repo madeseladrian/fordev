@@ -22,12 +22,14 @@ class GetxSignUpPresenter extends GetxController {
   final _passwordError = Rx<UIError?>(null);
   final _passwordConfirmationError = Rx<UIError?>(null);
   final _isFormValid = Rx<bool>(false);
+  final _isLoading = Rx<bool>(false);
 
   Stream<UIError?> get nameErrorStream => _nameError.stream;
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
   Stream<UIError?> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxSignUpPresenter({
     required this.addAccount,
@@ -82,6 +84,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   Future<void> signUp() async {
+    _isLoading.value = true;
     await addAccount.add(
       AddAccountParams(
         name: _name,
