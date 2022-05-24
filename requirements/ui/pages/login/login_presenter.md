@@ -12,7 +12,7 @@
 9. ✅ Notificar o isFormValidStream após alterar a senha, mas mas não notificar o isFormValidStream se o valor for igual ao último
 10.✅ Notificar o passwordErrorStream com null, caso o Validation não retorne erro
 11.✅ Notificar o isFormValidStream desabilita o butão se qualquer campo estiver inválido
-12.✅ Notificar o isFormValidStream habilita o butão se qualquer campo estiver inválido
+12.✅ Notificar o isFormValidStream habilita o butão se os campos estiverem válidos
 13.✅ Chamar o Authentication com email e senha corretos
 14.✅ Notificar o isLoadingStream como true antes de chamar o Authentication e false no fim do Authentication
 15.✅ Notificar o mainErrorStream caso o Authentication retorne erro: InvalidCredentials 
