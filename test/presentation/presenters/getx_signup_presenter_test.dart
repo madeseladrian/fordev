@@ -14,6 +14,7 @@ void main() {
   late String name;
   late String email;
   late String password;
+  late String passwordConfirmation;
   late ValidationSpy validation;
   late GetxSignUpPresenter sut;
  
@@ -30,6 +31,7 @@ void main() {
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
+    passwordConfirmation = faker.internet.password();
     validation = ValidationSpy();
     mockValidation();
     sut = GetxSignUpPresenter(
@@ -137,5 +139,14 @@ void main() {
     
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('16 - Should call Validation with correct passwordConfirmation', () async {
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    
+    verify(() => validation.validate(
+      field: 'passwordConfirmation', 
+      value: passwordConfirmation 
+    )).called(1);
   });
 } 
