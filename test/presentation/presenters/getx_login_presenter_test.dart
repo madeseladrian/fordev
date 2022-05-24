@@ -170,9 +170,6 @@ void main() {
   });
 
   test('15 - Should emit correct events on Authentication success', () async {
-    sut.validateEmail(email);
-    sut.validatePassword(password);
-    
     expectLater(sut.isLoadingStream, emits(true));
 
     await sut.authenticate();
@@ -180,8 +177,6 @@ void main() {
 
   test('16 - Should emit correct events on InvalidCredentialsError', () async {
     mockAuthenticationError(DomainError.invalidCredentials);
-    sut.validateEmail(email);
-    sut.validatePassword(password);
     
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((error) => 
@@ -192,8 +187,6 @@ void main() {
 
   test('17 - Should emit correct events on UnexpectedError', () async {
     mockAuthenticationError(DomainError.unexpected);
-    sut.validateEmail(email);
-    sut.validatePassword(password);
     
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((error) => 
@@ -203,9 +196,6 @@ void main() {
   });
 
   test('18 - Should call SaveCurrentAccount with correct values', () async {
-    sut.validateEmail(email);
-    sut.validatePassword(password);
-    
     await sut.authenticate();
 
     verify(() => saveCurrentAccount.save(accountEntity)).called(1);
@@ -213,8 +203,6 @@ void main() {
 
   test('19 - Should emit UnexpectedError if SaveCurrentAccount fails', () async {
     mockSaveError();
-    sut.validateEmail(email);
-    sut.validatePassword(password);
     
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1((error) => 
@@ -224,9 +212,6 @@ void main() {
   });
   
   test('20 - Should change page on success authentication', () async {
-    sut.validateEmail(email);
-    sut.validatePassword(password);
-    
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
 
     await sut.authenticate();
