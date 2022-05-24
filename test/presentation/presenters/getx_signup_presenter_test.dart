@@ -111,4 +111,13 @@ void main() {
     verify(() => validation.validate(field: 'password', value: password)).called(1);
   });
 
+  test('12,13,14 - Should returns invalidFieldError if password is empty', () async {
+    mockValidationError(value: ValidationError.invalidField);
+   
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
 } 

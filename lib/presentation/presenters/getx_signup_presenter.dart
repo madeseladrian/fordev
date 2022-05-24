@@ -46,6 +46,7 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   void validatePassword(String password) {
-    _validateField(field: 'password', value: password);
+    _passwordError.value = _validateField(field: 'password', value: password);
+    _validateForm();
   }
 }
