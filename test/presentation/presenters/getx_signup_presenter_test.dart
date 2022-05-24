@@ -13,6 +13,7 @@ class ValidationSpy extends Mock implements Validation {}
 void main() {
   late String name;
   late String email;
+  late String password;
   late ValidationSpy validation;
   late GetxSignUpPresenter sut;
  
@@ -28,6 +29,7 @@ void main() {
   setUp(() {
     name = faker.person.name();
     email = faker.internet.email();
+    password = faker.internet.password();
     validation = ValidationSpy();
     mockValidation();
     sut = GetxSignUpPresenter(
@@ -83,4 +85,11 @@ void main() {
     sut.validateEmail(email);
     sut.validateEmail(email);
   });
+
+  test('11 - Should call Validation with correct password', () async {
+    sut.validatePassword(password);
+    
+    verify(() => validation.validate(field: 'password', value: password)).called(1);
+  });
+
 } 
