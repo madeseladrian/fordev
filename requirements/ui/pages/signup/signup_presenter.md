@@ -30,6 +30,6 @@
 27.✅ Notificar o mainErrorStream caso o AddAccount retorne erro: UnexpectedError
 28.✅ Notificar o mainErrorStream caso o AddAccount retorne erro: EmailInUseError
 29.✅ Gravar o Account no cache em caso de sucesso
-30. Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
+30.✅ Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
 31. Levar o usuário pra tela de Enquetes em caso de sucesso
 32. Levar o usuário pra tela de Login ao clicar no link de voltar para login
