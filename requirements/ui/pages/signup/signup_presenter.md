@@ -28,7 +28,7 @@
 25.✅ Notificar o isLoadingStream como true antes de chamar o AddAccount
 26.✅ Notificar o isLoadingStream como false no fim do AddAccount
 27.✅ Notificar o mainErrorStream caso o AddAccount retorne erro: UnexpectedError
-28. Notificar o mainErrorStream caso o AddAccount retorne erro: EmailInUseError
+28.✅ Notificar o mainErrorStream caso o AddAccount retorne erro: EmailInUseError
 29. Gravar o Account no cache em caso de sucesso
 30. Notificar o mainErrorStream caso o SaveCurrentAccount retorne erro
 31. Levar o usuário pra tela de Enquetes em caso de sucesso
