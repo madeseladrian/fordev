@@ -29,4 +29,8 @@ void main() {
     expect(sut.validate({'any_field': null}), null);
     expect(sut.validate({'other_field': null}), null);
   });
+
+  test('5 - Should return null if the values of the fields are null', () {
+    expect(sut.validate({'any_field': null, 'other_field': null}), null);
+  });
 }
