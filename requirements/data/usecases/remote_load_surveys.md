@@ -11,11 +11,11 @@
 > ## Exceção - URL inválida (404)
 5. ✅ Sistema retorna uma mensagem de erro inesperado
 
-> ## Exceção - Acesso negado
-6. Sistema retorna uma mensagem de acesso negado
+> ## Exceção - Falha no servidor (500)
+6. ✅ Sistema retorna uma mensagem de erro inesperado
 
-> ## Exceção - Falha no servidor
-7. Sistema retorna uma mensagem de erro inesperado
+> ## Exceção - Acesso negado
+7. Sistema retorna uma mensagem de acesso negado
 
 > ## Sucesso - Decoratee
 8. Sistema valida o token de acesso para saber se o usuário tem permissão para ver esses dados
