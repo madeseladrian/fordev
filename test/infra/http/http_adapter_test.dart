@@ -16,6 +16,7 @@ void main() {
   When mockGetCall() => when(() => client.get(any(), headers: any(named: 'headers')));
   void mockGet(int statusCode, {String body = '{"any_key":"any_value"}'}) => 
     mockGetCall().thenAnswer((_) async => Response(body, statusCode));
+  void mockGetError() => when(() => mockGetCall().thenThrow(Exception()));
 
   When mockPostCall() => when(() => 
     client.post(
@@ -102,6 +103,12 @@ void main() {
     // Is an error different from the others
     test('10 - Should return ServerError if get throws with 422', () async {
       mockGet(422);
+      final future = sut.request(url: url, method: 'get');
+      expect(future, throwsA(HttpError.serverError));
+    });
+
+    test('11 - Should return ServerError if get throws', () async {
+      mockGetError();
       final future = sut.request(url: url, method: 'get');
       expect(future, throwsA(HttpError.serverError));
     });
