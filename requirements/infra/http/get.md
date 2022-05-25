@@ -4,7 +4,7 @@
 1. ✅ Request com verbo http correto (get)
 2. ✅ Passar nos headers o content type JSON
 3. ✅ Ok - 200 e resposta com dados
-4. No content - 204 e resposta sem dados
+4. ✅ No content - 204 e resposta sem dados
 
 > ## Erros
 5. Bad request - 400
