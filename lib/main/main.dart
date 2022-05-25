@@ -26,9 +26,9 @@ class App extends StatelessWidget {
       initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: makeSplashPage),
-        GetPage(name: '/login', page: makeLoginPage),
-        GetPage(name: '/surveys', page: () => const Scaffold(body: Center(child: Text('Pesquisa')))),
-        GetPage(name: '/signup', page: () => const Scaffold(body: Center(child: Text('Criar conta')))),
+        GetPage(name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
+        GetPage(name: '/signup', page: makeSignUpPage),
+        GetPage(name: '/surveys', page: () => const Scaffold(body: Center(child: Text('Pesquisa'))), transition: Transition.fadeIn),
       ]
     );
   }

@@ -5,11 +5,12 @@ import '../../domain/params/params.dart';
 import '../../domain/usecases/usecases.dart';
 
 import '../../ui/helpers/helpers.dart';
+import '../../ui/pages/pages.dart';
 
 import '../helpers/helpers.dart';
 import '../protocols/protocols.dart';
 
-class GetxSignUpPresenter extends GetxController {
+class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   final AddAccount addAccount;
   final SaveCurrentAccount saveCurrentAccount;
   final Validation validation;
@@ -28,13 +29,21 @@ class GetxSignUpPresenter extends GetxController {
   final _isFormValid = Rx<bool>(false);
   final _isLoading = Rx<bool>(false);
 
+  @override
   Stream<UIError?> get nameErrorStream => _nameError.stream;
+  @override
   Stream<UIError?> get emailErrorStream => _emailError.stream;
+  @override
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
+  @override
   Stream<UIError?> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
+  @override
   Stream<UIError?> get mainErrorStream => _mainError.stream;
+  @override
   Stream<String?> get navigateToStream => _navigateTo.stream;
+  @override
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  @override
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxSignUpPresenter({
@@ -69,30 +78,35 @@ class GetxSignUpPresenter extends GetxController {
       && _passwordConfirmation != null;
   }
 
+  @override
   void validateName(String name) {
     _name = name;
     _nameError.value = _validateField(field: 'name');
     _validateForm();
   }
 
+  @override
   void validateEmail(String email) {
     _email = email;
     _emailError.value = _validateField(field: 'email');
     _validateForm();
   }
 
+  @override
   void validatePassword(String password) {
     _password = password;
     _passwordError.value = _validateField(field: 'password',);
     _validateForm();
   }
 
+  @override
   void validatePasswordConfirmation(String passwordConfirmation) {
     _passwordConfirmation = passwordConfirmation;
     _passwordConfirmationError.value = _validateField(field: 'passwordConfirmation');
     _validateForm();
   }
 
+  @override
   Future<void> signUp() async {
     try {
       _mainError.value = null;
@@ -116,6 +130,7 @@ class GetxSignUpPresenter extends GetxController {
     }
   }
 
+  @override
   void goToLogin() {
     _navigateTo.value = '/login';
   }
