@@ -81,6 +81,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   @override
   Future<void> authenticate() async {
     try {
+      _mainError.value = null;
       _isLoading.value = true;
       final accountEntity = await authentication.authenticate(
         AuthenticationParams(email: _email, password: _password)
@@ -88,12 +89,12 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
       await saveCurrentAccount.save(accountEntity);
       _navigateTo.value = '/surveys';
     } on DomainError catch(error) {
+      _isLoading.value = false;
       switch (error) {
         case DomainError.invalidCredentials:
-          _mainError.value = UIError.invalidCredentials; break;
+          _mainError.value = UIError.invalidCredentials; break;        
         default: _mainError.value = UIError.unexpected;
       }
-      _isLoading.value = false;
     }
   }
 

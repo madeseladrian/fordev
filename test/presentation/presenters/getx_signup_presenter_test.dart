@@ -268,7 +268,8 @@ void main() {
 
   test('25 - Should emit correct events on AddAccount success', () async {  
     expectLater(sut.isLoadingStream, emits(true));
-
+    expectLater(sut.mainErrorStream, emits(null));
+    
     await sut.signUp();
   });
 
@@ -299,8 +300,8 @@ void main() {
   test('30 - Should emit UnexpectedError if SaveCurrentAccount fails', () async {
     mockSaveError();
     
-    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.signUp();
   });

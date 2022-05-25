@@ -19,7 +19,7 @@ Future<void> showLoading(BuildContext context) async {
   );
 }
 
-void hideLoading(BuildContext context) {
+void hideShowDialog(BuildContext context) {
   if (Navigator.canPop(context)) {
     Navigator.of(context).pop();
   }

@@ -14,6 +14,7 @@ class LoginPage extends StatelessWidget with NavigationManager {
 
   @override
   Widget build(BuildContext context) {
+
     void _hideKeyboard() {
       final currentFocus = FocusScope.of(context);
       if (!currentFocus.hasPrimaryFocus) {
@@ -28,7 +29,7 @@ class LoginPage extends StatelessWidget with NavigationManager {
             if (isLoading == true) {
               showLoading(context);
             } else {
-              hideLoading(context);
+              hideShowDialog(context);
             }
           });
 
