@@ -65,6 +65,23 @@ void main() {
       expect(response, null);
     });
 
+    // Error tests with body is not necessary, because it is the same as without body
+    test('5 - Should return BadRequestError if get returns 400 with body', () async {
+      mockGet(400, body: '');
+
+      final future = sut.request(url: url, method: 'get');
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
+    test('5 - Should return BadRequestError if get returns 400', () async {
+      mockGet(400);
+
+      final future = sut.request(url: url, method: 'get');
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
   });
 
   group('post', () {
@@ -103,7 +120,7 @@ void main() {
       expect(response, null);
     });
 
-    // Tests with body is not necessary, because it is the same as without body
+    // Error tests body is not necessary, because it is the same as without body
     test('8 - Should return BadRequestError if post returns 400 with body', () async {
       mockPost(400, body: ''); 
       final future = sut.request(url: url, method: 'post');
