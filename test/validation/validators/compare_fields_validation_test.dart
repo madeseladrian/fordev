@@ -19,4 +19,9 @@ void main() {
     final formData = {'any_field': 'any_value', 'other_field': 'any_value'};
     expect(sut.validate(formData), null);
   });
+
+  test('3 - Should return null if one of the fields is missing', () {
+    expect(sut.validate({'any_field': 'any_value'}), null);
+    expect(sut.validate({'other_field': 'any_value'}), null);
+  });
 }
