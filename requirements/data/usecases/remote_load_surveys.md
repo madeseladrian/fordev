@@ -3,16 +3,16 @@
 > ## Caso de sucesso
 1. ✅ Sistema faz uma requisição para a URL da API de surveys
 2. ✅ Sistema entrega os dados das enquetes
-3. Sistema valida os dados recebidos da API
-
-> ## Exceção - URL inválida
-4. Sistema retorna uma mensagem de erro inesperado
-
-> ## Exceção - Acesso negado
-5. Sistema retorna uma mensagem de acesso negado
+3. ✅ Sistema valida os dados recebidos da API
 
 > ## Exceção - Resposta inválida
-6. Sistema retorna uma mensagem de erro inesperado
+4. ✅ Sistema retorna uma mensagem de erro inesperado
+
+> ## Exceção - URL inválida
+5. Sistema retorna uma mensagem de erro inesperado
+
+> ## Exceção - Acesso negado
+6. Sistema retorna uma mensagem de acesso negado
 
 > ## Exceção - Falha no servidor
 7. Sistema retorna uma mensagem de erro inesperado
