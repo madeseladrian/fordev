@@ -43,6 +43,7 @@ void main() {
     body: any(named: 'body'),
   ));
   void mockRequest(dynamic data) => mockRequestCall().thenAnswer((_) async => data);
+  void mockRequestError(HttpError error) => mockRequestCall().thenThrow(error);
 
   List<Map> makeSurveyList() => [{
     'id': faker.guid.guid(),
@@ -91,6 +92,14 @@ void main() {
 
   test('3,4 - Should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {
     mockRequest([{'invalid_key': 'invalid_value'}]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('5 - Should throw UnexpectedError if HttpClient returns 404', () async {
+    mockRequestError(HttpError.notFound);
 
     final future = sut.load();
 
