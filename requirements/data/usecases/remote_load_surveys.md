@@ -2,8 +2,8 @@
 
 > ## Caso de sucesso
 1. ✅ Sistema faz uma requisição para a URL da API de surveys
-2. Sistema valida os dados recebidos da API
-3. Sistema entrega os dados das enquetes
+2. ✅ Sistema entrega os dados das enquetes
+3. Sistema valida os dados recebidos da API
 
 > ## Exceção - URL inválida
 4. Sistema retorna uma mensagem de erro inesperado
