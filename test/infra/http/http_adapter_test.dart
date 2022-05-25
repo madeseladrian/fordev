@@ -13,6 +13,10 @@ void main() {
   late ClientSpy client;
   late String url;
 
+  When mockGetCall() => when(() => client.get(any(), headers: any(named: 'headers')));
+  void mockGet(int statusCode, {String body = '{"any_key":"any_value"}'}) => 
+    mockGetCall().thenAnswer((_) async => Response(body, statusCode));
+
   When mockPostCall() => when(() => 
     client.post(
       any(),
@@ -26,12 +30,26 @@ void main() {
   setUp(() {
     client = ClientSpy();
     sut = HttpAdapter(client: client);
+    mockGet(200);
     mockPost(200);
   });
 
   setUpAll(() {
     url = faker.internet.httpUrl();
     registerFallbackValue(Uri.parse(url));
+  });
+
+  group('get', () {
+    test('1,2 - Should call get with correct values', () async {
+      await sut.request(url: url, method: 'get');
+      verify(() => client.get(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json'
+        }
+      ));
+    });
   });
 
   group('post', () {
@@ -122,7 +140,7 @@ void main() {
   });
 
   group('shared', () {
-    test('16 - Should throw ServerError if invalid method is provided', () {
+    test('* - Should throw ServerError if invalid method is provided', () {
       final future = sut.request(url: url, method: 'invalid_method');
       expect(() => future, throwsA(HttpError.serverError));
     });
