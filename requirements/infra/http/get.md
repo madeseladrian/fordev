@@ -13,8 +13,8 @@
 8. ✅ Not found - 404
 9. ✅ Internal server error - 500
 
-> ## Exceção - Status code diferente dos citados acima
-10. Internal server error - 500
+> ## Exceção - Status code diferente dos citados acima (422)
+10.✅ Internal server error - 500
 
 > ## Exceção - Http request deu alguma exceção
 11. Internal server error - 500

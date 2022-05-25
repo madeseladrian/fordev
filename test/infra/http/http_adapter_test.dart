@@ -53,64 +53,56 @@ void main() {
 
     test('3 - Should return data if get returns 200', () async {
       final response = await sut.request(url: url, method: 'get');
-
       expect(response, {'any_key': 'any_value'});
     });
 
     test('4 - Should return null if get returns 200 with no data', () async {
       mockGet(200, body: '');
-
       final response = await sut.request(url: url, method: 'get');
-
       expect(response, null);
     });
 
     // Error tests with body is not necessary, because it is the same as without body
     test('5 - Should return BadRequestError if get returns 400 with body', () async {
       mockGet(400, body: '');
-
       final future = sut.request(url: url, method: 'get');
-
       expect(future, throwsA(HttpError.badRequest));
     });
 
     test('5 - Should return BadRequestError if get returns 400', () async {
       mockGet(400);
-
       final future = sut.request(url: url, method: 'get');
-
       expect(future, throwsA(HttpError.badRequest));
     });
 
     test('6 - Should return UnauthorizedError if get returns 401', () async {
       mockGet(401);
-
       final future = sut.request(url: url, method: 'get');
-
       expect(future, throwsA(HttpError.unauthorized));
     });
 
     test('7 - Should return ForbiddenError if get returns 403', () async {
       mockGet(403);
-
       final future = sut.request(url: url, method: 'get');
-
       expect(future, throwsA(HttpError.forbidden));
     });
 
     test('8 - Should return NotFoundError if get returns 404', () async {
       mockGet(404);
-
       final future = sut.request(url: url, method: 'get');
-
       expect(future, throwsA(HttpError.notFound));
     });
 
     test('9 - Should return ServerError if get returns 500', () async {
       mockGet(500);
-
       final future = sut.request(url: url, method: 'get');
+      expect(future, throwsA(HttpError.serverError));
+    });
 
+    // Is an error different from the others
+    test('10 - Should return ServerError if get throws with 422', () async {
+      mockGet(422);
+      final future = sut.request(url: url, method: 'get');
       expect(future, throwsA(HttpError.serverError));
     });
   });
