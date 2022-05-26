@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  carousel_slider:
   cupertino_icons: 
   equatable: 
   flutter_secure_storage:
