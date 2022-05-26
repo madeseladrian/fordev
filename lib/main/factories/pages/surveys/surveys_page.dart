@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:mocktail/mocktail.dart';
 import '../../../../ui/pages/pages.dart';
 
-Widget makeSurveysPage() => const SurveysPage();
+class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
+
+Widget makeSurveysPage() => SurveysPage(presenter: SurveysPresenterSpy());
