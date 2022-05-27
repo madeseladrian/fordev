@@ -13,7 +13,7 @@ void main() {
   late SurveysPresenterSpy presenter;
   late StreamController<bool> isLoadingController;
 
-  Future<void> _testPage(WidgetTester tester) async {
+  Future<void> loadPage(WidgetTester tester) async {
     presenter = SurveysPresenterSpy();
     isLoadingController = StreamController<bool>();
     
@@ -29,13 +29,13 @@ void main() {
   }
 
   testWidgets('1 - Should call LoadSurveys on page load', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     verify(() => presenter.loadData()).called(1);
   });
 
   testWidgets('2,3 - Should handle loading correctly', (WidgetTester tester) async {
-    await  _testPage(tester);
+    await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();

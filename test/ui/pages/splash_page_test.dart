@@ -13,7 +13,7 @@ void main() {
   late SplashPresenterSpy presenter;
   late StreamController<String?> navigateToController;
 
-  Future<void> _testPage(WidgetTester tester) async { 
+  Future<void> loadPage(WidgetTester tester) async { 
     presenter = SplashPresenterSpy();
     navigateToController = StreamController<String?>();
 
@@ -39,13 +39,13 @@ void main() {
   });
 
   testWidgets('1 - Should call loadCurrentAccount on page load', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     verify(() => presenter.checkAccount()).called(1);
   });
 
   testWidgets('2 - Should change page', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     navigateToController.add('/any_route');
     await tester.pumpAndSettle();
@@ -55,7 +55,7 @@ void main() {
   });
 
   testWidgets('3 - Should not change page', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     navigateToController.add('');
     await tester.pumpAndSettle();

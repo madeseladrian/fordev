@@ -22,7 +22,7 @@ void main() {
   late StreamController<bool> isFormValidController;
   late StreamController<bool> isLoadingController;
 
-  Future<void> _testPage(WidgetTester tester) async {
+  Future<void> loadPage(WidgetTester tester) async {
     presenter = SignUpPresenterSpy();
     nameErrorController = StreamController<UIError?>();
     emailErrorController = StreamController<UIError?>();
@@ -65,7 +65,7 @@ void main() {
   });
 
   testWidgets('1,2,3,4,5 - Should load with correct initial state', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     final nameTextChildren = find.descendant(
       of: find.bySemanticsLabel('Nome'),
@@ -102,7 +102,7 @@ void main() {
   });
 
   testWidgets('6 - Should call validate with correct name', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     final name = faker.person.name();
     await tester.enterText(find.bySemanticsLabel('Nome'), name);
@@ -110,7 +110,7 @@ void main() {
   });
   
   testWidgets('7 - Should call validate with correct email', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     final email = faker.internet.email();
     await tester.enterText(find.bySemanticsLabel('Email'), email);
@@ -118,7 +118,7 @@ void main() {
   });
 
   testWidgets('8 - Should call validate with correct password', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     final password = faker.internet.password();
     await tester.enterText(find.bySemanticsLabel('Senha'), password);
@@ -126,7 +126,7 @@ void main() {
   });
 
   testWidgets('9 - Should call validate with correct passwordConfirmation', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     final passwordConfirmation = faker.internet.password();
     await tester.enterText(find.bySemanticsLabel('Confirmar senha'), passwordConfirmation);
@@ -134,7 +134,7 @@ void main() {
   });
 
   testWidgets('10 - Should present error if name is invalid', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     nameErrorController.add(UIError.invalidField);
     await tester.pump();
@@ -143,7 +143,7 @@ void main() {
   });
 
   testWidgets('11 - Should present error if name is empty', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     nameErrorController.add(UIError.requiredField);
     await tester.pump();
@@ -152,7 +152,7 @@ void main() {
   });
 
   testWidgets('12 - Should present no error if name is valid', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     nameErrorController.add(null);
     await tester.pump();
@@ -164,7 +164,7 @@ void main() {
   });
 
   testWidgets('13 - Should present error if email is invalid', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     emailErrorController.add(UIError.invalidField);
     await tester.pump();
@@ -173,7 +173,7 @@ void main() {
   });
 
   testWidgets('14 - Should present error if email is empty', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     emailErrorController.add(UIError.requiredField);
     await tester.pump();
@@ -182,7 +182,7 @@ void main() {
   });
 
   testWidgets('15 - Should present no error if email is valid', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     emailErrorController.add(null);
     await tester.pump();
@@ -194,7 +194,7 @@ void main() {
   });
 
   testWidgets('16 - Should present error if password is empty', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     passwordErrorController.add(UIError.requiredField);
     await tester.pump();
@@ -203,7 +203,7 @@ void main() {
   });
 
   testWidgets('17 - Should present no error if password is valid', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     passwordErrorController.add(null);
     await tester.pump();
@@ -215,7 +215,7 @@ void main() {
   });
 
   testWidgets('18 - Should present error if passwordConfirmation is empty', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     passwordConfirmationErrorController.add(UIError.requiredField);
     await tester.pump();
@@ -224,7 +224,7 @@ void main() {
   });
 
   testWidgets('19 - Should present no error if passwordConfirmation is valid', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     passwordErrorController.add(null);
     await tester.pump();
@@ -236,7 +236,7 @@ void main() {
   });
 
   testWidgets('20 - Should enable button if form is valid', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     isFormValidController.add(true);
     await tester.pump();
@@ -246,7 +246,7 @@ void main() {
   });
 
   testWidgets('21 - Should disable button if form is invalid', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     isFormValidController.add(false);
     await tester.pump();
@@ -256,7 +256,7 @@ void main() {
   });
   
   testWidgets('22 - Should call add account on form submit', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     isFormValidController.add(true);
     await tester.pump();
@@ -269,7 +269,7 @@ void main() {
   });
 
   testWidgets('23 - Should present loading', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();
@@ -278,7 +278,7 @@ void main() {
   });
 
   testWidgets('24 - Should hide loading', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();
@@ -289,7 +289,7 @@ void main() {
   });
 
   testWidgets('25 - Should present error message if add account fails', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     mainErrorController.add(UIError.invalidCredentials);
     await tester.pump();
@@ -298,7 +298,7 @@ void main() {
   });
 
   testWidgets('26 - Should present error message if add account throws', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     mainErrorController.add(UIError.unexpected);
     await tester.pump();
@@ -307,7 +307,7 @@ void main() {
   });
   
   testWidgets('27 - Should change page', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     navigateToController.add('any_route');
     await tester.pumpAndSettle();
@@ -317,7 +317,7 @@ void main() {
   });
 
   testWidgets('28 - Should not change page', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     navigateToController.add('');
     await tester.pumpAndSettle();
@@ -329,7 +329,7 @@ void main() {
   });
 
   testWidgets('29 - Should call goToLogin on link click', (WidgetTester tester) async {
-    await _testPage(tester);
+    await loadPage(tester);
 
     await tester.pump();
     final button = find.text('Login');
