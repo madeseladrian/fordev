@@ -22,9 +22,10 @@ class SurveysPage extends StatelessWidget {
             if (isLoading == true) {
               showLoading(context);
             } else {
-              hideShowDialog(context);
+              hideLoading(context);
             }
           });
+          
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: CarouselSlider(

@@ -34,15 +34,23 @@ void main() {
     verify(() => presenter.loadData()).called(1);
   });
 
-  testWidgets('2,3 - Should handle loading correctly', (WidgetTester tester) async {
+  testWidgets('2 - Should present loading', (WidgetTester tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
     
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets('3 - Should hide loading', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isLoadingController.add(true);
+    await tester.pump();
     isLoadingController.add(false);
     await tester.pump();
+
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }
