@@ -75,7 +75,7 @@ void main() {
     expect(find.text('Question 1'), findsNothing);
   });
 
-  testWidgets('5 - Should present list if surveysStream succeeds', (WidgetTester tester) async {
+  testWidgets('5,6 - Should present list if surveysStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
     loadSurveysController.add(makeSurveyList());
@@ -85,5 +85,7 @@ void main() {
     expect(find.text('Recarregar'), findsNothing);
     expect(find.text('Question 1'), findsWidgets);
     expect(find.text('Question 2'), findsWidgets);
+    expect(find.text('Date 1'), findsWidgets);
+    expect(find.text('Date 2'), findsWidgets);
   });
 }
