@@ -1,10 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:fordev/ui/pages/pages.dart';
 
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
 import 'components/components.dart';
-import 'surveys_presenter.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter presenter;
@@ -25,20 +25,35 @@ class SurveysPage extends StatelessWidget {
               hideLoading(context);
             }
           });
-          
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: CarouselSlider(
-              options: CarouselOptions(
-                enlargeCenterPage: true,
-                aspectRatio: 1
-              ),
-              items: const [
-                SurveyItem(),
-                SurveyItem(),
-                SurveyItem(),
-              ]
-            ),
+
+          return StreamBuilder<List<SurveyViewModel>>(
+            stream: presenter.loadSurveysStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Column(
+                  children: [
+                    Center(child: Text(snapshot.error.toString())),
+                    ElevatedButton(
+                      child: Text(R.string.reload),
+                      onPressed: null,
+                    ),
+                  ],
+                );
+              }
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      enlargeCenterPage: true,
+                      aspectRatio: 1
+                    ),
+                    items: snapshot.data?.map((viewmodel) => SurveyItem(viewModel: viewmodel)).toList(),
+                  ),
+                );
+              }
+              return const SizedBox(height: 0);
+            }
           );
         }
       )
