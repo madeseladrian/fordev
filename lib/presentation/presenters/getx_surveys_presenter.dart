@@ -1,10 +1,11 @@
-import 'package:fordev/domain/helpers/domain_error.dart';
-import 'package:fordev/ui/helpers/errors/errors.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
+
 import '../../ui/pages/pages.dart';
+import '../../ui/helpers/errors/errors.dart';
 
 class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
   final LoadSurveys loadSurveys;
@@ -30,7 +31,7 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
         date: DateFormat('dd MMM yyyy').format(survey.dateTime),
         didAnswer: survey.didAnswer)
       ).toList();
-    } on DomainError catch (_, stackTrace) {
+    } on DomainError catch (error, stackTrace) {
       _surveys.subject.addError(UIError.unexpected.description, stackTrace);
     } finally {
       _isLoading.value = false;

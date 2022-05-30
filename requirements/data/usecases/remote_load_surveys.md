@@ -18,4 +18,4 @@
 7. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Sucesso - Decoratee
-8. Sistema valida o token de acesso para saber se o usuário tem permissão para ver esses dados
+*. ✅ Sistema valida o token de acesso para saber se o usuário tem permissão para ver esses dados

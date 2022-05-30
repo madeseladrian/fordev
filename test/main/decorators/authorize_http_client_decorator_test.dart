@@ -92,7 +92,7 @@ void main() {
     expect(future, throwsA(HttpError.forbidden));
   });
 
-  test('5 - Should rethrow if decoratee throws', () async {
+  test('6 - Should rethrow if decoratee throws', () async {
     mockRequestError(HttpError.badRequest);
 
     final future = sut.request(url: url, method: method, body: body);

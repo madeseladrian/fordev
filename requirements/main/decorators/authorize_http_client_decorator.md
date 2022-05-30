@@ -1,11 +1,17 @@
 # Authorize Http Client Decorator
 
-> ## Caso de sucesso
-1. ✅ Chamar o FetchSecureCacheStorage com a chave correta
-2. ✅ Chamar o decoratee com o token de acesso no header
-3. ✅ A resposta do HttpClient tem que retornar a mesma resposta do decoratee
+> ## Sucesso
+1. ✅ Obter o token de acesso do Cache
+2. ✅ Executar o request do HttpClient que está sendo decorado com um novo header (x-access-token)
+3. ✅ Retornar a mesma resposta do HttpClient que está sendo decorado
 
-> ## Erros
-4. ✅ Retornar o ForbiddenError se o FetchSecureCacheStorage falhar
-5. ✅ Repassar o erro do tipo HttpError adiante se o decoratee falhar, para que a classe que o chamou faça o tratamento adequado
-6. Deletar o cache se o request retorna um ForbiddenError
+> ## Exceção - Falha ao obter dados do cache
+4. ✅ Retornar erro HTTP Forbidden - 403
+5. Apagar token de acesso do Cache
+
+> ## Exceção - HttpClient retornou alguma exceção (menos Forbidden)
+6. ✅ Retornar a mesma exceção recebida
+
+> ## Exceção - HttpClient retornou erro Forbidden
+7. Retornar erro HTTP Forbidden - 403
+8. Apagar token de acesso do Cache
