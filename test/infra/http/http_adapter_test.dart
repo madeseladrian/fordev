@@ -50,6 +50,20 @@ void main() {
           'accept': 'application/json'
         }
       ));
+
+      await sut.request(
+        url: url, 
+        method: 'post', 
+        headers: {'any_header': 'any_value'}
+      );
+      verify(() => client.post(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+          'any_header': 'any_value'
+        }
+      ));
     });
 
     test('3 - Should return data if get returns 200', () async {
@@ -116,12 +130,28 @@ void main() {
 
   group('post', () {
     test('1,2,3 - Should call post with correct values', () async { 
-      sut.request(url: url, method: 'post', body: {"any_key":"any_value"});
+      await sut.request(url: url, method: 'post', body: {"any_key":"any_value"});
       verify(() => client.post(
         Uri.parse(url),
         headers: {
           'content-type': 'application/json',
           'accept': 'application/json'
+        },
+        body: '{"any_key":"any_value"}'
+      ));
+
+      await sut.request(
+        url: url, 
+        method: 'post', 
+        body: {'any_key': 'any_value'},
+        headers: {'any_header': 'any_value'}
+      );
+      verify(() => client.post(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+          'any_header': 'any_value'
         },
         body: '{"any_key":"any_value"}'
       ));
