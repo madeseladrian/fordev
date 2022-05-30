@@ -2,10 +2,13 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/presentation/presenters/presenters.dart';
+
+import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
 class LoadSurveysSpy extends Mock implements LoadSurveys {}
@@ -32,6 +35,7 @@ void main() {
 
   When mockLoadCall() => when(() => loadSurveys.load());
   void mockLoad(List<SurveyEntity> surveys) => mockLoadCall().thenAnswer((_) async => surveys);
+  void mockLoadError(DomainError error) => mockLoadCall().thenThrow(error);
 
   setUp(() {
     surveys = makeSurveyList();
@@ -52,6 +56,18 @@ void main() {
       SurveyViewModel(id: surveys[0].id, question: surveys[0].question, date: '02 Feb 2020', didAnswer: surveys[0].didAnswer),
       SurveyViewModel(id: surveys[1].id, question: surveys[1].question, date: '20 Dec 2018', didAnswer: surveys[1].didAnswer),
     ])));
+
+    await sut.loadData();
+  });
+
+  test('5 - Should emit correct events on failure', () async {
+    mockLoadError(DomainError.unexpected);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.surveysStream.listen(
+      null, 
+      onError: expectAsync1((error) => expect(error, UIError.unexpected.description))
+    );
 
     await sut.loadData();
   });
