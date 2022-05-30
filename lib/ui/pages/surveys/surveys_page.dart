@@ -4,7 +4,6 @@ import 'package:fordev/ui/pages/pages.dart';
 
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
-import 'components/components.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter presenter;
@@ -48,7 +47,9 @@ class SurveysPage extends StatelessWidget {
                       enlargeCenterPage: true,
                       aspectRatio: 1
                     ),
-                    items: snapshot.data?.map((viewmodel) => SurveyItem(viewModel: viewmodel)).toList(),
+                    items: snapshot.data?.map(
+                      (viewModel) => SurveyItem(viewModel: viewModel)
+                    ).toList(),
                   ),
                 );
               }

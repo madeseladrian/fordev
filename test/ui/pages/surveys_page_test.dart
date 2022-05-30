@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:fordev/ui/components/app_theme.dart';
+import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
 class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
@@ -15,9 +16,12 @@ void main() {
   late StreamController<bool> isLoadingController;
   late StreamController<List<SurveyViewModel>> loadSurveysController;
 
+  final themeData = makeAppTheme();
+
   List<SurveyViewModel> makeSurveyList() => [
     SurveyViewModel(id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
     SurveyViewModel(id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
+    SurveyViewModel(id: '3', question: 'Question 3', date: 'Date 3', didAnswer: true)
   ];
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -34,9 +38,11 @@ void main() {
       getPages: [
         GetPage(name: '/surveys', page: () => SurveysPage(presenter: presenter)),
       ],
+      theme: themeData,
     );
     await tester.pumpWidget(surveysPage);
   }
+
 
   testWidgets('1 - Should call LoadSurveys on page load', (WidgetTester tester) async {
     await loadPage(tester);
@@ -87,5 +93,24 @@ void main() {
     expect(find.text('Question 2'), findsWidgets);
     expect(find.text('Date 1'), findsWidgets);
     expect(find.text('Date 2'), findsWidgets);
+  });
+
+  testWidgets('7 - Should present right colors', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadSurveysController.add(makeSurveyList());
+    await tester.pump();
+
+    final firstContainer = tester.widget<Container>(
+      find.byKey(const Key('survey_item_1'))
+    );
+    final firstDecoration = firstContainer.decoration as BoxDecoration;
+    expect(firstDecoration.color, themeData.secondaryHeaderColor);
+
+    final secondContainer = tester.widget<Container>(
+      find.byKey(const Key('survey_item_2'))
+    );
+    final secondDecoration = secondContainer.decoration as BoxDecoration;
+    expect(secondDecoration.color, themeData.primaryColorDark);
   });
 }
