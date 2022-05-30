@@ -8,7 +8,7 @@ import 'package:fordev/data/http/http.dart';
 class FetchSecureCacheStorageSpy extends Mock implements FetchSecureCacheStorage {}
 class HttpClientSpy extends Mock implements HttpClient {}
 
-class AuthorizeHttpClientDecorator  {
+class AuthorizeHttpClientDecorator implements HttpClient {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
   final HttpClient decoratee;
 
@@ -17,6 +17,7 @@ class AuthorizeHttpClientDecorator  {
     required this.decoratee
   });
 
+  @override
   Future<dynamic> request({
     required String url,
     required String method,
@@ -24,8 +25,8 @@ class AuthorizeHttpClientDecorator  {
     Map? headers,
   }) async {
     final token = await fetchSecureCacheStorage.fetchSecure('token');
-      final authorizedHeaders = headers ?? {}..addAll({'x-access-token': token});
-      return await decoratee.request(url: url, method: method, body: body, headers: authorizedHeaders);
+    final authorizedHeaders = headers ?? {}..addAll({'x-access-token': token});
+    return await decoratee.request(url: url, method: method, body: body, headers: authorizedHeaders);
   }
 }
 
@@ -74,14 +75,30 @@ void main() {
 
   test('2 - Should call decoratee with access token on header', () async {
     await sut.request(url: url, method: method, body: body);
-    verify(() => httpClient.request(url: url, method: method, body: body, headers: {'x-access-token': token})).called(1);
+    verify(() => httpClient.request(
+      url: url, 
+      method: method, 
+      body: body, 
+      headers: {'x-access-token': token})
+    ).called(1);
 
-    await sut.request(url: url, method: method, body: body, headers: {'any_header': 'any_value'});
+    await sut.request(
+      url: url, 
+      method: method, 
+      body: body, 
+      headers: {'any_header': 'any_value'}
+    );
     verify(() => httpClient.request(
       url: url,
       method: method,
       body: body,
       headers: {'x-access-token': token, 'any_header': 'any_value'}
     )).called(1);
+  });
+
+  test('3 - Should return same result as decoratee', () async {
+    final response = await sut.request(url: url, method: method, body: body);
+
+    expect(response, httpResponse);
   });
 }
