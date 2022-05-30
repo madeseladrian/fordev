@@ -2,3 +2,4 @@
 
 > ## Caso de sucesso
 1. ✅ Chamar o FetchSecureCacheStorage com a chave correta
+2. ✅ Chamar o decoratee com o token de acesso no header
