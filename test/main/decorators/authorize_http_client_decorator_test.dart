@@ -24,9 +24,20 @@ class AuthorizeHttpClientDecorator implements HttpClient {
     Map? body,
     Map? headers,
   }) async {
-    final token = await fetchSecureCacheStorage.fetchSecure('token');
-    final authorizedHeaders = headers ?? {}..addAll({'x-access-token': token});
-    return await decoratee.request(url: url, method: method, body: body, headers: authorizedHeaders);
+    try {
+      final token = await fetchSecureCacheStorage.fetchSecure('token');
+      final authorizedHeaders = headers ?? {}..addAll({'x-access-token': token});
+      return await decoratee.request(
+        url: url, 
+        method: method, 
+        body: body, 
+        headers: authorizedHeaders
+      );
+    } on HttpError {
+      rethrow;
+    } catch (error) {
+      throw HttpError.forbidden;
+    }
   }
 }
 
@@ -47,9 +58,11 @@ void main() {
     headers: any(named: 'headers')
   ));
   void mockRequest(dynamic data) => mockRequestCall().thenAnswer((_) async => data);
+  void mockRequestError(HttpError error) => mockRequestCall().thenThrow(error);
 
   When mockFetchCall() => when(() => secureCacheStorage.fetchSecure(any()));
   void mockFetch(String? data) => mockFetchCall().thenAnswer((_) async => data);
+  void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
   setUp(() {
     url = faker.internet.httpUrl();
@@ -100,5 +113,21 @@ void main() {
     final response = await sut.request(url: url, method: method, body: body);
 
     expect(response, httpResponse);
+  });
+
+  test('4 - Should throw ForbiddenError if FetchSecureCacheStorage throws', () async {
+    mockFetchError();
+
+    final future = sut.request(url: url, method: method, body: body);
+
+    expect(future, throwsA(HttpError.forbidden));
+  });
+
+  test('5 - Should rethrow if decoratee throws', () async {
+    mockRequestError(HttpError.badRequest);
+
+    final future = sut.request(url: url, method: method, body: body);
+
+    expect(future, throwsA(HttpError.badRequest));
   });
 }
