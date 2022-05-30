@@ -14,11 +14,11 @@ class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
 void main() {
   late SurveysPresenterSpy presenter;
   late StreamController<bool> isLoadingController;
-  late StreamController<List<SurveyViewModel>> loadSurveysController;
+  late StreamController<List<SurveyViewModel>> surveysController;
 
   final themeData = makeAppTheme();
 
-  List<SurveyViewModel> makeSurveyList() => [
+  List<SurveyViewModel> makeSurveyList() => const [
     SurveyViewModel(id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
     SurveyViewModel(id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
     SurveyViewModel(id: '3', question: 'Question 3', date: 'Date 3', didAnswer: true)
@@ -27,11 +27,11 @@ void main() {
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SurveysPresenterSpy();
     isLoadingController = StreamController<bool>();
-    loadSurveysController = StreamController<List<SurveyViewModel>>();
+    surveysController = StreamController<List<SurveyViewModel>>();
     
     when(() => presenter.loadData()).thenAnswer((_) async => _);
     when(() => presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(() => presenter.loadSurveysStream).thenAnswer((_) => loadSurveysController.stream);
+    when(() => presenter.surveysStream).thenAnswer((_) => surveysController.stream);
     
     final surveysPage = GetMaterialApp(
       initialRoute: '/surveys',
@@ -73,7 +73,7 @@ void main() {
   testWidgets('4 - Should present error if surveysStream fails', (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.addError(UIError.unexpected.description);
+    surveysController.addError(UIError.unexpected.description);
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
@@ -84,7 +84,7 @@ void main() {
   testWidgets('5,6 - Should present list if surveysStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.add(makeSurveyList());
+    surveysController.add(makeSurveyList());
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsNothing);
@@ -98,7 +98,7 @@ void main() {
   testWidgets('7 - Should present right colors', (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.add(makeSurveyList());
+    surveysController.add(makeSurveyList());
     await tester.pump();
 
     final firstContainer = tester.widget<Container>(
@@ -117,7 +117,7 @@ void main() {
   testWidgets('8 - Should call LoadSurveys on reload button click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.addError(UIError.unexpected.description);
+    surveysController.addError(UIError.unexpected.description);
     await tester.pump();
     await tester.tap(find.text('Recarregar'));
 

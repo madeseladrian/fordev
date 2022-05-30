@@ -18,6 +18,7 @@ dependencies:
   flutter_secure_storage:
   get: 
   http: 
+  intl:
   provider: 
 
 dev_dependencies:
