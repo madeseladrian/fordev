@@ -66,7 +66,7 @@ void main() {
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.surveysStream.listen(
       null, 
-      onError: expectAsync1((error) => expect(error, UIError.unexpected.description))
+      onError: expectAsync2((error, _) => expect(error, UIError.unexpected.description))
     );
 
     await sut.loadData();
