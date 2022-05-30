@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:fordev/ui/components/app_theme.dart';
+import 'package:fordev/ui/components/components.dart';
 import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
@@ -112,5 +112,15 @@ void main() {
     );
     final secondDecoration = secondContainer.decoration as BoxDecoration;
     expect(secondDecoration.color, themeData.primaryColorDark);
+  });
+
+  testWidgets('8 - Should call LoadSurveys on reload button click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadSurveysController.addError(UIError.unexpected.description);
+    await tester.pump();
+    await tester.tap(find.text('Recarregar'));
+
+    verify(() => presenter.loadData()).called(2);
   });
 }
