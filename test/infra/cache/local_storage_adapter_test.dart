@@ -3,18 +3,9 @@ import 'package:localstorage/localstorage.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/infra/cache/cache.dart';
+
 class LocalStorageSpy extends Mock implements LocalStorage {}
-
-class LocalStorageAdapter  {
-  final LocalStorage localStorage;
-
-  LocalStorageAdapter({required this.localStorage});
-
-  Future<void> save({required String key, required dynamic value}) async {
-    await localStorage.deleteItem(key);
-    await localStorage.setItem(key, value);
-  }
-}
 
 void main() {
   late LocalStorageAdapter sut;
@@ -47,7 +38,7 @@ void main() {
       verify(() => localStorage.setItem(key, value)).called(1);
     });
 
-    test('2 - Should throw if deleteItem throws', () async {
+    test('3 - Should throw if deleteItem throws', () async {
       mockDeleteError();
 
       final future = sut.save(key: key, value: value);
@@ -55,7 +46,7 @@ void main() {
       expect(future, throwsA(const TypeMatcher<Exception>()));
     });
 
-    test('3 - Should throw if setItem throws', () async {
+    test('4 - Should throw if setItem throws', () async {
       mockSaveError();
       
       final future = sut.save(key: key, value: value);
