@@ -28,6 +28,7 @@ dev_dependencies:
   faker: 
   flutter_launcher_icons: 
   mocktail: 
+  network_image_mock:
   test: 
 
   flutter_lints: ^1.0.0
