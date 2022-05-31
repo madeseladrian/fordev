@@ -35,4 +35,4 @@
 1. ✅ Sistema grava os novos dados no Cache
 
 > ## Exceção - Erro ao gravar dados no Cache
-2. Sistema retorna uma mensagem de erro inesperado
+2. ✅ Sistema retorna uma mensagem de erro inesperado

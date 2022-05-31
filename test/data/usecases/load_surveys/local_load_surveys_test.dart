@@ -25,7 +25,8 @@ void main() {
 
   When mockSaveCall() => when(() => cacheStorage.save(key: any(named: 'key'), value: any(named: 'value')));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
-
+  void mockSaveError() => mockSaveCall().thenThrow(Exception());
+  
   List<Map> makeSurveyList() => [{
     'id': faker.guid.guid(),
     'question': faker.randomGenerator.string(10),
@@ -183,6 +184,14 @@ void main() {
       await sut.save(surveys);
 
       verify(() => cacheStorage.save(key: 'surveys', value: list)).called(1);
+    });
+
+    test('2 - Should throw UnexpectedError if save throws', () async {
+      mockSaveError();
+
+      final future = sut.save(surveys);
+
+      expect(future, throwsA(DomainError.unexpected));
     });
   });
 }
