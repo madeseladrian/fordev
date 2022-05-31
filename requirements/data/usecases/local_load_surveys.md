@@ -25,7 +25,7 @@
 3. ✅ Sistema limpa os dados do cache
 
 > ## Exceção - Erro ao carregar dados do Cache
-4. Sistema limpa os dados do cache
+4. ✅ Sistema limpa os dados do cache
 
 ---
 
