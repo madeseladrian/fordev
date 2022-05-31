@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/data/usecases/usecases.dart';
@@ -24,20 +25,21 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
   }
 }
 
-class RemoteLoadSurveysSpy extends Mock implements RemoteLoadSurveys {}
 class LocalLoadSurveysSpy extends Mock implements LocalLoadSurveys {}
+class RemoteLoadSurveysSpy extends Mock implements RemoteLoadSurveys {}
 
 void main() {
   late RemoteLoadSurveysWithLocalFallback sut;
-  late RemoteLoadSurveysSpy remote;
   late LocalLoadSurveysSpy local;
+  late RemoteLoadSurveysSpy remote;
   late List<SurveyEntity> remoteSurveys;
-
-  When mockRemoteLoadCall() => when(() => remote.load());
-  void mockRemoteLoad(List<SurveyEntity> surveys) => mockRemoteLoadCall().thenAnswer((_) async => surveys);
 
   When mockLocalSaveCall() => when(() => local.save(any()));
   void mockLocalSave() => mockLocalSaveCall().thenAnswer((_) async => _);
+
+  When mockRemoteLoadCall() => when(() => remote.load());
+  void mockRemoteLoad(List<SurveyEntity> surveys) => mockRemoteLoadCall().thenAnswer((_) async => surveys);
+  void mockRemoteLoadError(DomainError error) => mockRemoteLoadCall().thenThrow(error);
 
   List<SurveyEntity> makeSurveyList() => [
     SurveyEntity(
@@ -83,4 +85,13 @@ void main() {
 
     expect(surveys, remoteSurveys);
   });
+
+  test('4 - Should rethrow if remote load throws AccessDeniedError', () async {
+    mockRemoteLoadError(DomainError.accessDenied);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.accessDenied));
+  });
+
 }
