@@ -16,6 +16,7 @@ void main() {
 
   When mockFetchCall() => when(() => localStorage.getItem(any()));
   void mockFetch(dynamic data) => mockFetchCall().thenAnswer((_) async => data);
+  void mockFetchError() => when(() => mockFetchCall().thenThrow(Exception()));
 
   When mockSaveCall() => when(() => localStorage.setItem(any(), any()));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
@@ -88,6 +89,14 @@ void main() {
       final data = await sut.fetch(key);
 
       expect(data, result);
+    });
+
+    test('3 - Should throw if getItem throws', () async {
+      mockFetchError();
+
+      final future = sut.fetch(key);
+
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 }

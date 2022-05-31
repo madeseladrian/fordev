@@ -5,4 +5,4 @@
 2. ✅ Retornar o valor armazenado para aquela chave
 
 > ## Exceção - Erro ao carregar os dados do cache
-3. Deve repassar a exceção para quem chamou essa classe
+3. ✅ Deve repassar a exceção para quem chamou essa classe
