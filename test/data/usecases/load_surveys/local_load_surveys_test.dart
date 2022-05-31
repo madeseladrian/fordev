@@ -14,6 +14,7 @@ void main() {
   late LocalLoadSurveys sut;
   late CacheStorageSpy cacheStorage;
   late List<Map> data;
+  late List<SurveyEntity> surveys;
 
   When mockFetchCall() => when(() => cacheStorage.fetch(any()));
   void mockFetch(dynamic json) => mockFetchCall().thenAnswer((_) async => json);
@@ -21,6 +22,9 @@ void main() {
 
   When mockDeleteCall() => when(() => cacheStorage.delete(any()));
   void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
+
+  When mockSaveCall() => when(() => cacheStorage.save(key: any(named: 'key'), value: any(named: 'value')));
+  void mockSave() => mockSaveCall().thenAnswer((_) async => _);
 
   List<Map> makeSurveyList() => [{
     'id': faker.guid.guid(),
@@ -46,11 +50,28 @@ void main() {
     'didAnswer': 'false',
   }];
 
+  List<SurveyEntity> makeSurveyEntityList() => [
+    SurveyEntity(
+      id: faker.guid.guid(),
+      question: faker.randomGenerator.string(10),
+      dateTime: DateTime.utc(2020, 2, 2),
+      didAnswer: true
+    ),
+    SurveyEntity(
+      id: faker.guid.guid(),
+      question: faker.randomGenerator.string(10),
+      dateTime: DateTime.utc(2018, 12, 20),
+      didAnswer: false
+    )
+  ];
+
   setUp(() {
+    surveys = makeSurveyEntityList();
     data = makeSurveyList();
     cacheStorage = CacheStorageSpy();
     mockFetch(data);
     mockDelete();
+    mockSave();
     sut = LocalLoadSurveys(cacheStorage: cacheStorage);
   });
 
@@ -142,6 +163,26 @@ void main() {
       await sut.validate();
 
       verify(() => cacheStorage.delete('surveys')).called(1);
+    });
+  });
+
+  group('save', () {
+    test('1 - Should call cacheStorage with correct values', () async {
+      final list = [{
+        'id': surveys[0].id,
+        'question': surveys[0].question,
+        'date': '2020-02-02T00:00:00.000Z',
+        'didAnswer': 'true',
+      }, {
+        'id': surveys[1].id,
+        'question': surveys[1].question,
+        'date': '2018-12-20T00:00:00.000Z',
+        'didAnswer': 'false',
+      }];
+
+      await sut.save(surveys);
+
+      verify(() => cacheStorage.save(key: 'surveys', value: list)).called(1);
     });
   });
 }
