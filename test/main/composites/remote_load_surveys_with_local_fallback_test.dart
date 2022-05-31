@@ -2,10 +2,12 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev/data/usecases/usecases.dart';
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
-class RemoteLoadSurveysWithLocalFallback  {
+import 'package:fordev/data/usecases/usecases.dart';
+
+class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
   final LocalLoadSurveys local;
   final RemoteLoadSurveys remote;
 
@@ -14,9 +16,11 @@ class RemoteLoadSurveysWithLocalFallback  {
     required this.remote
   });
 
-  Future<void> load() async {
+  @override
+  Future<List<SurveyEntity>> load() async {
     final remoteSurveys = await remote.load();
     await local.save(remoteSurveys);
+    return remoteSurveys;
   }
 }
 
@@ -72,5 +76,11 @@ void main() {
     await sut.load();
 
     verify(() => local.save(remoteSurveys)).called(1);
+  });
+
+  test('3 - Should return remote surveys', () async {
+    final surveys = await sut.load();
+
+    expect(surveys, remoteSurveys);
   });
 }
