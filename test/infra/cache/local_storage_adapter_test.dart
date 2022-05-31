@@ -31,7 +31,7 @@ void main() {
   });
 
   group('save', () {
-    test('1,2 - Should call localStorage with correct values', () async {
+    test('1,2 - Should call localStorage with correct delete and set values', () async {
       await sut.save(key: key, value: value);
 
       verify(() => localStorage.deleteItem(key)).called(1);
@@ -52,6 +52,14 @@ void main() {
       final future = sut.save(key: key, value: value);
 
       expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
+  });
+
+  group('delete', () {
+    test('1 - Should call localStorage with correct delete value', () async {
+      await sut.delete(key);
+
+      verify(() => localStorage.deleteItem(key)).called(1);
     });
   });
 }
