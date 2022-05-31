@@ -23,12 +23,13 @@ class App extends StatelessWidget {
       title: '4Dev',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
-      initialRoute: '/',
+      initialRoute: '/survey_result/3',
       getPages: [
         GetPage(name: '/', page: makeSplashPage),
         GetPage(name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
         GetPage(name: '/signup', page: makeSignUpPage),
         GetPage(name: '/surveys', page: makeSurveysPage, transition: Transition.fadeIn),
+        GetPage(name: '/survey_result/:survey_id', page: makeSurveyResultPage),
       ]
     );
   }
