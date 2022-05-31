@@ -62,6 +62,11 @@ void main() {
     'didAnswer': 'false',
   }];
 
+  List<Map> makeIncompleteSurveyList() => [{
+    'date': '2019-02-02T00:00:00Z',
+    'didAnswer': 'false',
+  }];
+
   setUp(() {
     data = makeSurveyList();
     fetchCacheStorage = FetchCacheStorageSpy();
@@ -105,6 +110,14 @@ void main() {
 
     test('4 - Should throw UnexpectedError if cache is isvalid', () async {
       mockFetch(makeInvalidSurveyList());
+
+      final future = sut.load();
+
+      expect(future, throwsA(DomainError.unexpected));
+    });
+
+    test('5 - Should throw UnexpectedError if cache is incomplete', () async {
+      mockFetch(makeIncompleteSurveyList());
 
       final future = sut.load();
 
