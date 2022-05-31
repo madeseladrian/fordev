@@ -2,7 +2,10 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/domain/entities/entities.dart';
+
 import 'package:fordev/data/http/http.dart';
+import 'package:fordev/data/models/models.dart';
 
 class RemoteLoadSurveyResult {
   final String url;
@@ -13,8 +16,9 @@ class RemoteLoadSurveyResult {
     required this.httpClient
   });
 
-  Future<void> loadBySurvey({required String surveyId}) async {
-    await httpClient.request(url: url, method: 'get');
+  Future<SurveyResultEntity > loadBySurvey({required String surveyId}) async {
+    final json = await httpClient.request(url: url, method: 'get');
+    return RemoteSurveyResultModel.fromJson(json).toEntity();
   }
 }
 
@@ -67,4 +71,27 @@ void main() {
 
     verify(() => httpClient.request(url: url, method: 'get'));
   });
+
+  test('4 - Should return surveyResult on 200', () async {
+    final result = await sut.loadBySurvey(surveyId: surveyId);
+
+    expect(result, SurveyResultEntity(
+      surveyId: surveyResult['surveyId'],
+      question: surveyResult['question'],
+      answers: [
+        SurveyAnswerEntity(
+          image: surveyResult['answers'][0]['image'],
+          answer: surveyResult['answers'][0]['answer'],
+          isCurrentAnswer: surveyResult['answers'][0]['isCurrentAccountAnswer'],
+          percent: surveyResult['answers'][0]['percent'],
+        ),
+        SurveyAnswerEntity(
+          answer: surveyResult['answers'][1]['answer'],
+          isCurrentAnswer: surveyResult['answers'][1]['isCurrentAccountAnswer'],
+          percent: surveyResult['answers'][1]['percent'],
+        )
+      ]
+    ));
+  });
+
 }
