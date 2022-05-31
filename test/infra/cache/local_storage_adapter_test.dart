@@ -24,6 +24,7 @@ void main() {
 
   When mockSaveCall() => when(() => localStorage.setItem(any(), any()));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
+    void mockSaveError() => when(() => mockSaveCall().thenThrow(Exception()));
 
   When mockDeleteCall() => when(() => localStorage.deleteItem(any()));
   void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
@@ -49,6 +50,14 @@ void main() {
     test('2 - Should throw if deleteItem throws', () async {
       mockDeleteError();
 
+      final future = sut.save(key: key, value: value);
+
+      expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
+
+    test('3 - Should throw if setItem throws', () async {
+      mockSaveError();
+      
       final future = sut.save(key: key, value: value);
 
       expect(future, throwsA(const TypeMatcher<Exception>()));

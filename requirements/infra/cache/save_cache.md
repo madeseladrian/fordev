@@ -8,4 +8,4 @@
 3. ✅ Deve repassar a exceção para quem chamou essa classe
 
 > ## Exceção - Erro ao inserir dados no cache
-4. Deve repassar a exceção para quem chamou essa classe
+4. ✅ Deve repassar a exceção para quem chamou essa classe
