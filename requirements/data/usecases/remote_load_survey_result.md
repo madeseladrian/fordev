@@ -6,14 +6,14 @@
 3. ✅ Sistema valida os dados recebidos da API
 4. ✅ Sistema entrega os dados do resultado da enquete
 
-> ## Exceção - URL inválida
+> ## Exceção - Resposta inválida
 5. ✅ Sistema retorna uma mensagem de erro inesperado
 
-> ## Exceção - Acesso negado
-6. ✅ Sistema retorna uma mensagem de acesso negado
+> ## Exceção - URL inválida
+6. ✅ Sistema retorna uma mensagem de erro inesperado
 
-> ## Exceção - Resposta inválida
-7. Sistema retorna uma mensagem de erro inesperado
+> ## Exceção - Acesso negado
+7. ✅ Sistema retorna uma mensagem de acesso negado
 
 > ## Exceção - Falha no servidor
 8. Sistema retorna uma mensagem de erro inesperado
