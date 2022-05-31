@@ -13,12 +13,17 @@ class LocalSurveyModel {
     required this.didAnswer,
   });
 
-  factory LocalSurveyModel.fromJson(Map json) => LocalSurveyModel(
-    id: json['id'],
-    question: json['question'],
-    date: DateTime.parse(json['date']),
-    didAnswer: json['didAnswer'].toLowerCase() == 'true',
-  );
+  factory LocalSurveyModel.fromJson(Map json) {
+    if (!json.keys.toSet().containsAll(['id', 'question', 'date', 'didAnswer'])) {
+      throw Exception();
+    }
+    return LocalSurveyModel(
+      id: json['id'],
+      question: json['question'],
+      date: DateTime.parse(json['date']),
+      didAnswer: json['didAnswer'].toLowerCase() == 'true',
+    );
+  }
 
   factory LocalSurveyModel.fromEntity(SurveyEntity entity) => LocalSurveyModel(
     id: entity.id,

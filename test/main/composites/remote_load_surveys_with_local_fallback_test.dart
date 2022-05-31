@@ -2,28 +2,38 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/data/usecases/usecases.dart';
+import 'package:fordev/domain/entities/entities.dart';
 
-class RemoteLoadSurveysWithLocalFallback {
+class RemoteLoadSurveysWithLocalFallback  {
+  final LocalLoadSurveys local;
   final RemoteLoadSurveys remote;
 
-  RemoteLoadSurveysWithLocalFallback({required this.remote});
+  RemoteLoadSurveysWithLocalFallback({
+    required this.local,
+    required this.remote
+  });
 
   Future<void> load() async {
-    await remote.load();
+    final remoteSurveys = await remote.load();
+    await local.save(remoteSurveys);
   }
 }
 
 class RemoteLoadSurveysSpy extends Mock implements RemoteLoadSurveys {}
+class LocalLoadSurveysSpy extends Mock implements LocalLoadSurveys {}
 
 void main() {
   late RemoteLoadSurveysWithLocalFallback sut;
   late RemoteLoadSurveysSpy remote;
+  late LocalLoadSurveysSpy local;
   late List<SurveyEntity> remoteSurveys;
 
-  When mockLoadCall() => when(() => remote.load());
-  void mockLoad(List<SurveyEntity> surveys) => mockLoadCall().thenAnswer((_) async => surveys);
+  When mockRemoteLoadCall() => when(() => remote.load());
+  void mockRemoteLoad(List<SurveyEntity> surveys) => mockRemoteLoadCall().thenAnswer((_) async => surveys);
+
+  When mockLocalSaveCall() => when(() => local.save(any()));
+  void mockLocalSave() => mockLocalSaveCall().thenAnswer((_) async => _);
 
   List<SurveyEntity> makeSurveyList() => [
     SurveyEntity(
@@ -41,15 +51,26 @@ void main() {
   ];
 
   setUp(() {
+    local = LocalLoadSurveysSpy();
+    mockLocalSave();
     remoteSurveys = makeSurveyList();
     remote = RemoteLoadSurveysSpy();
-    mockLoad(remoteSurveys);
-    sut = RemoteLoadSurveysWithLocalFallback(remote: remote);
+    mockRemoteLoad(remoteSurveys);
+    sut = RemoteLoadSurveysWithLocalFallback(
+      local: local,
+      remote: remote
+    );
   });
 
   test('1 - Should call remote load', () async {
     await sut.load();
 
     verify(() => remote.load()).called(1);
+  });
+
+  test('2 - Should call local save with remote data', () async {
+    await sut.load();
+
+    verify(() => local.save(remoteSurveys)).called(1);
   });
 }
