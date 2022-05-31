@@ -27,6 +27,7 @@ void main() {
 
   When mockDeleteCall() => when(() => localStorage.deleteItem(any()));
   void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
+  void mockDeleteError() => when(() => mockDeleteCall().thenThrow(Exception()));
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -43,6 +44,14 @@ void main() {
 
       verify(() => localStorage.deleteItem(key)).called(1);
       verify(() => localStorage.setItem(key, value)).called(1);
+    });
+
+    test('2 - Should throw if deleteItem throws', () async {
+      mockDeleteError();
+
+      final future = sut.save(key: key, value: value);
+
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 }

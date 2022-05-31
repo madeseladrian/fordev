@@ -5,7 +5,7 @@
 2. ✅ Inserir dados no cache
 
 > ## Exceção - Erro ao apagar dados do cache
-3. Deve repassar a exceção para quem chamou essa classe
+3. ✅ Deve repassar a exceção para quem chamou essa classe
 
 > ## Exceção - Erro ao inserir dados no cache
 4. Deve repassar a exceção para quem chamou essa classe
