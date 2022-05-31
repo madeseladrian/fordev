@@ -5,35 +5,10 @@ import 'package:test/test.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/entities/entities.dart';
 
-import 'package:fordev/data/models/models.dart';
-
-abstract class FetchCacheStorage {
-  Future<dynamic> fetch(String key);
-  Future<void> delete(String key);
-  Future<void> save({ required String key, required dynamic value });
-}
+import 'package:fordev/data/cache/cache.dart';
+import 'package:fordev/data/usecases/usecases.dart';
 
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {}
-
-class LocalLoadSurveys {
-  final FetchCacheStorage fetchCacheStorage;
-
-  LocalLoadSurveys({ required this.fetchCacheStorage });
-
-  Future<List<SurveyEntity>> load() async {
-    try {
-      final data = await fetchCacheStorage.fetch('surveys');
-      if (data?.isEmpty == true) {
-        throw Exception();
-      }
-      return data.map<SurveyEntity>(
-        (json) => LocalSurveyModel.fromJson(json).toEntity()
-      ).toList();
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
-}
 
 void main() {
   late LocalLoadSurveys sut;
