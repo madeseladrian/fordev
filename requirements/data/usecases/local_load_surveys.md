@@ -4,10 +4,10 @@
 1. ✅ Sistema solicita os dados das enquetes do Cache
 2. ✅ Sistema entrega os dados das enquetes
 
-> ## Exceção - Erro ao carregar dados do Cache
-3.  Sistema retorna uma mensagem de erro inesperado
-
 > ## Exceção - Cache vazio
+3. ✅ Sistema retorna uma mensagem de erro inesperado
+
+> ## Exceção - Erro ao carregar dados do Cache
 4.  Sistema retorna uma mensagem de erro inesperado
 
 ---
