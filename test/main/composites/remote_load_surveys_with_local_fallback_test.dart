@@ -19,9 +19,17 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
 
   @override
   Future<List<SurveyEntity>> load() async {
-    final remoteSurveys = await remote.load();
-    await local.save(remoteSurveys);
-    return remoteSurveys;
+    try {
+      final surveys = await remote.load();
+      await local.save(surveys);
+      return surveys;
+    } catch (error) {
+      if (error == DomainError.accessDenied) {
+        rethrow;
+      }
+      await local.validate();
+      return await local.load();
+    }
   }
 }
 
@@ -33,9 +41,16 @@ void main() {
   late LocalLoadSurveysSpy local;
   late RemoteLoadSurveysSpy remote;
   late List<SurveyEntity> remoteSurveys;
+  late List<SurveyEntity> localSurveys;
 
   When mockLocalSaveCall() => when(() => local.save(any()));
   void mockLocalSave() => mockLocalSaveCall().thenAnswer((_) async => _);
+
+  When mockLocalValidateCall() => when(() => local.validate());
+  void mockLocalValidate() => mockLocalValidateCall().thenAnswer((_) async => _);
+
+  When mockLocalLoadCall() => when(() => local.load());
+  void mockLocalLoad(List<SurveyEntity> surveys) => mockLocalLoadCall().thenAnswer((_) async => surveys);
 
   When mockRemoteLoadCall() => when(() => remote.load());
   void mockRemoteLoad(List<SurveyEntity> surveys) => mockRemoteLoadCall().thenAnswer((_) async => surveys);
@@ -57,8 +72,11 @@ void main() {
   ];
 
   setUp(() {
+    localSurveys = makeSurveyList();
     local = LocalLoadSurveysSpy();
     mockLocalSave();
+    mockLocalValidate();
+    mockLocalLoad(localSurveys);
     remoteSurveys = makeSurveyList();
     remote = RemoteLoadSurveysSpy();
     mockRemoteLoad(remoteSurveys);
@@ -94,4 +112,12 @@ void main() {
     expect(future, throwsA(DomainError.accessDenied));
   });
 
+  test('5,6 - Should call local load on remote error', () async {
+    mockRemoteLoadError(DomainError.unexpected);
+
+    await sut.load();
+
+    verify(() => local.validate()).called(1);
+    verify(() => local.load()).called(1);
+  });
 }
