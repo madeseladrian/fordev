@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:fordev/ui/pages/pages.dart';
 
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
+import 'surveys.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter presenter;
@@ -24,7 +24,6 @@ class SurveysPage extends StatelessWidget {
               hideLoading(context);
             }
           });
-
           return StreamBuilder<List<SurveyViewModel>>(
             stream: presenter.surveysStream,
             builder: (context, snapshot) {
@@ -62,7 +61,7 @@ class SurveysPage extends StatelessWidget {
                   ),
                 );
               }
-              return const SizedBox(height: 0);
+              return const Center(child: CircularProgressIndicator());
             }
           );
         }

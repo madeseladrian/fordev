@@ -43,6 +43,10 @@ void main() {
     await tester.pumpWidget(surveysPage);
   }
 
+  tearDown(() {
+    isLoadingController.close();
+    surveysController.close();
+  });
 
   testWidgets('1 - Should call LoadSurveys on page load', (WidgetTester tester) async {
     await loadPage(tester);
@@ -56,7 +60,8 @@ void main() {
     isLoadingController.add(true);
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    //expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsWidgets);
   });
 
   testWidgets('3 - Should hide loading', (WidgetTester tester) async {
@@ -67,7 +72,8 @@ void main() {
     isLoadingController.add(false);
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsNothing);
+    //expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
   testWidgets('4 - Should present error if surveysStream fails', (WidgetTester tester) async {

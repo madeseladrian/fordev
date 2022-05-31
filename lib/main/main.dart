@@ -18,7 +18,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
 
     return GetMaterialApp(
       title: '4Dev',
