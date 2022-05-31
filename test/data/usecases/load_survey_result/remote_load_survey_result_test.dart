@@ -115,7 +115,15 @@ void main() {
   });
 
 
-  test('6 - Should throw UnexpectedError if HttpClient returns 404', () async {
+  test('6 - Should throw AccessDeniedError if HttpClient returns 403', () async {
+    mockRequestError(HttpError.forbidden);
+
+    final future = sut.loadBySurvey(surveyId: surveyId);
+
+    expect(future, throwsA(DomainError.accessDenied));
+  });
+
+  test('7 - Should throw UnexpectedError if HttpClient returns 404', () async {
     mockRequestError(HttpError.notFound);
 
     final future = sut.loadBySurvey(surveyId: surveyId);
@@ -123,11 +131,11 @@ void main() {
     expect(future, throwsA(DomainError.unexpected));
   });
 
-  test('7 - Should throw AccessDeniedError if HttpClient returns 403', () async {
-    mockRequestError(HttpError.forbidden);
+  test('8 - Should throw UnexpectedError if HttpClient returns 500', () async {
+    mockRequestError(HttpError.serverError);
 
     final future = sut.loadBySurvey(surveyId: surveyId);
 
-    expect(future, throwsA(DomainError.accessDenied));
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
