@@ -12,10 +12,14 @@ void main() {
   late LocalStorageSpy localStorage;
   late String key;
   late dynamic value;
+  late String result;
+
+  When mockFetchCall() => when(() => localStorage.getItem(any()));
+  void mockFetch(dynamic data) => mockFetchCall().thenAnswer((_) async => data);
 
   When mockSaveCall() => when(() => localStorage.setItem(any(), any()));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
-    void mockSaveError() => when(() => mockSaveCall().thenThrow(Exception()));
+  void mockSaveError() => when(() => mockSaveCall().thenThrow(Exception()));
 
   When mockDeleteCall() => when(() => localStorage.deleteItem(any()));
   void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
@@ -24,7 +28,9 @@ void main() {
   setUp(() {
     key = faker.randomGenerator.string(5);
     value = faker.randomGenerator.string(50);
+    result = faker.randomGenerator.string(50);
     localStorage = LocalStorageSpy();
+    mockFetch(result);
     mockSave();
     mockDelete();
     sut = LocalStorageAdapter(localStorage: localStorage);
@@ -68,6 +74,14 @@ void main() {
       final future = sut.delete(key);
 
       expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
+  });
+
+  group('fetch', () {
+    test('Should call localStorage with correct fetch value', () async {
+      await sut.fetch(key);
+
+      verify(() => localStorage.getItem(key)).called(1);
     });
   });
 }
