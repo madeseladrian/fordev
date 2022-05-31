@@ -19,6 +19,9 @@ void main() {
   void mockFetch(dynamic json) => mockFetchCall().thenAnswer((_) async => json);
   void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
+  When mockDeleteCall() => when(() => cacheStorage.delete(any()));
+  void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
+
   List<Map> makeSurveyList() => [{
     'id': faker.guid.guid(),
     'question': faker.randomGenerator.string(10),
@@ -47,6 +50,7 @@ void main() {
     data = makeSurveyList();
     cacheStorage = CacheStorageSpy();
     mockFetch(data);
+    mockDelete();
     sut = LocalLoadSurveys(cacheStorage: cacheStorage);
   });
 
@@ -114,6 +118,14 @@ void main() {
       await sut.validate();
 
       verify(() => cacheStorage.fetch('surveys')).called(1);
+    });
+
+    test('2 - Should delete cache if it is invalid', () async {
+      mockFetch(makeInvalidSurveyList());
+
+      await sut.validate();
+
+      verify(() => cacheStorage.delete('surveys')).called(1);
     });
   });
 }
