@@ -1,6 +1,6 @@
 import 'package:localstorage/localstorage.dart';
 
-import 'package:fordev/data/cache/cache.dart';
+import '../../data/cache/cache.dart';
 
 class LocalStorageAdapter implements CacheStorage {
   final LocalStorage localStorage;
@@ -17,6 +17,7 @@ class LocalStorageAdapter implements CacheStorage {
   Future<void> delete(String key) async {
     await localStorage.deleteItem(key);
   }
+
   @override
   Future<dynamic> fetch(String key) async {
     return await localStorage.getItem(key);

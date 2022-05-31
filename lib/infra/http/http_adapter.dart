@@ -23,11 +23,22 @@ class HttpAdapter implements HttpClient {
 
     final jsonBody = body != null ? jsonEncode(body) : null;
     var response = Response('', 500);
+    Future<Response>? futureResponse;
     try {
       if (method == 'post') {
-        response = await client.post(Uri.parse(url), headers: defaultHeaders, body: jsonBody);
+        futureResponse = client.post(
+          Uri.parse(url), 
+          headers: defaultHeaders, 
+          body: jsonBody
+        );
       } else if (method == 'get') {
-        response = await client.get(Uri.parse(url), headers: defaultHeaders);
+        futureResponse = client.get(
+          Uri.parse(url), 
+          headers: defaultHeaders
+        );
+      }
+      if (futureResponse != null) {
+        response = await futureResponse.timeout(const Duration(seconds: 10));
       }
     } catch (error) {
       throw HttpError.serverError;
