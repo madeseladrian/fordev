@@ -18,21 +18,21 @@
 # Local Validate Surveys
 
 > ## Caso de sucesso
-5.  Sistema solicita os dados das enquetes do Cache
-6.  Sistema valida os dados recebidos do Cache
+1. ✅ Sistema solicita os dados das enquetes do Cache
+2. Sistema valida os dados recebidos do Cache
 
 > ## Exceção - Erro ao carregar dados do Cache
-7.  Sistema limpa os dados do cache
+3. Sistema limpa os dados do cache
 
 > ## Exceção - Dados inválidos no cache
-8.  Sistema limpa os dados do cache
+4. Sistema limpa os dados do cache
 
 ---
 
 # Local Save Surveys
 
 > ## Caso de sucesso
-9.  Sistema grava os novos dados no Cache
+1. Sistema grava os novos dados no Cache
 
 > ## Exceção - Erro ao gravar dados no Cache
-10.  Sistema retorna uma mensagem de erro inesperado
+2. Sistema retorna uma mensagem de erro inesperado

@@ -6,14 +6,14 @@ import '../../cache/cache.dart';
 import '../../models/models.dart';
 
 class LocalLoadSurveys implements LoadSurveys {
-  final FetchCacheStorage fetchCacheStorage;
+  final CacheStorage cacheStorage;
 
-  LocalLoadSurveys({ required this.fetchCacheStorage });
+  LocalLoadSurveys({ required this.cacheStorage });
 
   @override
   Future<List<SurveyEntity>> load() async {
     try {
-      final data = await fetchCacheStorage.fetch('surveys');
+      final data = await cacheStorage.fetch('surveys');
       if (data?.isEmpty == true) {
         throw Exception();
       }
@@ -23,5 +23,9 @@ class LocalLoadSurveys implements LoadSurveys {
     } catch (error) {
       throw DomainError.unexpected;
     }
+  }
+
+  Future<void> validate() async {
+    await cacheStorage.fetch('surveys');
   }
 }
