@@ -21,10 +21,10 @@
 1. ✅ Sistema solicita os dados das enquetes do Cache
 2. ✅ Sistema valida os dados recebidos do Cache
 
-> ## Exceção - Erro ao carregar dados do Cache
-3. Sistema limpa os dados do cache
-
 > ## Exceção - Dados inválidos no cache
+3. ✅ Sistema limpa os dados do cache
+
+> ## Exceção - Erro ao carregar dados do Cache
 4. Sistema limpa os dados do cache
 
 ---

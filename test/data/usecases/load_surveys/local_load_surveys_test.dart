@@ -127,5 +127,13 @@ void main() {
 
       verify(() => cacheStorage.delete('surveys')).called(1);
     });
+
+    test('3 - Should delete cache if it is incomplete', () async {
+      mockFetch(makeIncompleteSurveyList());
+
+      await sut.validate();
+
+      verify(() => cacheStorage.delete('surveys')).called(1);
+    });
   });
 }
