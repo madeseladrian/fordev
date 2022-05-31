@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 
 import 'package:fordev/data/http/http.dart';
 import 'package:fordev/data/models/models.dart';
@@ -17,8 +18,12 @@ class RemoteLoadSurveyResult {
   });
 
   Future<SurveyResultEntity > loadBySurvey({required String surveyId}) async {
-    final json = await httpClient.request(url: url, method: 'get');
-    return RemoteSurveyResultModel.fromJson(json).toEntity();
+    try {
+      final json = await httpClient.request(url: url, method: 'get');
+      return RemoteSurveyResultModel.fromJson(json).toEntity();
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -38,6 +43,7 @@ void main() {
     headers: any(named: 'headers')
   ));
   void mockRequest(dynamic data) => mockRequestCall().thenAnswer((_) async => data);
+  void mockRequestError(HttpError error) => mockRequestCall().thenThrow(error);
 
   Map makeSurveyResultJson() => {
     'surveyId': faker.guid.guid(),
@@ -94,4 +100,11 @@ void main() {
     ));
   });
 
+  test('5 - Should throw UnexpectedError if HttpClient returns 404', () async {
+    mockRequestError(HttpError.notFound);
+
+    final future = sut.loadBySurvey(surveyId: surveyId);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }
