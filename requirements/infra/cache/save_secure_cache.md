@@ -1,4 +1,4 @@
-# Local Storage Adapter
+# Secure Storage Adapter
 
 > ## Caso de Sucesso
 1. ✅ Sistema grava o token de acesso do usuário no Cache de forma segura

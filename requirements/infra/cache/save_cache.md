@@ -1,8 +1,8 @@
 # Save Cache
 
 > ## Sucesso
-1. Apagar os dados da chave recebida do cache
-2. Inserir dados no cache
+1. ✅ Apagar os dados da chave recebida do cache
+2. ✅ Inserir dados no cache
 
 > ## Exceção - Erro ao apagar dados do cache
 3. Deve repassar a exceção para quem chamou essa classe

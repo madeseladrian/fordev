@@ -19,6 +19,7 @@ dependencies:
   get: 
   http: 
   intl:
+  localstorage:
   provider: 
 
 dev_dependencies:
