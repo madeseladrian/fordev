@@ -8,5 +8,5 @@ abstract class SurveyResultPresenter implements Listenable {
   Stream<SurveyResultViewModel?> get surveyResultStream;
   
   Future<void> loadData();
-  Future<void> save({ required String answer });
+  Future<void> save({required String answer});
 }
