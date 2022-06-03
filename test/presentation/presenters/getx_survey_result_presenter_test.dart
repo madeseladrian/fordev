@@ -1,46 +1,17 @@
 import 'package:faker/faker.dart';
-import 'package:fordev/domain/helpers/helpers.dart';
-import 'package:fordev/ui/helpers/helpers.dart';
-import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/usecases/usecases.dart';
 
-import 'package:fordev/presentation/helpers/helpers.dart';
+import 'package:fordev/presentation/presenters/presenters.dart';
 
+import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
 class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
-
-class GetxSurveyResultPresenter extends GetxController {
-  final LoadSurveyResult loadSurveyResult;
-  final String surveyId;
-
-  final _isLoading = false.obs;
-  final _surveyResult = Rx<SurveyResultViewModel?>(null);
-
-  Stream<bool> get isLoadingStream => _isLoading.stream;
-  Stream<SurveyResultViewModel?> get surveyResultStream => _surveyResult.stream;
-
-  GetxSurveyResultPresenter({
-    required this.loadSurveyResult,
-    required this.surveyId,
-  });
-
-  Future<void> loadData() async {
-    try {
-      _isLoading.value = true;
-      final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
-      _surveyResult.subject.add(surveyResult.toViewModel());
-    } on DomainError {
-      _surveyResult.subject.addError(UIError.unexpected.description);
-    } finally {
-      _isLoading.value = false;
-    }
-  }
-}
 
 void main() {
   late GetxSurveyResultPresenter sut;
