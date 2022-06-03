@@ -17,45 +17,10 @@ class SurveyAnswerResult extends StatelessWidget {
         if (index == 0) {
           return SurveyHeader(header: viewModel.question);
         }
-        return Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  viewModel.answers[index - 1].image != null
-                    ? Image.network(viewModel.answers[index - 1].image!)
-                    : Container(),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        viewModel.answers[index - 1].answer, 
-                        style: const TextStyle(fontSize: 16)
-                      ),
-                    )),
-                  Text(
-                    viewModel.answers[index - 1].percent, 
-                    style: TextStyle(
-                      fontSize: 16, 
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor
-                    )
-                  ),
-                  viewModel.answers[index - 1].isCurrentAnswer
-                    ? const ActiveIcon() : const DisabledIcon()
-                ],
-              ),
-            ),
-            const Divider(height: 1)
-          ],
-        );
+        return SurveyAnswer(viewModel: viewModel.answers[index - 1]);
       },
       itemCount: viewModel.answers.length + 1,
     );
   }
 }
+
