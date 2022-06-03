@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../domain/helpers/domain_error.dart';
+import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 
 import '../../ui/pages/pages.dart';
-import '../../ui/helpers/errors/errors.dart';
+import '../../ui/helpers/helpers.dart';
 
 class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
   final LoadSurveys loadSurveys;

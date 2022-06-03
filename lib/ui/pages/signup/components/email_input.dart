@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/helpers.dart';
-import '../signup.dart';
+import '../signup_presenter.dart';
 
 class EmailInput extends StatelessWidget {
   const EmailInput({Key? key}) : super(key: key);

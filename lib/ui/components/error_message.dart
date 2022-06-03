@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fordev/ui/components/components.dart';
 
 import '../helpers/helpers.dart';
+import 'components.dart';
+
 Future<void> showErrorMessage(BuildContext context, String error) async {
   await showDialog(
     context: context,

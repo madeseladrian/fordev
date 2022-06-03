@@ -1,7 +1,7 @@
+import 'package:test/test.dart';
+
 import 'package:fordev/presentation/helpers/helpers.dart';
 import 'package:fordev/validation/validators/validators.dart';
-
-import 'package:test/test.dart';
 
 void main() {
   late CompareFieldsValidation sut;
