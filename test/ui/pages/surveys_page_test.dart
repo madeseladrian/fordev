@@ -127,4 +127,16 @@ void main() {
 
     verify(() => presenter.loadData()).called(2);
   });
+
+  testWidgets('9 - Should call goToSurveyResult on survey click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveysController.add(makeSurveyList());
+    await tester.pump();
+
+    await tester.tap(find.text('Question 1'));
+    await tester.pump();
+
+    verify(() => presenter.goToSurveyResult('1')).called(1);
+  });
 }

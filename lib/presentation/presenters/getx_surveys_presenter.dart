@@ -37,4 +37,9 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
       _isLoading.value = false;
     }
   }
+
+  @override
+  void goToSurveyResult(String surveyId) {
+    
+  }
 }
