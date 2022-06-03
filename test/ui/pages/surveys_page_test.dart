@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/route_manager.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:fordev/ui/components/components.dart';
@@ -15,6 +15,7 @@ void main() {
   late SurveysPresenterSpy presenter;
   late StreamController<bool> isLoadingController;
   late StreamController<List<SurveyViewModel>> surveysController;
+  late StreamController<String> navigateToController;
 
   final themeData = makeAppTheme();
 
@@ -28,15 +29,18 @@ void main() {
     presenter = SurveysPresenterSpy();
     isLoadingController = StreamController<bool>();
     surveysController = StreamController<List<SurveyViewModel>>();
-    
+    navigateToController = StreamController<String>();
+
     when(() => presenter.loadData()).thenAnswer((_) async => _);
     when(() => presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(() => presenter.surveysStream).thenAnswer((_) => surveysController.stream);
+    when(() => presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
     
     final surveysPage = GetMaterialApp(
       initialRoute: '/surveys',
       getPages: [
         GetPage(name: '/surveys', page: () => SurveysPage(presenter: presenter)),
+        GetPage(name: '/any_route', page: () => const Scaffold(body: Text('fake page')))
       ],
       theme: themeData,
     );
@@ -46,6 +50,7 @@ void main() {
   tearDown(() {
     isLoadingController.close();
     surveysController.close();
+    navigateToController.close();
   });
 
   testWidgets('1 - Should call LoadSurveys on page load', (WidgetTester tester) async {
@@ -138,5 +143,15 @@ void main() {
     await tester.pump();
 
     verify(() => presenter.goToSurveyResult('1')).called(1);
+  });
+
+  testWidgets('10 - Should change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_route');
+    expect(find.text('fake page'), findsOneWidget);
   });
 }

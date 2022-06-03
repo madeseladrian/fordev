@@ -12,11 +12,14 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
   
   final _isLoading = false.obs;
   final _surveys = Rx<List<SurveyViewModel>>([]);
+  final _navigateTo = Rx<String>('');
 
   @override
   Stream<bool> get isLoadingStream => _isLoading.stream;
   @override
   Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;
+  @override
+  Stream<String> get navigateToStream => _navigateTo.stream;
 
   GetxSurveysPresenter({required this.loadSurveys});
 
@@ -40,6 +43,6 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
 
   @override
   void goToSurveyResult(String surveyId) {
-    
+    _navigateTo.value = 'survey_result/$surveyId';
   }
 }
