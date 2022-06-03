@@ -6,6 +6,8 @@ import 'package:test/test.dart';
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/usecases/usecases.dart';
 
+import 'package:fordev/presentation/helpers/helpers.dart';
+
 import 'package:fordev/ui/pages/pages.dart';
 
 class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
@@ -14,10 +16,10 @@ class GetxSurveyResultPresenter extends GetxController {
   final LoadSurveyResult loadSurveyResult;
   final String surveyId;
 
-  final isLoading = false.obs;
+  final _isLoading = false.obs;
   final _surveyResult = Rx<SurveyResultViewModel?>(null);
 
-  Stream<bool> get isLoadingStream => isLoading.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
   Stream<SurveyResultViewModel?> get surveyResultStream => _surveyResult.stream;
 
   GetxSurveyResultPresenter({
@@ -26,7 +28,10 @@ class GetxSurveyResultPresenter extends GetxController {
   });
 
   Future<void> loadData() async {
-    loadSurveyResult.loadBySurvey(surveyId: surveyId);
+    _isLoading.value = true;
+    final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
+    _surveyResult.subject.add(surveyResult.toViewModel());
+    _isLoading.value = false;
   }
 }
 
@@ -57,6 +62,24 @@ void main() {
     ]
   );
 
+  SurveyResultViewModel mapToViewModel(SurveyResultEntity entity) => SurveyResultViewModel(
+    surveyId: entity.surveyId,
+    question: entity.question,
+    answers: [
+      SurveyAnswerViewModel(
+        image: entity.answers[0].image,
+        answer: entity.answers[0].answer,
+        isCurrentAnswer: entity.answers[0].isCurrentAnswer,
+        percent: '${entity.answers[0].percent}%'
+      ),
+      SurveyAnswerViewModel(
+        answer: entity.answers[1].answer,
+        isCurrentAnswer: entity.answers[1].isCurrentAnswer,
+        percent: '${entity.answers[1].percent}%'
+      )
+    ]
+  );
+
   setUp(() {
     loadResult = makeSurveyResult();
     surveyId = faker.guid.guid();
@@ -75,5 +98,13 @@ void main() {
 
       verify(() => loadSurveyResult.loadBySurvey(surveyId: surveyId)).called(1);
     });
+
+    test('2,3 - Should emit correct events on success', () async {
+      expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      sut.surveyResultStream.listen(expectAsync1((result) => expect(result, mapToViewModel(loadResult))));
+
+      await sut.loadData();
+    });
+
   });
 }
