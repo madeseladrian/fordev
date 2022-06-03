@@ -15,13 +15,7 @@ class SurveyAnswerResult extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (context, index) {
         if (index == 0) {
-          return Container(
-            padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
-            decoration: BoxDecoration(
-              color: Theme.of(context).disabledColor.withAlpha(90)
-            ),
-            child: Text(viewModel.question),
-          );
+          return SurveyHeader(header: viewModel.question);
         }
         return Column(
           children: [
