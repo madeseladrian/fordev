@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:fordev/ui/pages/pages.dart';
 
-class SurveyResult extends StatelessWidget {
-  const SurveyResult({
+class SurveyAnswerResult extends StatelessWidget {
+  final SurveyResultViewModel viewModel;
+  
+  const SurveyAnswerResult({
     Key? key,
+    required this.viewModel,
   }) : super(key: key);
 
   @override
@@ -16,7 +20,7 @@ class SurveyResult extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).disabledColor.withAlpha(90)
             ),
-            child: const Text('Qual é seu framework web favorito?'),
+            child: Text(viewModel.question),
           );
         }
         return Column(
@@ -29,32 +33,27 @@ class SurveyResult extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Image.network(
-                    'http://fordevs.herokuapp.com/static/img/logo-angular.png',
-                    width: 40,
-                  ),
-                  const Expanded(
+                  viewModel.answers[index - 1].image != null
+                    ? Image.network(viewModel.answers[index - 1].image!)
+                    : Container(),
+                  Expanded(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        'Angular', style: TextStyle(fontSize: 16)
+                        viewModel.answers[index - 1].answer, 
+                        style: const TextStyle(fontSize: 16)
                       ),
                     )),
                   Text(
-                    '100%', 
+                    viewModel.answers[index - 1].percent, 
                     style: TextStyle(
                       fontSize: 16, 
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).primaryColor
                     )
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Icon(
-                      Icons.check_circle,
-                      color: Theme.of(context).highlightColor,
-                    ),
-                  )
+                  viewModel.answers[index - 1].isCurrentAnswer
+                    ? const ActiveIcon() : const DisabledIcon()
                 ],
               ),
             ),
@@ -62,7 +61,7 @@ class SurveyResult extends StatelessWidget {
           ],
         );
       },
-      itemCount: 4,
+      itemCount: viewModel.answers.length + 1,
     );
   }
 }

@@ -16,6 +16,24 @@ void main() {
   late StreamController<bool> isLoadingController;
   late StreamController<SurveyResultViewModel?> surveyResultController;
 
+  SurveyResultViewModel makeSurveyResult() => const SurveyResultViewModel(
+    surveyId: 'Any id',
+    question: 'Question',
+    answers: [
+      SurveyAnswerViewModel(
+        image: 'Image 0',
+        answer: 'Answer 0',
+        isCurrentAnswer: true,
+        percent: '60%'
+      ),
+      SurveyAnswerViewModel(
+        answer: 'Answer 1',
+        isCurrentAnswer: false,
+        percent: '40%'
+      )
+    ]
+  );
+
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SurveyResultPresenterSpy();
     isLoadingController = StreamController<bool>();
@@ -81,4 +99,24 @@ void main() {
     verify(() => presenter.loadData()).called(2);
   });
 
+  testWidgets('6,7,8,9,10,11,12,13 - Should present valid data if surveyResultStream succeeds', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveyResultController.add(makeSurveyResult());
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsNothing);
+    expect(find.text('Recarregar'), findsNothing);
+    expect(find.text('Question'), findsOneWidget);
+    expect(find.text('Answer 0'), findsOneWidget);
+    expect(find.text('Answer 1'), findsOneWidget);
+    expect(find.text('60%'), findsOneWidget);
+    expect(find.text('40%'), findsOneWidget);
+    expect(find.byType(ActiveIcon), findsOneWidget);
+    expect(find.byType(DisabledIcon), findsOneWidget);
+    final image = tester.widget<Image>(find.byType(Image)).image as NetworkImage;
+    expect(image.url, 'Image 0');
+  });
 }

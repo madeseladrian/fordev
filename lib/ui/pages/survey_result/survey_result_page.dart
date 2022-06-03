@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
-import 'components/components.dart';
 import 'survey_result.dart';
 
 class SurveyResultPage extends StatelessWidget {
@@ -35,7 +34,7 @@ class SurveyResultPage extends StatelessWidget {
                 );
               }
               if (snapshot.hasData) {
-                return const SurveyResult();
+                return SurveyAnswerResult(viewModel: snapshot.data!);
               }
               return const SizedBox();
             }
