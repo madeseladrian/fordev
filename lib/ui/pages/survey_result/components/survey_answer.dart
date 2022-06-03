@@ -13,6 +13,33 @@ class SurveyAnswer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _buildItems() {
+      List<Widget> children = [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              viewModel.answer, 
+              style: const TextStyle(fontSize: 16)
+            ),
+          )),
+        Text(
+          viewModel.percent, 
+          style: TextStyle(
+            fontSize: 16, 
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColor
+          )
+        ),
+        viewModel.isCurrentAnswer
+          ? const ActiveIcon() : const DisabledIcon()
+      ];
+      if (viewModel.image != null) {
+        children.insert(0, Image.network(viewModel.image!, width: 40));
+      }
+      return children;
+    }
+
     return Column(
       children: [
         Container(
@@ -22,29 +49,7 @@ class SurveyAnswer extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              viewModel.image != null
-                ? Image.network(viewModel.image!)
-                : Container(),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    viewModel.answer, 
-                    style: const TextStyle(fontSize: 16)
-                  ),
-                )),
-              Text(
-                viewModel.percent, 
-                style: TextStyle(
-                  fontSize: 16, 
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor
-                )
-              ),
-              viewModel.isCurrentAnswer
-                ? const ActiveIcon() : const DisabledIcon()
-            ],
+            children: _buildItems()
           ),
         ),
         const Divider(height: 1)
