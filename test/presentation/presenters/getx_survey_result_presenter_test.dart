@@ -4,13 +4,21 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
+import 'package:fordev/ui/pages/pages.dart';
 
 class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
 
 class GetxSurveyResultPresenter extends GetxController {
   final LoadSurveyResult loadSurveyResult;
   final String surveyId;
+
+  final isLoading = false.obs;
+  final _surveyResult = Rx<SurveyResultViewModel?>(null);
+
+  Stream<bool> get isLoadingStream => isLoading.stream;
+  Stream<SurveyResultViewModel?> get surveyResultStream => _surveyResult.stream;
 
   GetxSurveyResultPresenter({
     required this.loadSurveyResult,
