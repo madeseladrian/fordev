@@ -1,4 +1,6 @@
 import 'package:faker/faker.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -28,10 +30,15 @@ class GetxSurveyResultPresenter extends GetxController {
   });
 
   Future<void> loadData() async {
-    _isLoading.value = true;
-    final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
-    _surveyResult.subject.add(surveyResult.toViewModel());
-    _isLoading.value = false;
+    try {
+      _isLoading.value = true;
+      final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
+      _surveyResult.subject.add(surveyResult.toViewModel());
+    } on DomainError {
+      _surveyResult.subject.addError(UIError.unexpected.description);
+    } finally {
+      _isLoading.value = false;
+    }
   }
 }
 
@@ -43,6 +50,7 @@ void main() {
 
   When mockLoadCall() => when(() => loadSurveyResult.loadBySurvey(surveyId: any(named: 'surveyId')));
   void mockLoad(SurveyResultEntity surveyResult) => mockLoadCall().thenAnswer((_) async => surveyResult);
+  void mockLoadError(DomainError error) => mockLoadCall().thenThrow(error);
 
   SurveyResultEntity makeSurveyResult() => SurveyResultEntity(
     surveyId: faker.guid.guid(),
@@ -99,12 +107,22 @@ void main() {
       verify(() => loadSurveyResult.loadBySurvey(surveyId: surveyId)).called(1);
     });
 
-    test('2,3 - Should emit correct events on success', () async {
+    test('2,3,4 - Should emit correct events on success', () async {
       expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
       sut.surveyResultStream.listen(expectAsync1((result) => expect(result, mapToViewModel(loadResult))));
 
       await sut.loadData();
     });
 
+    test('5 - Should emit correct events on failure', () async {
+      mockLoadError(DomainError.unexpected);
+
+      expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      sut.surveyResultStream.listen(null, onError: expectAsync1((error) => 
+        expect(error, UIError.unexpected.description)
+      ));
+
+      await sut.loadData();
+    });
   });
 }
