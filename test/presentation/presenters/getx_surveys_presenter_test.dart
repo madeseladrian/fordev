@@ -71,4 +71,10 @@ void main() {
 
     await sut.loadData();
   });
+
+  test('6 - Should go to SurveyResultPage on survey click', () async {
+    expectLater(sut.navigateToStream, emits('/survey_result/any_route'));
+
+    sut.goToSurveyResult('any_route');
+  });
 }

@@ -34,8 +34,8 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
         date: DateFormat('dd MMM yyyy').format(survey.dateTime),
         didAnswer: survey.didAnswer)
       ).toList();
-    } on DomainError catch (error, stackTrace) {
-      _surveys.subject.addError(UIError.unexpected.description, stackTrace);
+    } on DomainError catch(error, stacktrace) {
+      _surveys.subject.addError(UIError.unexpected.description, stacktrace);
     } finally {
       _isLoading.value = false;
     }
@@ -43,6 +43,6 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
 
   @override
   void goToSurveyResult(String surveyId) {
-    _navigateTo.value = 'survey_result/$surveyId';
+    _navigateTo.value = '/survey_result/$surveyId';
   }
 }
