@@ -1,10 +1,11 @@
 import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
+import '../../../domain/usecases/usecases.dart';
 
 import '../../http/http.dart';
 import '../../models/models.dart';
 
-class RemoteLoadSurveyResult {
+class RemoteLoadSurveyResult implements LoadSurveyResult {
   final String url;
   final HttpClient httpClient;
 
@@ -13,6 +14,7 @@ class RemoteLoadSurveyResult {
     required this.httpClient
   });
 
+  @override
   Future<SurveyResultEntity > loadBySurvey({required String surveyId}) async {
     try {
       final json = await httpClient.request(url: url, method: 'get');
