@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:fordev/ui/pages/pages.dart';
+import '../../../pages/pages.dart';
 
 class SurveyAnswerResult extends StatelessWidget {
   final SurveyResultViewModel viewModel;
@@ -23,4 +23,3 @@ class SurveyAnswerResult extends StatelessWidget {
     );
   }
 }
-
