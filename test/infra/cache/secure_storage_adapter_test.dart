@@ -24,6 +24,7 @@ void main() {
   
   When mockDeleteCall() => when(() => secureStorage.delete(key: any(named: 'key')));
   void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
+  void mockDeleteError() => when(() => mockDeleteCall().thenThrow(Exception()));
 
   setUp(() {
     key = faker.lorem.word();
@@ -71,6 +72,14 @@ void main() {
       await sut.delete(key);
 
       verify(() => secureStorage.delete(key: key)).called(1);
+    });
+
+    test('2 - Should throw if delete throws', () async {
+      mockDeleteError();
+
+      final future = sut.delete(key);
+
+      expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 }
