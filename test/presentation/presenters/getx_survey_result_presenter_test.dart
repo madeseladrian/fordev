@@ -94,5 +94,14 @@ void main() {
 
       await sut.loadData();
     });
+
+    test('6 - Should emit correct events on access denied', () async {
+      mockLoadError(DomainError.accessDenied);
+
+      //expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      expectLater(sut.isSessionExpiredStream, emits(true));
+
+      await sut.loadData();
+    });
   });
 }

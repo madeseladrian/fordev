@@ -30,8 +30,12 @@ class GetxSurveyResultPresenter extends GetxController implements SurveyResultPr
     try {
       final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
       _surveyResult.subject.add(surveyResult.toViewModel());
-    } on DomainError {
-      _surveyResult.subject.addError(UIError.unexpected.description);
+    } on DomainError catch(error) {
+      if (error == DomainError.accessDenied) {
+        _isSessionExpired.value = true;
+      } else {
+        _surveyResult.subject.addError(UIError.unexpected.description);
+      }
     } 
   }
 
