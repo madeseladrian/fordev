@@ -14,6 +14,7 @@ class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
 void main() {
   late SurveyResultPresenterSpy presenter;
   late StreamController<SurveyResultViewModel?> surveyResultController;
+  late StreamController<bool> isSessionExpiredController;
 
   SurveyResultViewModel makeSurveyResult() => const SurveyResultViewModel(
     surveyId: 'Any id',
@@ -36,9 +37,11 @@ void main() {
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SurveyResultPresenterSpy();
     surveyResultController = StreamController<SurveyResultViewModel?>();
+    isSessionExpiredController = StreamController<bool>();
 
     when(() => presenter.loadData()).thenAnswer((_) async => _);
     when(() => presenter.surveyResultStream).thenAnswer((_) => surveyResultController.stream);
+    when(() => presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
 
     final surveyResultPage = GetMaterialApp(
       initialRoute: '/survey_result/any_survey_id',
@@ -47,6 +50,7 @@ void main() {
           name: '/survey_result/any_survey_id',
           page: () => SurveyResultPage(presenter: presenter),
         ),
+        GetPage(name: '/login', page: () => const Scaffold(body: Text('fake login')))
       ],
     );
     await mockNetworkImagesFor(() async {
@@ -122,5 +126,22 @@ void main() {
     expect(find.byType(DisabledIcon), findsOneWidget);
     final image = tester.widget<Image>(find.byType(Image)).image as NetworkImage;
     expect(image.url, 'Image 0');
+  });
+
+  testWidgets('14 - Should logout', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isSessionExpiredController.add(true);
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, '/login');
+    expect(find.text('fake login'), findsOneWidget);
+  });
+
+  testWidgets('15 - Should not logout', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isSessionExpiredController.add(false);
+    await tester.pump();
+    expect(Get.currentRoute, '/survey_result/any_survey_id');
   });
 }

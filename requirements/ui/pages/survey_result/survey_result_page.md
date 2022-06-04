@@ -14,5 +14,6 @@
 11.✅ Exibir o ícone ativado se for a resposta do usuário
 12.✅ Carregar a imagem com a partir da URL correta, caso a resposta tenha imagem
 13.✅ Não renderizar imagem, caso a resposta não tenha imagem
-14. Ir para tela de Login e limpar a navegação ao receber evento de sessionExpired como true
-15. Chamar o método de Salvar Resultado da Enquete ao clicar em algum item da lista
+14.✅ Ir para tela de Login e limpar a navegação ao receber evento de sessionExpired como true
+15.✅ Não deslogar o usuário
+16. Chamar o método de Salvar Resultado da Enquete ao clicar em algum item da lista

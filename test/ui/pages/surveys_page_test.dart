@@ -36,8 +36,6 @@ void main() {
     when(() => presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
     when(() => presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
 
-
-
     final surveysPage = GetMaterialApp(
       initialRoute: '/surveys',
       getPages: [
