@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:get/get.dart';
 
 import '../../../../ui/pages/pages.dart';
+import '../../factories.dart';
 
-class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
 
 Widget makeSurveyResultPage() {
-  return SurveyResultPage(presenter: SurveyResultPresenterSpy());
+  return SurveyResultPage(presenter: makeGetxSurveyResultPresenter(Get.parameters['survey_id'] ?? ''));
 }

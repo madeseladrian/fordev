@@ -13,7 +13,6 @@ class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
 
 void main() {
   late SurveyResultPresenterSpy presenter;
-  late StreamController<bool> isLoadingController;
   late StreamController<SurveyResultViewModel?> surveyResultController;
 
   SurveyResultViewModel makeSurveyResult() => const SurveyResultViewModel(
@@ -36,11 +35,9 @@ void main() {
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SurveyResultPresenterSpy();
-    isLoadingController = StreamController<bool>();
     surveyResultController = StreamController<SurveyResultViewModel?>();
 
     when(() => presenter.loadData()).thenAnswer((_) async => _);
-    when(() => presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream); 
     when(() => presenter.surveyResultStream).thenAnswer((_) => surveyResultController.stream);
 
     final surveyResultPage = GetMaterialApp(
@@ -58,7 +55,7 @@ void main() {
   }
 
   tearDown(() {
-    isLoadingController.close();
+    surveyResultController.close();
   });
 
   testWidgets('1 - Should call LoadSurveyResult on page load', (WidgetTester tester) async {
@@ -70,12 +67,19 @@ void main() {
   testWidgets('2,3 - Should handle loading correctly', (WidgetTester tester) async {
     await loadPage(tester);
 
-    isLoadingController.add(true);
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    isLoadingController.add(false);
+    surveyResultController.addError(UIError.unexpected.description);
     await tester.pump();
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+
+    surveyResultController.add(makeSurveyResult());
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
+    expect(find.text('Question'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 

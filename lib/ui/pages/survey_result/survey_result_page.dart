@@ -11,18 +11,12 @@ class SurveyResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    presenter.loadData();
+    
     return Scaffold(
       appBar: AppBar(title: Text(R.string.surveyResult), centerTitle: true),
       body: Builder(
         builder: (context) {
-          presenter.isLoadingStream.listen((isLoading) {
-            if (isLoading == true) {
-              showLoading(context);
-            } else {
-              hideLoading(context);
-            }
-          });
+          presenter.loadData();
           
           return StreamBuilder<SurveyResultViewModel?>(
             stream: presenter.surveyResultStream,
@@ -36,7 +30,9 @@ class SurveyResultPage extends StatelessWidget {
               if (snapshot.hasData) {
                 return SurveyAnswerResult(viewModel: snapshot.data!);
               }
-              return const SizedBox();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
           );
         }
