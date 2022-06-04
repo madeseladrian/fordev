@@ -62,17 +62,27 @@ void main() {
   test('5 - Should emit correct events on failure', () async {
     mockLoadError(DomainError.unexpected);
 
-    sut.surveysStream.listen(
-      null, 
-      onError: expectAsync2((error, _) => expect(error, UIError.unexpected.description))
-    );
+    sut.surveysStream.listen(null, onError: expectAsync1((error) => 
+      expect(error, UIError.unexpected.description)));
 
     await sut.loadData();
   });
 
   test('6 - Should go to SurveyResultPage on survey click', () async {
-    expectLater(sut.navigateToStream, emits('/survey_result/any_route'));
+    expectLater(sut.navigateToStream, emitsInOrder([
+      '/survey_result/any_route',
+      '/survey_result/any_route'
+    ]));
 
     sut.goToSurveyResult('any_route');
+    sut.goToSurveyResult('any_route');
+  });
+
+  test('7 - Should emit correct events on access denied', () async {
+    mockLoadError(DomainError.accessDenied);
+
+    expectLater(sut.isSessionExpiredStream, emits(true));
+
+    await sut.loadData();
   });
 }

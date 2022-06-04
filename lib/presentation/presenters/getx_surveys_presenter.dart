@@ -33,13 +33,17 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
         date: DateFormat('dd MMM yyyy').format(survey.dateTime),
         didAnswer: survey.didAnswer)
       ).toList();
-    } on DomainError {
-      _surveys.subject.addError(UIError.unexpected.description);
-    } 
+    } on DomainError catch(error) {
+      if (error == DomainError.accessDenied) {
+        _isSessionExpired.value = true;
+      } else {
+        _surveys.subject.addError(UIError.unexpected.description);
+      }
+    }
   }
 
   @override
   void goToSurveyResult(String surveyId) {
-    _navigateTo.value = '/survey_result/$surveyId';
+    _navigateTo.subject.add('/survey_result/$surveyId');
   }
 }
