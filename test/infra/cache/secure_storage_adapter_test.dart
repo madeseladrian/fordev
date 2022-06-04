@@ -33,31 +33,31 @@ void main() {
 
   group('saveSecure', () {
     test('1 - Should call save secure with correct values', () async {
-      await sut.saveSecure(key: key, value: value);
+      await sut.save(key: key, value: value);
       verify(() => secureStorage.write(key: key, value: value));
     });
 
     test('2 - Should throw if save secure throws', () async {
       mockSaveError();
-      final future = sut.saveSecure(key: key, value: value);
+      final future = sut.save(key: key, value: value);
       expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });
 
   group('fetchSecure', () {
     test('1 - Should call save secure with correct value', () async {
-      await sut.fetchSecure(key);
+      await sut.fetch(key);
       verify(() => secureStorage.read(key: key));
     });
 
     test('2 - Should return correct value on success', () async {
-      final fetchedValue = await sut.fetchSecure(key);
+      final fetchedValue = await sut.fetch(key);
       expect(fetchedValue, key);
     });
 
     test('3 - Should throw if fetch secure throws', () async {
       mockFetchError();
-      final future = sut.fetchSecure(key);
+      final future = sut.fetch(key);
       expect(future, throwsA(const TypeMatcher<Exception>()));
     });
   });

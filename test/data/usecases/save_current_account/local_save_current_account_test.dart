@@ -15,7 +15,7 @@ void main() {
   late LocalSaveCurrentAccount sut;
   late AccountEntity account;
 
-  When mockSaveCall() => when(() => saveSecureCacheStorage.saveSecure(key: any(named: 'key'), value: any(named: 'value')));
+  When mockSaveCall() => when(() => saveSecureCacheStorage.save(key: any(named: 'key'), value: any(named: 'value')));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
   void mockSaveError() => mockSaveCall().thenThrow(Exception());
 
@@ -28,7 +28,7 @@ void main() {
 
   test('1 - Should call SaveSecureCacheStorage with correct values', () async {
     await sut.save(account);
-    verify(() => saveSecureCacheStorage.saveSecure(
+    verify(() => saveSecureCacheStorage.save(
       key: 'token', value: account.token
     ));
   });

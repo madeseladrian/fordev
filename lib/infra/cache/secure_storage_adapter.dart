@@ -8,12 +8,12 @@ class SecureStorageAdapter implements SaveSecureCacheStorage, FetchSecureCacheSt
   SecureStorageAdapter({required this.secureStorage});
   
   @override
-  Future<void> saveSecure({required String key, required dynamic value}) async {
+  Future<void> save({required String key, required dynamic value}) async {
     await secureStorage.write(key: key, value: value);
   }
 
   @override
-  Future<String?> fetchSecure(String key) async {
+  Future<String?> fetch(String key) async {
     return await secureStorage.read(key: key);
   }
 }

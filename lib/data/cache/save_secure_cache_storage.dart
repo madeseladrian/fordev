@@ -1,5 +1,5 @@
 abstract class SaveSecureCacheStorage {
-  Future<void> saveSecure({
+  Future<void> save({
     required String key, 
     required dynamic value
   });

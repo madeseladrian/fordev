@@ -31,11 +31,11 @@ void main() {
   void mockRequest(dynamic data) => mockRequestCall().thenAnswer((_) async => data);
   void mockRequestError(HttpError error) => mockRequestCall().thenThrow(error);
 
-  When mockFetchCall() => when(() => fetchSecureCacheStorage.fetchSecure(any()));
+  When mockFetchCall() => when(() => fetchSecureCacheStorage.fetch(any()));
   void mockFetch(String? data) => mockFetchCall().thenAnswer((_) async => data);
   void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
-  When mockDeleteCall() => when(() => deleteSecureCacheStorage.deleteSecure(any()));
+  When mockDeleteCall() => when(() => deleteSecureCacheStorage.delete(any()));
   void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
 
   setUp(() {
@@ -60,7 +60,7 @@ void main() {
   test('1 - Should call FetchSecureCacheStorage with correct key', () async {
     await sut.request(url: url, method: method, body: body);
 
-    verify(() => fetchSecureCacheStorage.fetchSecure('token')).called(1);
+    verify(() => fetchSecureCacheStorage.fetch('token')).called(1);
   });
 
   test('2 - Should call decoratee with access token on header', () async {
@@ -106,7 +106,7 @@ void main() {
     final future = sut.request(url: url, method: method, body: body);
 
     expect(future, throwsA(HttpError.forbidden));
-    verify(() => deleteSecureCacheStorage.deleteSecure('token')).called(1);
+    verify(() => deleteSecureCacheStorage.delete('token')).called(1);
   });
 
   // Use 'untilCalled' when you need to test an async function inside try/catch
@@ -114,9 +114,9 @@ void main() {
     mockRequestError(HttpError.forbidden);
 
     final future = sut.request(url: url, method: method, body: body);
-    await untilCalled(() => deleteSecureCacheStorage.deleteSecure('token'));
+    await untilCalled(() => deleteSecureCacheStorage.delete('token'));
 
     expect(future, throwsA(HttpError.forbidden));
-    verify(() => deleteSecureCacheStorage.deleteSecure('token')).called(1);
+    verify(() => deleteSecureCacheStorage.delete('token')).called(1);
   });
 }
