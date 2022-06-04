@@ -11,7 +11,6 @@ class SurveyResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(title: Text(R.string.surveyResult), centerTitle: true),
       body: Builder(

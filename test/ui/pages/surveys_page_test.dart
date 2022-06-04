@@ -13,7 +13,6 @@ class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
 
 void main() {
   late SurveysPresenterSpy presenter;
-  late StreamController<bool> isLoadingController;
   late StreamController<List<SurveyViewModel>> surveysController;
   late StreamController<String> navigateToController;
 
@@ -27,12 +26,10 @@ void main() {
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SurveysPresenterSpy();
-    isLoadingController = StreamController<bool>();
     surveysController = StreamController<List<SurveyViewModel>>();
     navigateToController = StreamController<String>();
 
     when(() => presenter.loadData()).thenAnswer((_) async => _);
-    when(() => presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(() => presenter.surveysStream).thenAnswer((_) => surveysController.stream);
     when(() => presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
     
@@ -48,7 +45,6 @@ void main() {
   }
 
   tearDown(() {
-    isLoadingController.close();
     surveysController.close();
     navigateToController.close();
   });
@@ -59,23 +55,20 @@ void main() {
     verify(() => presenter.loadData()).called(1);
   });
 
-  testWidgets('2 - Should present loading', (WidgetTester tester) async {
+  testWidgets('2,3 - Should hide loading', (WidgetTester tester) async {
     await loadPage(tester);
 
-    isLoadingController.add(true);
     await tester.pump();
-
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-  });
 
-  testWidgets('3 - Should hide loading', (WidgetTester tester) async {
-    await loadPage(tester);
-
-    isLoadingController.add(true);
+    surveysController.addError(UIError.unexpected.description);
     await tester.pump();
-    isLoadingController.add(false);
-    await tester.pump();
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
 
+    surveysController.add(makeSurveyList());
+    await tester.pump();
+    expect(find.text('Question 1'), findsWidgets);
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
