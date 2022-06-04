@@ -13,5 +13,5 @@
 6. ✅ Apagar token de acesso do Cache
 
 > ## Exceção - HttpClient retornou erro Forbidden
-7. Retornar erro HTTP Forbidden - 403
-8. Apagar token de acesso do Cache
+7. ✅ Retornar erro HTTP Forbidden - 403
+8. ✅ Apagar token de acesso do Cache

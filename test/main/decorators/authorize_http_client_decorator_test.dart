@@ -100,7 +100,7 @@ void main() {
     expect(future, throwsA(HttpError.badRequest));
   });
 
-  test('5 - Should throw ForbiddenError if FetchSecureCacheStorage throws', () async {
+  test('5,6 - Should throw ForbiddenError if FetchSecureCacheStorage throws', () async {
     mockFetchError();
 
     final future = sut.request(url: url, method: method, body: body);
@@ -109,4 +109,14 @@ void main() {
     verify(() => deleteSecureCacheStorage.deleteSecure('token')).called(1);
   });
 
+  // Use 'untilCalled' when you need to test an async function inside try/catch
+  test('7,8 - Should delete cache if request throws ForbiddenError', () async {
+    mockRequestError(HttpError.forbidden);
+
+    final future = sut.request(url: url, method: method, body: body);
+    await untilCalled(() => deleteSecureCacheStorage.deleteSecure('token'));
+
+    expect(future, throwsA(HttpError.forbidden));
+    verify(() => deleteSecureCacheStorage.deleteSecure('token')).called(1);
+  });
 }
