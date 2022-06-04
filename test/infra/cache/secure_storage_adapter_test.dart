@@ -22,12 +22,16 @@ void main() {
   void mockFetch(String? data) => mockFetchCall().thenAnswer((_) async => data);
   void mockFetchError() => when(() => mockFetchCall().thenThrow(Exception()));
   
+  When mockDeleteCall() => when(() => secureStorage.delete(key: any(named: 'key')));
+  void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
+
   setUp(() {
     key = faker.lorem.word();
     value = faker.guid.guid();
     secureStorage = FlutterSecureStorageSpy();
     mockSave();
     mockFetch(key);
+    mockDelete();
     sut = SecureStorageAdapter(secureStorage: secureStorage);
   });
 
@@ -59,6 +63,14 @@ void main() {
       mockFetchError();
       final future = sut.fetch(key);
       expect(future, throwsA(const TypeMatcher<Exception>()));
+    });
+  });
+
+  group('delete', () {
+    test('1 - Should call delete with correct key', () async {
+      await sut.delete(key);
+
+      verify(() => secureStorage.delete(key: key)).called(1);
     });
   });
 }
