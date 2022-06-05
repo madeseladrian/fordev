@@ -4,46 +4,11 @@ import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
-import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/data/cache/cache.dart';
-import 'package:fordev/data/models/models.dart';
+import 'package:fordev/data/usecases/usecases.dart';
 
 class CacheStorageSpy extends Mock implements CacheStorage {}
-
-class LocalLoadSurveyResult implements LoadSurveyResult {
-  final CacheStorage cacheStorage;
-
-  LocalLoadSurveyResult({ required this.cacheStorage });
-
-  @override
-  Future<SurveyResultEntity> loadBySurvey({ required String surveyId }) async {
-    try {
-      final data = await cacheStorage.fetch('survey_result/$surveyId');
-      return LocalSurveyResultModel.fromJson(data).toEntity();
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
-
-  Future<void> validate(String surveyId) async {
-    try {
-      final data = await cacheStorage.fetch('survey_result/$surveyId');
-      LocalSurveyResultModel.fromJson(data).toEntity();
-    } catch (error) {
-      await cacheStorage.delete('survey_result/$surveyId');
-    }
-  }
-
-  Future<void> save(SurveyResultEntity surveyResult) async {
-    try {
-      final json = LocalSurveyResultModel.fromEntity(surveyResult).toJson();
-      await cacheStorage.save(key: 'survey_result/${surveyResult.surveyId}', value: json);
-    } catch(error) {
-      throw DomainError.unexpected;
-    }
-  }
-}
 
 void main() {
   late LocalLoadSurveyResult sut;
