@@ -39,6 +39,7 @@ void main() {
     surveyResultController = StreamController<SurveyResultViewModel?>();
     isSessionExpiredController = StreamController<bool>();
 
+    when(() => presenter.save(answer: any(named: 'answer'))).thenAnswer((_) async => _);
     when(() => presenter.loadData()).thenAnswer((_) async => _);
     when(() => presenter.surveyResultStream).thenAnswer((_) => surveyResultController.stream);
     when(() => presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
@@ -60,6 +61,7 @@ void main() {
 
   tearDown(() {
     surveyResultController.close();
+    isSessionExpiredController.close();
   });
 
   testWidgets('1 - Should call LoadSurveyResult on page load', (WidgetTester tester) async {
@@ -143,5 +145,17 @@ void main() {
     isSessionExpiredController.add(false);
     await tester.pump();
     expect(Get.currentRoute, '/survey_result/any_survey_id');
+  });
+
+  testWidgets('16 - Should call save on list item click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveyResultController.add(makeSurveyResult());
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
+    await tester.tap(find.text('Answer 1'));
+
+    verify(() => presenter.save(answer: 'Answer 1')).called(1);
   });
 }

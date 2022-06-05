@@ -5,7 +5,7 @@ import '../../helpers/helpers.dart';
 import '../../mixins/mixins.dart';
 import 'survey_result.dart';
 
-class SurveyResultPage extends StatelessWidget with  SessionManager {
+class SurveyResultPage extends StatelessWidget with SessionManager {
   final SurveyResultPresenter presenter;
 
   const SurveyResultPage({Key? key, required this.presenter}) : super(key: key);
@@ -29,7 +29,10 @@ class SurveyResultPage extends StatelessWidget with  SessionManager {
                 );
               }
               if (snapshot.hasData) {
-                return SurveyAnswerResult(viewModel: snapshot.data!);
+                return SurveyAnswerResult(
+                  viewModel: snapshot.data!,
+                  onSave: presenter.save
+                );
               }
               return const Center(
                 child: CircularProgressIndicator(),
