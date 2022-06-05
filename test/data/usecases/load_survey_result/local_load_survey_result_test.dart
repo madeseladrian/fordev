@@ -25,7 +25,12 @@ class LocalLoadSurveyResult  {
   }
 
   Future<void> validate(String surveyId) async {
-    await cacheStorage.fetch('survey_result/$surveyId');
+    try {
+      final data = await cacheStorage.fetch('survey_result/$surveyId');
+      LocalSurveyResultModel.fromJson(data).toEntity();
+    } catch (error) {
+      await cacheStorage.delete('survey_result/$surveyId');
+    }
   }
 }
 
@@ -38,6 +43,9 @@ void main() {
   When mockFetchCall() => when(() => cacheStorage.fetch(any()));
   void mockFetch(dynamic json) => mockFetchCall().thenAnswer((_) async => json);
   void mockFetchError() => mockFetchCall().thenThrow(Exception());
+
+  When mockDeleteCall() => when(() => cacheStorage.delete(any()));
+  void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
 
   Map makeSurveyResult() => {
     'surveyId': faker.guid.guid(),
@@ -74,6 +82,7 @@ void main() {
     data = makeSurveyResult();
     cacheStorage = CacheStorageSpy();
     mockFetch(data);
+    mockDelete();
     sut = LocalLoadSurveyResult(cacheStorage: cacheStorage);
   });
 
@@ -144,6 +153,14 @@ void main() {
       await sut.validate(surveyId);
 
       verify(() => cacheStorage.fetch('survey_result/$surveyId')).called(1);
+    });
+
+    test('2 - Should delete cache if validate is invalid', () async {
+      mockFetch(makeInvalidSurveyResult());
+
+      await sut.validate(surveyId);
+
+      verify(() => cacheStorage.delete('survey_result/$surveyId')).called(1);
     });
   });
 }

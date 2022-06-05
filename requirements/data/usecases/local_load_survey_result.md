@@ -18,10 +18,10 @@
 
 > ## Caso de sucesso
 1. ✅ Sistema solicita os dados do resultado de uma enquete do Cache
-2. Sistema valida os dados recebidos do Cache
 
 > ## Exceção - Dados inválidos no cache
-3. Sistema limpa os dados do cache
+2. ✅ Sistema limpa os dados do cache se os dados são inválidos
+3. Sistema limpa os dados do cache se os dados são incompletos
 
 > ## Exceção - Erro ao carregar dados do Cache
 4. Sistema limpa os dados do cache
