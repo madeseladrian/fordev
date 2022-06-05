@@ -4,34 +4,9 @@ import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
-import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/data/usecases/usecases.dart';
-
-class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
-  final RemoteLoadSurveyResult remote;
-  final LocalLoadSurveyResult local;
-
-  RemoteLoadSurveyResultWithLocalFallback({
-    required this.remote,
-    required this.local,
-  });
-
-  @override
-  Future<SurveyResultEntity> loadBySurvey({ required String surveyId }) async {
-    try {
-      final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
-      await local.save(surveyResult);
-      return surveyResult;
-    } catch (error) {
-      if (error == DomainError.accessDenied) {
-        rethrow;
-      }
-      await local.validate(surveyId);
-      return await local.loadBySurvey(surveyId: surveyId);
-    }
-  }
-}
+import 'package:fordev/main/composites/composites.dart';
 
 class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {}
 class LocalLoadSurveyResultSpy extends Mock implements LocalLoadSurveyResult {}
