@@ -3,8 +3,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
-import 'package:fordev/data/usecases/usecases.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/usecases/usecases.dart';
+
+import 'package:fordev/data/usecases/usecases.dart';
 
 class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
   final RemoteLoadSurveyResult remote;
@@ -35,6 +37,7 @@ void main() {
 
   When mockRemoteLoadCall() => when(() => remote.loadBySurvey(surveyId: any(named: 'surveyId')));
   void mockRemoteLoad(SurveyResultEntity surveyResult) => mockRemoteLoadCall().thenAnswer((_) async => surveyResult);
+  void mockRemoteLoadError(DomainError error) => mockRemoteLoadCall().thenThrow(error);
 
   When mockLocalSaveCall() => when(() => local.save(any()));
   void mockLocalSave() => mockLocalSaveCall().thenAnswer((_) async => _);
@@ -90,5 +93,13 @@ void main() {
     final response = await sut.loadBySurvey(surveyId: surveyId);
 
     expect(response, remoteSurveyResult);
+  });
+
+  test('4 - Should rethrow if remote loadBySurvey throws AccessDeniedError', () async {
+    mockRemoteLoadError(DomainError.accessDenied);
+
+    final future = sut.loadBySurvey(surveyId: surveyId);
+
+    expect(future, throwsA(DomainError.accessDenied));
   });
 }
