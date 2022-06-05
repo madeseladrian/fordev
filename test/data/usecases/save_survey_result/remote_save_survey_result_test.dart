@@ -2,7 +2,11 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+
 import 'package:fordev/data/http/http.dart';
+import 'package:fordev/data/models/models.dart';
 
 class RemoteSaveSurveyResult  {
   final String url;
@@ -13,8 +17,13 @@ class RemoteSaveSurveyResult  {
     required this.httpClient
   });
 
-  Future<void> save({required String answer}) async {
-    await httpClient.request(url: url, method: 'put', body: {'answer': answer});
+  Future<SurveyResultEntity> save({required String answer}) async {
+    try {
+      final json = await httpClient.request(url: url, method: 'put', body: {'answer': answer});
+      return RemoteSurveyResultModel.fromJson(json).toEntity();
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -53,6 +62,10 @@ void main() {
     'date': faker.date.dateTime().toIso8601String(),
   };
 
+  Map makeInvalidJson() => {
+    'invalid_key': 'invalid_value'
+  };
+
   setUp(() {
     surveyResult = makeSurveyResultJson();
     answer = faker.lorem.sentence();
@@ -62,9 +75,39 @@ void main() {
     sut = RemoteSaveSurveyResult(url: url, httpClient: httpClient);
   });
 
-  test('1 - Should call HttpClient with correct values', () async {
+  test('1,2,3 - Should call HttpClient with correct values', () async {
     await sut.save(answer: answer);
 
     verify(() => httpClient.request(url: url, method: 'put', body: {'answer': answer}));
+  });
+
+  test('4 - Should return surveyResult on 200', () async {
+    final result = await sut.save(answer: answer);
+
+    expect(result, SurveyResultEntity(
+      surveyId: surveyResult['surveyId'],
+      question: surveyResult['question'],
+      answers: [
+        SurveyAnswerEntity(
+          image: surveyResult['answers'][0]['image'],
+          answer: surveyResult['answers'][0]['answer'],
+          isCurrentAnswer: surveyResult['answers'][0]['isCurrentAccountAnswer'],
+          percent: surveyResult['answers'][0]['percent'],
+        ),
+        SurveyAnswerEntity(
+          answer: surveyResult['answers'][1]['answer'],
+          isCurrentAnswer: surveyResult['answers'][1]['isCurrentAccountAnswer'],
+          percent: surveyResult['answers'][1]['percent'],
+        )
+      ]
+    ));
+  });
+
+  test('5 - Should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {
+    mockRequest(makeInvalidJson());
+
+    final future = sut.save(answer: answer);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
