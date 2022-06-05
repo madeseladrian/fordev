@@ -170,5 +170,13 @@ void main() {
 
       verify(() => cacheStorage.delete('survey_result/$surveyId')).called(1);
     });
+
+    test('4 - Should delete cache if fetch fails', () async {
+      mockFetchError();
+
+      await sut.validate(surveyId);
+
+      verify(() => cacheStorage.delete('survey_result/$surveyId')).called(1);
+    });
   });
 }
