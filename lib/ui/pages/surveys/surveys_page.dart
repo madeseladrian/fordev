@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
+import '../../mixins/mixins.dart';
 import 'surveys.dart';
 
-class SurveysPage extends StatelessWidget {
+class SurveysPage extends StatelessWidget with NavigationManager, SessionManager {
   final SurveysPresenter presenter;
 
   const SurveysPage({Key? key, required this.presenter}) : super(key: key);
@@ -18,18 +18,8 @@ class SurveysPage extends StatelessWidget {
       body: Builder(
         builder: (context) {
           presenter.loadData();
-
-          presenter.navigateToStream.listen((page) {
-            if (page?.isNotEmpty == true) {
-              Get.toNamed(page!);
-            }
-          });
-
-          presenter.isSessionExpiredStream.listen((isExpired) {
-            if (isExpired) {
-              Get.offAllNamed('/login');
-            }
-          });
+          handleSessionExpired(presenter.isSessionExpiredStream);
+          handleNavigation(presenter.navigateToStream);
           
           return StreamBuilder<List<SurveyViewModel>>(
             stream: presenter.surveysStream,
