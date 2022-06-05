@@ -23,6 +23,10 @@ class LocalLoadSurveyResult  {
       throw DomainError.unexpected;
     }
   }
+
+  Future<void> validate(String surveyId) async {
+    await cacheStorage.fetch('survey_result/$surveyId');
+  }
 }
 
 void main() {
@@ -132,6 +136,14 @@ void main() {
       final future = sut.loadBySurvey(surveyId: surveyId);
 
       expect(future, throwsA(DomainError.unexpected));
+    });
+  });
+
+  group('validate', () {
+    test('1 - Should call cacheStorage with correct key', () async {
+      await sut.validate(surveyId);
+
+      verify(() => cacheStorage.fetch('survey_result/$surveyId')).called(1);
     });
   });
 }

@@ -17,7 +17,7 @@
 # Local Validate Survey Result
 
 > ## Caso de sucesso
-1. Sistema solicita os dados do resultado de uma enquete do Cache
+1. ✅ Sistema solicita os dados do resultado de uma enquete do Cache
 2. Sistema valida os dados recebidos do Cache
 
 > ## Exceção - Dados inválidos no cache
