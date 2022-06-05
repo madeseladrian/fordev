@@ -28,11 +28,16 @@ void main() {
     mockPostCall().thenAnswer((_) async => Response(body, statusCode));
   void mockPostError() => when(() => mockPostCall().thenThrow(Exception()));
 
+  When mockPutCall() => when(() => client.put(any(), body: any(named: 'body'), headers: any(named: 'headers')));
+  void mockPut(int statusCode, {String body = '{"any_key":"any_value"}'}) => 
+    mockPutCall().thenAnswer((_) async => Response(body, statusCode));
+
   setUp(() {
     client = ClientSpy();
     sut = HttpAdapter(client: client);
     mockGet(200);
     mockPost(200);
+    mockPut(200);
   });
 
   setUpAll(() {
@@ -228,6 +233,37 @@ void main() {
       mockPostError(); 
       final future = sut.request(url: url, method: 'post');
       expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
+  group('put', () {
+    test('1,2,3 - Should call put with correct values', () async { 
+      await sut.request(url: url, method: 'put', body: {'any_key': 'any_value'});
+      verify(() => client.put(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json'
+        },
+        body: '{"any_key":"any_value"}'
+      ));
+
+      await sut.request(url: url, method: 'put', body: {'any_key': 'any_value'}, headers: {'any_header': 'any_value'});
+      verify(() => client.put(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+          'any_header': 'any_value'
+        },
+        body: '{"any_key":"any_value"}'
+      ));
+
+      await sut.request(url: url, method: 'put');
+      verify(() => client.put(
+        any(),
+        headers: any(named: 'headers')
+      ));
     });
   });
 
