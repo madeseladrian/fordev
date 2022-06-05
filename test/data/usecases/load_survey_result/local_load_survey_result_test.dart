@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 
 import 'package:fordev/data/cache/cache.dart';
 import 'package:fordev/data/models/models.dart';
@@ -15,8 +16,12 @@ class LocalLoadSurveyResult  {
   LocalLoadSurveyResult({ required this.cacheStorage });
 
   Future<SurveyResultEntity> loadBySurvey({ required String surveyId }) async {
-    final data = await cacheStorage.fetch('survey_result/$surveyId');
-    return LocalSurveyResultModel.fromJson(data).toEntity();
+    try {
+      final data = await cacheStorage.fetch('survey_result/$surveyId');
+      return LocalSurveyResultModel.fromJson(data).toEntity();
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -79,6 +84,14 @@ void main() {
           )
         ]
       ));
+    });
+
+    test('3 - Should throw UnexpectedError if cache is empty', () async {
+      mockFetch({});
+
+      final future = sut.loadBySurvey(surveyId: surveyId);
+
+      expect(future, throwsA(DomainError.unexpected));
     });
   });
 }

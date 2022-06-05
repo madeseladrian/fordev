@@ -4,11 +4,13 @@
 1. ✅ Sistema solicita os dados do resultado de uma enquete do Cache
 2. ✅ Sistema entrega os dados do resultado da enquete
 
-> ## Exceção - Erro ao carregar dados do Cache
-3. Sistema retorna uma mensagem de erro inesperado
-
 > ## Exceção - Cache vazio
-4. Sistema retorna uma mensagem de erro inesperado
+3. ✅ Sistema retorna uma mensagem de erro inesperado
+
+> ## Exceção - Erro ao carregar dados do Cache
+4. Sistema retorna uma mensagem de erro inesperado se os dados do cache são inválidos
+5. Sistema retorna uma mensagem de erro inesperado se os dados do cache são incompletos
+6. Sistema retorna uma mensagem de erro inesperado se o cache falha
 
 ---
 
@@ -18,10 +20,10 @@
 1. Sistema solicita os dados do resultado de uma enquete do Cache
 2. Sistema valida os dados recebidos do Cache
 
-> ## Exceção - Erro ao carregar dados do Cache
+> ## Exceção - Dados inválidos no cache
 3. Sistema limpa os dados do cache
 
-> ## Exceção - Dados inválidos no cache
+> ## Exceção - Erro ao carregar dados do Cache
 4. Sistema limpa os dados do cache
 
 ---
