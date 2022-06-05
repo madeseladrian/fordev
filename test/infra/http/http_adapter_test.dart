@@ -328,6 +328,14 @@ void main() {
 
       expect(future, throwsA(HttpError.forbidden));
     });
+
+    test('12 - Should return NotFoundError if put returns 404', () async {
+      mockPut(404);
+
+      final future = sut.request(url: url, method: 'put');
+
+      expect(future, throwsA(HttpError.notFound));
+    });
   });
 
   group('shared', () {
