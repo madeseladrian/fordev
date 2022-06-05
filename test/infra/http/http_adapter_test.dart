@@ -265,6 +265,12 @@ void main() {
         headers: any(named: 'headers')
       ));
     });
+
+    test('4 - Should return data if put returns 200', () async {
+      final response = await sut.request(url: url, method: 'put');
+
+      expect(response, {'any_key': 'any_value'});
+    });
   });
 
   group('shared', () {
