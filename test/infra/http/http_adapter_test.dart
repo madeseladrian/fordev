@@ -312,6 +312,14 @@ void main() {
 
       expect(future, throwsA(HttpError.badRequest));
     });
+
+    test('10 - Should return UnauthorizedError if put returns 401', () async {
+      mockPut(401);
+
+      final future = sut.request(url: url, method: 'put');
+
+      expect(future, throwsA(HttpError.unauthorized));
+    });
   });
 
   group('shared', () {
