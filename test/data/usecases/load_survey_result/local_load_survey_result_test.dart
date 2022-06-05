@@ -60,6 +60,10 @@ void main() {
     }],
   };
 
+  Map makeIncompleteSurveyResult() => {
+    'surveyId': faker.guid.guid()
+  };
+
   setUp(() {
     surveyId = faker.guid.guid();
     data = makeSurveyResult();
@@ -107,6 +111,14 @@ void main() {
 
     test('4 - Should throw UnexpectedError if cache is isvalid', () async {
       mockFetch(makeInvalidSurveyResult());
+
+      final future = sut.loadBySurvey(surveyId: surveyId);
+
+      expect(future, throwsA(DomainError.unexpected));
+    });
+
+    test('5 - Should throw UnexpectedError if cache is incomplete', () async {
+      mockFetch(makeIncompleteSurveyResult());
 
       final future = sut.loadBySurvey(surveyId: surveyId);
 

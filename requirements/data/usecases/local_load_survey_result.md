@@ -9,7 +9,7 @@
 
 > ## Exceção - Erro ao carregar dados do Cache
 4. ✅ Sistema retorna uma mensagem de erro inesperado se os dados do cache são inválidos
-5. Sistema retorna uma mensagem de erro inesperado se os dados do cache são incompletos
+5. ✅ Sistema retorna uma mensagem de erro inesperado se os dados do cache são incompletos
 6. Sistema retorna uma mensagem de erro inesperado se o cache falha
 
 ---
