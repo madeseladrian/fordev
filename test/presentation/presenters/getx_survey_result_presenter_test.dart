@@ -122,5 +122,16 @@ void main() {
 
       verify(() => saveSurveyResult.save(answer: answer)).called(1);
     });
+
+    test('8,9,10 - Should emit correct events on success', () async {
+      //expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      expectLater(sut.surveyResultStream, emitsInOrder([
+        mapToViewModel(loadResult),
+        mapToViewModel(saveResult),
+      ]));
+
+      await sut.loadData();
+      await sut.save(answer: answer);
+    });
   });
 }
