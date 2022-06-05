@@ -21,8 +21,10 @@ class RemoteSaveSurveyResult  {
     try {
       final json = await httpClient.request(url: url, method: 'put', body: {'answer': answer});
       return RemoteSurveyResultModel.fromJson(json).toEntity();
-    } on HttpError {
-      throw DomainError.unexpected;
+    } on HttpError catch(error) {
+      throw error == HttpError.forbidden
+        ? DomainError.accessDenied
+        : DomainError.unexpected;
     }
   }
 }
@@ -43,6 +45,7 @@ void main() {
     headers: any(named: 'headers')
   ));
   void mockRequest(dynamic data) => mockRequestCall().thenAnswer((_) async => data);
+  void mockRequestError(HttpError error) => mockRequestCall().thenThrow(error);
 
   Map makeSurveyResultJson() => {
     'surveyId': faker.guid.guid(),
@@ -109,5 +112,13 @@ void main() {
     final future = sut.save(answer: answer);
 
     expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('6 - Should throw AccessDeniedError if HttpClient returns 403', () async {
+    mockRequestError(HttpError.forbidden);
+
+    final future = sut.save(answer: answer);
+
+    expect(future, throwsA(DomainError.accessDenied));
   });
 }

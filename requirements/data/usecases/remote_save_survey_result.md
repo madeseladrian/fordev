@@ -10,7 +10,7 @@
 5. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Acesso negado (403)
-6. Sistema retorna uma mensagem de acesso negado
+6. ✅ Sistema retorna uma mensagem de acesso negado
 
 > ## Exceção - URL inválida (404)
 7. Sistema retorna uma mensagem de erro inesperado
