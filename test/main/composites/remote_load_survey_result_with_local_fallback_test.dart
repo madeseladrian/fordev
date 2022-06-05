@@ -4,8 +4,9 @@ import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/data/usecases/usecases.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
-class RemoteLoadSurveyResultWithLocalFallback  {
+class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
   final RemoteLoadSurveyResult remote;
   final LocalLoadSurveyResult local;
 
@@ -14,9 +15,11 @@ class RemoteLoadSurveyResultWithLocalFallback  {
     required this.local,
   });
 
-  Future<void> loadBySurvey({ required String surveyId }) async {
+  @override
+  Future<SurveyResultEntity> loadBySurvey({ required String surveyId }) async {
     final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
     await local.save(surveyResult);
+    return surveyResult;
   }
 }
 
@@ -81,5 +84,11 @@ void main() {
     await sut.loadBySurvey(surveyId: surveyId);
 
     verify(() => local.save(remoteSurveyResult)).called(1);
+  });
+
+  test('3 - Should return remote surveyResult', () async {
+    final response = await sut.loadBySurvey(surveyId: surveyId);
+
+    expect(response, remoteSurveyResult);
   });
 }
