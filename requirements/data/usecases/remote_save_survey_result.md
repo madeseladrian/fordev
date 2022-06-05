@@ -13,7 +13,7 @@
 6. ✅ Sistema retorna uma mensagem de acesso negado
 
 > ## Exceção - URL inválida (404)
-7. Sistema retorna uma mensagem de erro inesperado
+7. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor (500)
 8. Sistema retorna uma mensagem de erro inesperado

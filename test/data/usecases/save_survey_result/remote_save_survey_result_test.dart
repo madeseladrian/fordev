@@ -121,4 +121,12 @@ void main() {
 
     expect(future, throwsA(DomainError.accessDenied));
   });
+
+  test('7 - Should throw UnexpectedError if HttpClient returns 404', () async {
+    mockRequestError(HttpError.notFound);
+
+    final future = sut.save(answer: answer);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }
