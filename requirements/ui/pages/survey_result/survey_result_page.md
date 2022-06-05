@@ -17,4 +17,4 @@
 14.✅ Ir para tela de Login e limpar a navegação ao receber evento de sessionExpired como true
 15.✅ Não deslogar o usuário
 16.✅ Chamar o método de Salvar Resultado da Enquete ao clicar em algum item da lista
-17. Não chamar o método de Salvar Resultado da Enquete ao clicar em algum item da lista
+17.✅ Não chamar o método de Salvar Resultado da Enquete ao clicar em algum item da lista

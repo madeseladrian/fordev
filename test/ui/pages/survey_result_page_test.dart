@@ -158,4 +158,16 @@ void main() {
 
     verify(() => presenter.save(answer: 'Answer 1')).called(1);
   });
+
+  testWidgets('17 - Should not call save on current answer click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveyResultController.add(makeSurveyResult());
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
+    await tester.tap(find.text('Answer 0'));
+
+    verifyNever(() => presenter.save(answer: 'Answer 0'));
+  });
 }
