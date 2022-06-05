@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
@@ -6,33 +7,40 @@ import '../../helpers/helpers.dart';
 import '../../mixins/mixins.dart';
 import 'surveys.dart';
 
-class SurveysPage extends StatelessWidget with NavigationManager, SessionManager {
+class SurveysPage extends StatefulWidget {
   final SurveysPresenter presenter;
 
   const SurveysPage({Key? key, required this.presenter}) : super(key: key);
 
   @override
+  State<SurveysPage> createState() => _SurveysPageState();
+}
+
+class _SurveysPageState extends State<SurveysPage> with NavigationManager, SessionManager, RouteAware {
+  @override
   Widget build(BuildContext context) {
+    Get.find<RouteObserver>().subscribe(this, ModalRoute.of(context) as PageRoute);
+    
     return Scaffold(
       appBar: AppBar(title: Text(R.string.surveys), centerTitle: true),
       body: Builder(
         builder: (context) {
-          presenter.loadData();
-          handleSessionExpired(presenter.isSessionExpiredStream);
-          handleNavigation(presenter.navigateToStream);
+          widget.presenter.loadData();
+          handleSessionExpired(widget.presenter.isSessionExpiredStream);
+          handleNavigation(widget.presenter.navigateToStream);
           
           return StreamBuilder<List<SurveyViewModel>>(
-            stream: presenter.surveysStream,
+            stream: widget.presenter.surveysStream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return ReloadScreen(
                   error: snapshot.error.toString(),
-                  reload: presenter.loadData,
+                  reload: widget.presenter.loadData,
                 );
               }
               if (snapshot.hasData) {
                 return ListenableProvider(
-                  create: (_) => presenter,
+                  create: (_) => widget.presenter,
                   child: SurveyItems(viewModels: snapshot.data)
                 );
               }
@@ -44,5 +52,16 @@ class SurveysPage extends StatelessWidget with NavigationManager, SessionManager
         }
       )
     );
+  }
+
+  @override
+  void didPopNext() {
+    widget.presenter.loadData();
+  }
+
+  @override
+  void dispose() {
+    Get.find<RouteObserver>().unsubscribe(this);
+    super.dispose();
   }
 }
