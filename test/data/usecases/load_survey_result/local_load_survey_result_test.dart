@@ -33,6 +33,7 @@ void main() {
 
   When mockFetchCall() => when(() => cacheStorage.fetch(any()));
   void mockFetch(dynamic json) => mockFetchCall().thenAnswer((_) async => json);
+  void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
   Map makeSurveyResult() => {
     'surveyId': faker.guid.guid(),
@@ -119,6 +120,14 @@ void main() {
 
     test('5 - Should throw UnexpectedError if cache is incomplete', () async {
       mockFetch(makeIncompleteSurveyResult());
+
+      final future = sut.loadBySurvey(surveyId: surveyId);
+
+      expect(future, throwsA(DomainError.unexpected));
+    });
+
+    test('6 - Should throw UnexpectedError if cache throws', () async {
+      mockFetchError();
 
       final future = sut.loadBySurvey(surveyId: surveyId);
 
