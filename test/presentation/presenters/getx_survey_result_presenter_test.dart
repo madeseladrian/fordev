@@ -29,6 +29,7 @@ void main() {
 
   When mockSaveCall() => when(() => saveSurveyResult.save(answer: any(named: 'answer')));
   void mockSave(SurveyResultEntity data) => mockSaveCall().thenAnswer((_) async => data);
+  void mockSaveError(DomainError error) => mockSaveCall().thenThrow(error);
 
   SurveyResultEntity makeSurveyResult() => SurveyResultEntity(
     surveyId: faker.guid.guid(),
@@ -131,6 +132,15 @@ void main() {
       ]));
 
       await sut.loadData();
+      await sut.save(answer: answer);
+    });
+
+    test('11 - Should emit correct events on failure', () async {
+      mockSaveError(DomainError.unexpected);
+
+      //expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      sut.surveyResultStream.listen(null, onError: expectAsync1((error) => expect(error, UIError.unexpected.description)));
+
       await sut.save(answer: answer);
     });
   });
