@@ -16,4 +16,4 @@
 7. ✅ Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor (500)
-8. Sistema retorna uma mensagem de erro inesperado
+8. ✅ Sistema retorna uma mensagem de erro inesperado
