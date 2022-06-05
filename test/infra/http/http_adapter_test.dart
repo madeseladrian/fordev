@@ -268,80 +268,68 @@ void main() {
 
     test('4 - Should return data if put returns 200', () async {
       final response = await sut.request(url: url, method: 'put');
-
       expect(response, {'any_key': 'any_value'});
     });
 
     test('5 - Should return null if put returns 200 with no data', () async {
       mockPut(200, body: '');
-
       final response = await sut.request(url: url, method: 'put');
-
       expect(response, null);
     });
 
     test('6 - Should return null if put returns 204', () async {
       mockPut(204, body: '');
-
       final response = await sut.request(url: url, method: 'put');
-
       expect(response, null);
     });
 
     test('7 - Should return null if put returns 204 with data', () async {
       mockPut(204);
-
       final response = await sut.request(url: url, method: 'put');
-
       expect(response, null);
     });
 
     // Error tests body is not necessary, because it is the same as without body
     test('8 - Should return BadRequestError if put returns 400 with body', () async {
       mockPut(400, body: '');
-
       final future = sut.request(url: url, method: 'put');
-
       expect(future, throwsA(HttpError.badRequest));
     });
 
     test('9 - Should return BadRequestError if put returns 400', () async {
       mockPut(400);
-
       final future = sut.request(url: url, method: 'put');
-
       expect(future, throwsA(HttpError.badRequest));
     });
 
     test('10 - Should return UnauthorizedError if put returns 401', () async {
       mockPut(401);
-
       final future = sut.request(url: url, method: 'put');
-
       expect(future, throwsA(HttpError.unauthorized));
     });
 
     test('11 - Should return ForbiddenError if put returns 403', () async {
       mockPut(403);
-
       final future = sut.request(url: url, method: 'put');
-
       expect(future, throwsA(HttpError.forbidden));
     });
 
     test('12 - Should return NotFoundError if put returns 404', () async {
       mockPut(404);
-
       final future = sut.request(url: url, method: 'put');
-
       expect(future, throwsA(HttpError.notFound));
     });
 
     test('13 - Should return ServerError if put returns 500', () async {
       mockPut(500);
-
       final future = sut.request(url: url, method: 'put');
+      expect(future, throwsA(HttpError.serverError));
+    });
 
+    // Is an error different from the others
+    test('14 - Should return ServerError if put throws with 422', () async {
+      mockPut(422); 
+      final future = sut.request(url: url, method: 'put');
       expect(future, throwsA(HttpError.serverError));
     });
   });
