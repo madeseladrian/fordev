@@ -7,19 +7,17 @@ import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/pages.dart';
 import '../../ui/helpers/helpers.dart';
 
-class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
+import '../mixins/mixins.dart';
+
+class GetxSurveysPresenter extends GetxController 
+with SessionManager, NavigationManager
+implements SurveysPresenter {
   final LoadSurveys loadSurveys;
   
   final _surveys = Rx<List<SurveyViewModel>>([]);
-  final _navigateTo = Rx<String>('');
-  final _isSessionExpired = Rx<bool>(false);
 
   @override
   Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;
-  @override
-  Stream<String> get navigateToStream => _navigateTo.stream;
-  @override
-  Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
 
   GetxSurveysPresenter({required this.loadSurveys});
 
@@ -35,7 +33,7 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
       ).toList();
     } on DomainError catch(error) {
       if (error == DomainError.accessDenied) {
-        _isSessionExpired.value = true;
+        isSessionExpired = true;
       } else {
         _surveys.subject.addError(UIError.unexpected.description);
       }
@@ -44,6 +42,6 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
 
   @override
   void goToSurveyResult(String surveyId) {
-    _navigateTo.subject.add('/survey_result/$surveyId');
+    navigateTo = '/survey_result/$surveyId';
   }
 }

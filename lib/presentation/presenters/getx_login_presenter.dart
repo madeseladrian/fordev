@@ -8,9 +8,12 @@ import '../../ui/helpers/helpers.dart';
 import '../../ui/pages/pages.dart';
 
 import '../helpers/helpers.dart';
+import '../mixins/mixins.dart';
 import '../protocols/protocols.dart';
 
-class GetxLoginPresenter extends GetxController implements LoginPresenter {
+class GetxLoginPresenter extends GetxController 
+with LoadingManager, NavigationManager, FormManager, UIErrorManager 
+implements LoginPresenter {
   final Authentication authentication;
   final Validation validation;
   final SaveCurrentAccount saveCurrentAccount;
@@ -20,23 +23,11 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   final _emailError = Rx<UIError?>(null);
   final _passwordError = Rx<UIError?>(null);
-  final _mainError = Rx<UIError?>(null);
-  final _navigateTo = Rx<String?>(null);
-  final _isFormValid = Rx<bool>(false);
-  final _isLoading = Rx<bool>(false);
 
   @override
   Stream<UIError?> get emailErrorStream => _emailError.stream;
   @override
   Stream<UIError?> get passwordErrorStream => _passwordError.stream;
-  @override
-  Stream<UIError?> get mainErrorStream => _mainError.stream;
-  @override
-  Stream<String?> get navigateToStream => _navigateTo.stream;
-  @override
-  Stream<bool> get isFormValidStream => _isFormValid.stream;
-  @override
-  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxLoginPresenter({
     required this.authentication,
@@ -58,7 +49,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   }
 
   void _validateForm() {
-    _isFormValid.value = _emailError.value == null
+    isFormValid = _emailError.value == null
       && _passwordError.value == null 
       && _email != null
       && _password != null;
@@ -81,25 +72,25 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   @override
   Future<void> authenticate() async {
     try {
-      _mainError.value = null;
-      _isLoading.value = true;
+      mainError = null;
+      isLoading = true;
       final accountEntity = await authentication.authenticate(
         AuthenticationParams(email: _email, password: _password)
       );
       await saveCurrentAccount.save(accountEntity);
-      _navigateTo.value = '/surveys';
+      navigateTo = '/surveys';
     } on DomainError catch(error) {
-      _isLoading.value = false;
+      isLoading = false;
       switch (error) {
         case DomainError.invalidCredentials:
-          _mainError.value = UIError.invalidCredentials; break;        
-        default: _mainError.value = UIError.unexpected;
+          mainError = UIError.invalidCredentials; break;        
+        default: mainError = UIError.unexpected;
       }
     }
   }
 
   @override
   void goToSignUp() {
-    _navigateTo.subject.add('/signup');
+    navigateTo = '/signup';
   }
 }
