@@ -336,6 +336,14 @@ void main() {
 
       expect(future, throwsA(HttpError.notFound));
     });
+
+    test('13 - Should return ServerError if put returns 500', () async {
+      mockPut(500);
+
+      final future = sut.request(url: url, method: 'put');
+
+      expect(future, throwsA(HttpError.serverError));
+    });
   });
 
   group('shared', () {
