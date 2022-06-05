@@ -36,11 +36,12 @@ class LocalLoadSurveyResult implements LoadSurveyResult {
   }
 
   Future<void> save(SurveyResultEntity surveyResult) async {
-    final json = LocalSurveyResultModel.fromEntity(surveyResult).toJson();
-    await cacheStorage.save(
-      key: 'survey_result/${surveyResult.surveyId}', 
-      value: json
-    );
+    try {
+      final json = LocalSurveyResultModel.fromEntity(surveyResult).toJson();
+      await cacheStorage.save(key: 'survey_result/${surveyResult.surveyId}', value: json);
+    } catch(error) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -57,6 +58,7 @@ void main() {
 
   When mockSaveCall() => when(() => cacheStorage.save(key: any(named: 'key'), value: any(named: 'value')));
   void mockSave() => mockSaveCall().thenAnswer((_) async => _);
+  void mockSaveError() => mockSaveCall().thenThrow(Exception());
 
   When mockDeleteCall() => when(() => cacheStorage.delete(any()));
   void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
@@ -235,6 +237,14 @@ void main() {
       await sut.save(surveyResult);
 
       verify(() => cacheStorage.save(key: 'survey_result/${surveyResult.surveyId}', value: json)).called(1);
+    });
+
+    test('2 - Should throw UnexpectedError if save throws', () async {
+      mockSaveError();
+
+      final future = sut.save(surveyResult);
+
+      expect(future, throwsA(DomainError.unexpected));
     });
   });
 }
