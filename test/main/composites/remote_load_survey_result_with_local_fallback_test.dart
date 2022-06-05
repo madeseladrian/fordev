@@ -50,7 +50,8 @@ void main() {
 
   When mockLocalLoadCall() => when(() => local.loadBySurvey(surveyId: any(named: 'surveyId')));
   void mockLoad(SurveyResultEntity surveyResult) => mockLocalLoadCall().thenAnswer((_) async => surveyResult);
-
+  void mockLocalLoadError() => mockLocalLoadCall().thenThrow(DomainError.unexpected);
+  
   When mockLocalValidateCall() => when(() => local.validate(any()));
   void mockValidate() => mockLocalValidateCall().thenAnswer((_) async => _);
 
@@ -136,5 +137,14 @@ void main() {
     final response = await sut.loadBySurvey(surveyId: surveyId);
 
     expect(response, localSurveyResult);
+  });
+
+  test('8 - Should throw UnexpectedError if remote and local loadBySurvey throws', () async {
+    mockRemoteLoadError(DomainError.unexpected);
+    mockLocalLoadError();
+
+    final future = sut.loadBySurvey(surveyId: surveyId);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }

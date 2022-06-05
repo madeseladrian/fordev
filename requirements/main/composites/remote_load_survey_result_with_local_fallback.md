@@ -14,4 +14,4 @@
 7. ✅ Sistema retorna esses dados
 
 > ## Exceção - Erro ao obter dados do Cache
-8. Sistema retorna uma exceção de erro inesperado
+8. ✅ Sistema retorna uma exceção de erro inesperado
