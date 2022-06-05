@@ -49,6 +49,17 @@ void main() {
     }],
   };
 
+   Map makeInvalidSurveyResult() => {
+    'surveyId': faker.guid.guid(),
+    'question': faker.lorem.sentence(),
+    'answers': [{
+      'image': faker.internet.httpUrl(),
+      'answer': faker.lorem.sentence(),
+      'isCurrentAnswer': 'invalid bool',
+      'percent': 'invalid int'
+    }],
+  };
+
   setUp(() {
     surveyId = faker.guid.guid();
     data = makeSurveyResult();
@@ -88,6 +99,14 @@ void main() {
 
     test('3 - Should throw UnexpectedError if cache is empty', () async {
       mockFetch({});
+
+      final future = sut.loadBySurvey(surveyId: surveyId);
+
+      expect(future, throwsA(DomainError.unexpected));
+    });
+
+    test('4 - Should throw UnexpectedError if cache is isvalid', () async {
+      mockFetch(makeInvalidSurveyResult());
 
       final future = sut.loadBySurvey(surveyId: surveyId);
 
