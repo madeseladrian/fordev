@@ -2,7 +2,7 @@
 
 > ## Caso de sucesso
 1. ✅ Sistema solicita os dados do resultado de uma enquete do Cache
-2. Sistema entrega os dados do resultado da enquete
+2. ✅ Sistema entrega os dados do resultado da enquete
 
 > ## Exceção - Erro ao carregar dados do Cache
 3. Sistema retorna uma mensagem de erro inesperado

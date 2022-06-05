@@ -2,7 +2,10 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:fordev/domain/entities/entities.dart';
+
 import 'package:fordev/data/cache/cache.dart';
+import 'package:fordev/data/models/models.dart';
 
 class CacheStorageSpy extends Mock implements CacheStorage {}
 
@@ -11,8 +14,9 @@ class LocalLoadSurveyResult  {
 
   LocalLoadSurveyResult({ required this.cacheStorage });
 
-  Future<void> loadBySurvey({ required String surveyId }) async {
-    await cacheStorage.fetch('survey_result/$surveyId');
+  Future<SurveyResultEntity> loadBySurvey({ required String surveyId }) async {
+    final data = await cacheStorage.fetch('survey_result/$surveyId');
+    return LocalSurveyResultModel.fromJson(data).toEntity();
   }
 }
 
@@ -53,6 +57,28 @@ void main() {
       await sut.loadBySurvey(surveyId: surveyId);
 
       verify(() => cacheStorage.fetch('survey_result/$surveyId')).called(1);
+    });
+
+    test('2 - Should return surveyResult on success', () async {
+      final surveyResult = await sut.loadBySurvey(surveyId: surveyId);
+
+      expect(surveyResult, SurveyResultEntity(
+        surveyId: data['surveyId'],
+        question: data['question'],
+        answers: [
+          SurveyAnswerEntity(
+            image: data['answers'][0]['image'],
+            answer: data['answers'][0]['answer'],
+            percent: 40,
+            isCurrentAnswer: true,
+          ),
+          SurveyAnswerEntity(
+            answer: data['answers'][1]['answer'],
+            percent: 60,
+            isCurrentAnswer: false,
+          )
+        ]
+      ));
     });
   });
 }
