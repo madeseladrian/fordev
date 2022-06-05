@@ -271,7 +271,33 @@ void main() {
 
       expect(response, {'any_key': 'any_value'});
     });
+
+    test('5 - Should return null if put returns 200 with no data', () async {
+      mockPut(200, body: '');
+
+      final response = await sut.request(url: url, method: 'put');
+
+      expect(response, null);
+    });
+
+    test('6 - Should return null if put returns 204', () async {
+      mockPut(204, body: '');
+
+      final response = await sut.request(url: url, method: 'put');
+
+      expect(response, null);
+    });
+
+    test('7 - Should return null if put returns 204 with data', () async {
+      mockPut(204);
+
+      final response = await sut.request(url: url, method: 'put');
+
+      expect(response, null);
+    });
   });
+
+    
 
   group('shared', () {
     test('* - Should throw ServerError if invalid method is provided', () {
