@@ -12,16 +12,23 @@ import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
 class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
+class SaveSurveyResultSpy extends Mock implements SaveSurveyResult {}
 
 void main() {
   late GetxSurveyResultPresenter sut;
   late LoadSurveyResultSpy loadSurveyResult;
+  late SaveSurveyResultSpy saveSurveyResult;
   late SurveyResultEntity loadResult;
+  late SurveyResultEntity saveResult;
   late String surveyId;
+  late String answer;
 
   When mockLoadCall() => when(() => loadSurveyResult.loadBySurvey(surveyId: any(named: 'surveyId')));
   void mockLoad(SurveyResultEntity surveyResult) => mockLoadCall().thenAnswer((_) async => surveyResult);
   void mockLoadError(DomainError error) => mockLoadCall().thenThrow(error);
+
+  When mockSaveCall() => when(() => saveSurveyResult.save(answer: any(named: 'answer')));
+  void mockSave(SurveyResultEntity data) => mockSaveCall().thenAnswer((_) async => data);
 
   SurveyResultEntity makeSurveyResult() => SurveyResultEntity(
     surveyId: faker.guid.guid(),
@@ -61,12 +68,16 @@ void main() {
 
   setUp(() {
     loadResult = makeSurveyResult();
+    saveResult = makeSurveyResult();
     surveyId = faker.guid.guid();
+    answer = faker.lorem.sentence();
     loadSurveyResult = LoadSurveyResultSpy();
     mockLoad(loadResult);
-
+    saveSurveyResult = SaveSurveyResultSpy();
+    mockSave(saveResult);
     sut = GetxSurveyResultPresenter(
       loadSurveyResult: loadSurveyResult,
+      saveSurveyResult: saveSurveyResult,
       surveyId: surveyId
     );
   });
@@ -102,6 +113,14 @@ void main() {
       expectLater(sut.isSessionExpiredStream, emits(true));
 
       await sut.loadData();
+    });
+  });
+
+  group('save', () {
+    test('7 - Should call SaveSurveyResult on save', () async {
+      await sut.save(answer: answer);
+
+      verify(() => saveSurveyResult.save(answer: answer)).called(1);
     });
   });
 }

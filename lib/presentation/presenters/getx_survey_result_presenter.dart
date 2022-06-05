@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../domain/entities/entities.dart';
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 
@@ -13,6 +14,7 @@ import '../mixins/mixins.dart';
 class GetxSurveyResultPresenter extends GetxController 
 with SessionManager implements SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
+  final SaveSurveyResult saveSurveyResult;
   final String surveyId;
 
   final _surveyResult = Rx<SurveyResultViewModel?>(null);
@@ -22,13 +24,23 @@ with SessionManager implements SurveyResultPresenter {
 
   GetxSurveyResultPresenter({
     required this.loadSurveyResult,
+    required this.saveSurveyResult,
     required this.surveyId,
   });
 
   @override
   Future<void> loadData() async {
+    showResultOnAction(() => loadSurveyResult.loadBySurvey(surveyId: surveyId));
+  }
+
+  @override
+  Future<void> save({ required String answer }) async {
+    showResultOnAction(() => saveSurveyResult.save(answer: answer));
+  }
+
+  Future<void> showResultOnAction(Future<SurveyResultEntity> Function() action) async {
     try {
-      final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
+      final surveyResult = await action();
       _surveyResult.subject.add(surveyResult.toViewModel());
     } on DomainError catch(error) {
       if (error == DomainError.accessDenied) {
@@ -36,11 +48,6 @@ with SessionManager implements SurveyResultPresenter {
       } else {
         _surveyResult.subject.addError(UIError.unexpected.description);
       }
-    } 
-  }
-
-  @override
-  Future<void> save({required String answer}) async {
-    
+    }
   }
 }
