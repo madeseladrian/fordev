@@ -162,5 +162,13 @@ void main() {
 
       verify(() => cacheStorage.delete('survey_result/$surveyId')).called(1);
     });
+
+    test('3 - Should delete cache if validate is incomplete', () async {
+      mockFetch(makeIncompleteSurveyResult());
+
+      await sut.validate(surveyId);
+
+      verify(() => cacheStorage.delete('survey_result/$surveyId')).called(1);
+    });
   });
 }
