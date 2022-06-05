@@ -320,6 +320,14 @@ void main() {
 
       expect(future, throwsA(HttpError.unauthorized));
     });
+
+    test('11 - Should return ForbiddenError if put returns 403', () async {
+      mockPut(403);
+
+      final future = sut.request(url: url, method: 'put');
+
+      expect(future, throwsA(HttpError.forbidden));
+    });
   });
 
   group('shared', () {
