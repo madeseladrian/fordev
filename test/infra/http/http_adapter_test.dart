@@ -295,10 +295,18 @@ void main() {
 
       expect(response, null);
     });
-    
+
     // Error tests body is not necessary, because it is the same as without body
-    test('8 - Should return BadRequestError if put returns 400', () async {
+    test('8 - Should return BadRequestError if put returns 400 with body', () async {
       mockPut(400, body: '');
+
+      final future = sut.request(url: url, method: 'put');
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
+    test('9 - Should return BadRequestError if put returns 400', () async {
+      mockPut(400);
 
       final future = sut.request(url: url, method: 'put');
 
