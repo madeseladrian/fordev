@@ -4,17 +4,19 @@ import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/data/cache/cache.dart';
 import 'package:fordev/data/models/models.dart';
 
 class CacheStorageSpy extends Mock implements CacheStorage {}
 
-class LocalLoadSurveyResult  {
+class LocalLoadSurveyResult implements LoadSurveyResult {
   final CacheStorage cacheStorage;
 
   LocalLoadSurveyResult({ required this.cacheStorage });
 
+  @override
   Future<SurveyResultEntity> loadBySurvey({ required String surveyId }) async {
     try {
       final data = await cacheStorage.fetch('survey_result/$surveyId');
@@ -32,6 +34,14 @@ class LocalLoadSurveyResult  {
       await cacheStorage.delete('survey_result/$surveyId');
     }
   }
+
+  Future<void> save(SurveyResultEntity surveyResult) async {
+    final json = LocalSurveyResultModel.fromEntity(surveyResult).toJson();
+    await cacheStorage.save(
+      key: 'survey_result/${surveyResult.surveyId}', 
+      value: json
+    );
+  }
 }
 
 void main() {
@@ -39,10 +49,14 @@ void main() {
   late CacheStorageSpy cacheStorage;
   late Map data;
   late String surveyId;
+  late SurveyResultEntity surveyResult;
 
   When mockFetchCall() => when(() => cacheStorage.fetch(any()));
   void mockFetch(dynamic json) => mockFetchCall().thenAnswer((_) async => json);
   void mockFetchError() => mockFetchCall().thenThrow(Exception());
+
+  When mockSaveCall() => when(() => cacheStorage.save(key: any(named: 'key'), value: any(named: 'value')));
+  void mockSave() => mockSaveCall().thenAnswer((_) async => _);
 
   When mockDeleteCall() => when(() => cacheStorage.delete(any()));
   void mockDelete() => mockDeleteCall().thenAnswer((_) async => _);
@@ -77,12 +91,32 @@ void main() {
     'surveyId': faker.guid.guid()
   };
 
+  SurveyResultEntity makeSurveyResultEntity() => SurveyResultEntity(
+    surveyId: faker.guid.guid(),
+    question: faker.lorem.sentence(),
+    answers: [
+      SurveyAnswerEntity(
+        image: faker.internet.httpUrl(),
+        answer: faker.lorem.sentence(),
+        isCurrentAnswer: true,
+        percent: 40
+      ),
+      SurveyAnswerEntity(
+        answer: faker.lorem.sentence(),
+        isCurrentAnswer: false,
+        percent: 60
+      )
+    ]
+  );
+
   setUp(() {
     surveyId = faker.guid.guid();
+    surveyResult = makeSurveyResultEntity();
     data = makeSurveyResult();
     cacheStorage = CacheStorageSpy();
     mockFetch(data);
     mockDelete();
+    mockSave();
     sut = LocalLoadSurveyResult(cacheStorage: cacheStorage);
   });
 
@@ -177,6 +211,30 @@ void main() {
       await sut.validate(surveyId);
 
       verify(() => cacheStorage.delete('survey_result/$surveyId')).called(1);
+    });
+  });
+
+  group('save', () {
+    test('1 - Should call cacheStorage with correct values', () async {
+      Map json = {
+        'surveyId': surveyResult.surveyId,
+        'question': surveyResult.question,
+        'answers': [{
+          'image': surveyResult.answers[0].image,
+          'answer': surveyResult.answers[0].answer,
+          'percent': '40',
+          'isCurrentAnswer': 'true'
+        }, {
+          'image': null,
+          'answer': surveyResult.answers[1].answer,
+          'percent': '60',
+          'isCurrentAnswer': 'false'
+        }]
+      };
+
+      await sut.save(surveyResult);
+
+      verify(() => cacheStorage.save(key: 'survey_result/${surveyResult.surveyId}', value: json)).called(1);
     });
   });
 }
