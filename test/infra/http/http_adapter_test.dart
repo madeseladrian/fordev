@@ -31,6 +31,7 @@ void main() {
   When mockPutCall() => when(() => client.put(any(), body: any(named: 'body'), headers: any(named: 'headers')));
   void mockPut(int statusCode, {String body = '{"any_key":"any_value"}'}) => 
     mockPutCall().thenAnswer((_) async => Response(body, statusCode));
+  void mockPutError() => when(() => mockPutCall().thenThrow(Exception()));
 
   setUp(() {
     client = ClientSpy();
@@ -329,6 +330,12 @@ void main() {
     // Is an error different from the others
     test('14 - Should return ServerError if put throws with 422', () async {
       mockPut(422); 
+      final future = sut.request(url: url, method: 'put');
+      expect(future, throwsA(HttpError.serverError));
+    });
+
+    test('15 - Should return ServerError if put throws', () async {
+      mockPutError();
       final future = sut.request(url: url, method: 'put');
       expect(future, throwsA(HttpError.serverError));
     });
