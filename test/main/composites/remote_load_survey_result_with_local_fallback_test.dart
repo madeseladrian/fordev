@@ -7,26 +7,34 @@ import 'package:fordev/data/usecases/usecases.dart';
 
 class RemoteLoadSurveyResultWithLocalFallback  {
   final RemoteLoadSurveyResult remote;
+  final LocalLoadSurveyResult local;
 
   RemoteLoadSurveyResultWithLocalFallback({
-    required this.remote
+    required this.remote,
+    required this.local,
   });
 
   Future<void> loadBySurvey({ required String surveyId }) async {
-    await remote.loadBySurvey(surveyId: surveyId);
+    final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
+    await local.save(surveyResult);
   }
 }
 
 class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {}
+class LocalLoadSurveyResultSpy extends Mock implements LocalLoadSurveyResult {}
 
 void main() {
   late RemoteLoadSurveyResultWithLocalFallback sut;
   late RemoteLoadSurveyResultSpy remote;
+  late LocalLoadSurveyResultSpy local;
   late String surveyId;
   late SurveyResultEntity remoteSurveyResult;
 
-  When mockLoadCall() => when(() => remote.loadBySurvey(surveyId: any(named: 'surveyId')));
-  void mockLoad(SurveyResultEntity surveyResult) => mockLoadCall().thenAnswer((_) async => surveyResult);
+  When mockRemoteLoadCall() => when(() => remote.loadBySurvey(surveyId: any(named: 'surveyId')));
+  void mockRemoteLoad(SurveyResultEntity surveyResult) => mockRemoteLoadCall().thenAnswer((_) async => surveyResult);
+
+  When mockLocalSaveCall() => when(() => local.save(any()));
+  void mockLocalSave() => mockLocalSaveCall().thenAnswer((_) async => _);
 
   SurveyResultEntity makeSurveyResult() => SurveyResultEntity(
     surveyId: faker.guid.guid(),
@@ -48,11 +56,14 @@ void main() {
 
   setUp(() {
     surveyId = faker.guid.guid();
+    local = LocalLoadSurveyResultSpy();
+    mockLocalSave();
     remoteSurveyResult = makeSurveyResult();
     remote = RemoteLoadSurveyResultSpy();
-    mockLoad(remoteSurveyResult);
+    mockRemoteLoad(remoteSurveyResult);
     sut = RemoteLoadSurveyResultWithLocalFallback(
       remote: remote,
+      local: local
     );
   });
 
@@ -64,5 +75,11 @@ void main() {
     await sut.loadBySurvey(surveyId: surveyId);
 
     verify(() => remote.loadBySurvey(surveyId: surveyId)).called(1);
+  });
+
+  test('2 - Should call local save with remote data', () async {
+    await sut.loadBySurvey(surveyId: surveyId);
+
+    verify(() => local.save(remoteSurveyResult)).called(1);
   });
 }
