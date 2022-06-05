@@ -129,4 +129,12 @@ void main() {
     verify(() => local.validate(surveyId)).called(1);
     verify(() => local.loadBySurvey(surveyId: surveyId)).called(1);
   });
+
+  test('7 - Should return local surveyResult', () async {
+    mockRemoteLoadError(DomainError.unexpected);
+
+    final response = await sut.loadBySurvey(surveyId: surveyId);
+
+    expect(response, localSurveyResult);
+  });
 }
