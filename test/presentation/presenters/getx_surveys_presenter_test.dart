@@ -1,46 +1,26 @@
-import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
-import 'package:fordev/domain/usecases/usecases.dart';
 
 import 'package:fordev/presentation/presenters/presenters.dart';
 
 import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
-class LoadSurveysSpy extends Mock implements LoadSurveys {}
+import '../../data/mocks/mocks.dart';
+import '../../domain/mocks/mocks.dart';
 
 void main() {
   late GetxSurveysPresenter sut;
   late LoadSurveysSpy loadSurveys;
   late List<SurveyEntity> surveys;
 
-  List<SurveyEntity> makeSurveyList() => [
-    SurveyEntity(
-      id: faker.guid.guid(),
-      question: faker.randomGenerator.string(10),
-      dateTime: DateTime.utc(2020, 2, 2),
-      didAnswer: true
-    ),
-    SurveyEntity(
-      id: faker.guid.guid(),
-      question: faker.randomGenerator.string(10),
-      dateTime: DateTime.utc(2018, 12, 20),
-      didAnswer: false
-    )
-  ];
-
-  When mockLoadCall() => when(() => loadSurveys.load());
-  void mockLoad(List<SurveyEntity> surveys) => mockLoadCall().thenAnswer((_) async => surveys);
-  void mockLoadError(DomainError error) => mockLoadCall().thenThrow(error);
-
   setUp(() {
-    surveys = makeSurveyList();
+    surveys = EntityFactory.makeSurveyList();
     loadSurveys = LoadSurveysSpy();
-    mockLoad(surveys);
+    loadSurveys.mockLoad(surveys);
     sut = GetxSurveysPresenter(loadSurveys: loadSurveys);
   });
 
@@ -60,7 +40,7 @@ void main() {
   });
 
   test('5 - Should emit correct events on failure', () async {
-    mockLoadError(DomainError.unexpected);
+    loadSurveys.mockLoadError(DomainError.unexpected);
 
     sut.surveysStream.listen(null, onError: expectAsync1((error) => 
       expect(error, UIError.unexpected.description)));
@@ -79,7 +59,7 @@ void main() {
   });
 
   test('7 - Should emit correct events on access denied', () async {
-    mockLoadError(DomainError.accessDenied);
+    loadSurveys.mockLoadError(DomainError.accessDenied);
 
     expectLater(sut.isSessionExpiredStream, emits(true));
 
