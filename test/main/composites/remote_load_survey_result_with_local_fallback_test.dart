@@ -5,11 +5,9 @@ import 'package:test/test.dart';
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
 
-import 'package:fordev/data/usecases/usecases.dart';
 import 'package:fordev/main/composites/composites.dart';
-
-class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {}
-class LocalLoadSurveyResultSpy extends Mock implements LocalLoadSurveyResult {}
+import '../../data/mocks/mocks.dart';
+import '../../domain/mocks/mocks.dart';
 
 void main() {
   late RemoteLoadSurveyResultWithLocalFallback sut;
@@ -19,48 +17,14 @@ void main() {
   late SurveyResultEntity remoteSurveyResult;
   late SurveyResultEntity localSurveyResult;
 
-  When mockRemoteLoadCall() => when(() => remote.loadBySurvey(surveyId: any(named: 'surveyId')));
-  void mockRemoteLoad(SurveyResultEntity surveyResult) => mockRemoteLoadCall().thenAnswer((_) async => surveyResult);
-  void mockRemoteLoadError(DomainError error) => mockRemoteLoadCall().thenThrow(error);
-
-  When mockLocalLoadCall() => when(() => local.loadBySurvey(surveyId: any(named: 'surveyId')));
-  void mockLoad(SurveyResultEntity surveyResult) => mockLocalLoadCall().thenAnswer((_) async => surveyResult);
-  void mockLocalLoadError() => mockLocalLoadCall().thenThrow(DomainError.unexpected);
-  
-  When mockLocalValidateCall() => when(() => local.validate(any()));
-  void mockValidate() => mockLocalValidateCall().thenAnswer((_) async => _);
-
-  When mockLocalSaveCall() => when(() => local.save(any()));
-  void mockLocalSave() => mockLocalSaveCall().thenAnswer((_) async => _);
-
-  SurveyResultEntity makeSurveyResult() => SurveyResultEntity(
-    surveyId: faker.guid.guid(),
-    question: faker.lorem.sentence(),
-    answers: [
-      SurveyAnswerEntity(
-        image: faker.internet.httpUrl(),
-        answer: faker.lorem.sentence(),
-        isCurrentAnswer: true,
-        percent: 40
-      ),
-      SurveyAnswerEntity(
-        answer: faker.lorem.sentence(),
-        isCurrentAnswer: false,
-        percent: 60
-      )
-    ]
-  );
-
   setUp(() {
     surveyId = faker.guid.guid();
-    localSurveyResult = makeSurveyResult();
+    localSurveyResult = EntityFactory.makeSurveyResult();
     local = LocalLoadSurveyResultSpy();
-    mockLoad(localSurveyResult);
-    mockValidate();
-    mockLocalSave();
-    remoteSurveyResult = makeSurveyResult();
+    local.mockLoad(localSurveyResult);
+    remoteSurveyResult = EntityFactory.makeSurveyResult();
     remote = RemoteLoadSurveyResultSpy();
-    mockRemoteLoad(remoteSurveyResult);
+    remote.mockLoad(remoteSurveyResult);
     sut = RemoteLoadSurveyResultWithLocalFallback(
       remote: remote,
       local: local
@@ -68,7 +32,7 @@ void main() {
   });
 
   setUpAll(() {
-    registerFallbackValue(makeSurveyResult());
+    registerFallbackValue(EntityFactory.makeSurveyResult());
   });
 
   test('1 - Should call remote loadBySurvey', () async {
@@ -90,7 +54,7 @@ void main() {
   });
 
   test('4 - Should rethrow if remote loadBySurvey throws AccessDeniedError', () async {
-    mockRemoteLoadError(DomainError.accessDenied);
+    remote.mockLoadError(DomainError.accessDenied);
 
     final future = sut.loadBySurvey(surveyId: surveyId);
 
@@ -98,7 +62,7 @@ void main() {
   });
 
   test('5,6 - Should call local loadBySurvey on remote error', () async {
-    mockRemoteLoadError(DomainError.unexpected);
+    remote.mockLoadError(DomainError.unexpected);
 
     await sut.loadBySurvey(surveyId: surveyId);
 
@@ -107,7 +71,7 @@ void main() {
   });
 
   test('7 - Should return local surveyResult', () async {
-    mockRemoteLoadError(DomainError.unexpected);
+    remote.mockLoadError(DomainError.unexpected);
 
     final response = await sut.loadBySurvey(surveyId: surveyId);
 
@@ -115,8 +79,8 @@ void main() {
   });
 
   test('8 - Should throw UnexpectedError if remote and local loadBySurvey throws', () async {
-    mockRemoteLoadError(DomainError.unexpected);
-    mockLocalLoadError();
+    remote.mockLoadError(DomainError.unexpected);
+    local.mockLoadError();
 
     final future = sut.loadBySurvey(surveyId: surveyId);
 
