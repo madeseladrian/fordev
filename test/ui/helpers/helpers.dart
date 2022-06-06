@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:fordev/ui/components/app_theme.dart';
+
+ThemeData get themeData => makeAppTheme(); 
+
 Widget makePage({required String path, required Widget Function() page}) {
   final getPages = [
     GetPage(name: path, page: page),
@@ -14,6 +18,7 @@ Widget makePage({required String path, required Widget Function() page}) {
   }
   return GetMaterialApp(
     initialRoute: path,
+    theme: themeData,
     navigatorObservers: [Get.put<RouteObserver>(RouteObserver<PageRoute>())],
     getPages: getPages,
   );

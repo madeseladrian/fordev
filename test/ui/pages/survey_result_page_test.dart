@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
@@ -98,7 +97,7 @@ void main() {
 
     presenter.emitSessionExpired();
     await tester.pumpAndSettle();
-    expect(Get.currentRoute, '/login');
+    expect(currentRoute, '/login');
     expect(find.text('fake login'), findsOneWidget);
   });
 
@@ -107,7 +106,7 @@ void main() {
 
     presenter.emitSessionExpired(false);
     await tester.pump();
-    expect(Get.currentRoute, '/survey_result/any_survey_id');
+    expect(currentRoute, '/survey_result/any_survey_id');
   });
 
   testWidgets('16 - Should call save on list item click', (WidgetTester tester) async {

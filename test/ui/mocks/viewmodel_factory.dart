@@ -19,8 +19,9 @@ class ViewModelFactory {
     ]
   );
 
-  static List<SurveyViewModel> makeSurveyList() => const  [
+  static List<SurveyViewModel> makeSurveyList() => const [
     SurveyViewModel(id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
     SurveyViewModel(id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
+    SurveyViewModel(id: '3', question: 'Question 3', date: 'Date 3', didAnswer: true)
   ];
 }
