@@ -8,7 +8,8 @@ import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/data/http/http.dart';
 import 'package:fordev/data/usecases/usecases.dart';
 
-class HttpClientSpy extends Mock implements HttpClient {}
+import '../../../infra/mocks/mocks.dart';
+import '../../mocks/mocks.dart';
 
 void main() {
   late RemoteSaveSurveyResult sut;
@@ -17,43 +18,12 @@ void main() {
   late String answer;
   late Map surveyResult;
 
-   When mockRequestCall() => when(() => httpClient.request(
-    url: any(named: 'url'),
-    method: any(named: 'method'),
-    body: any(named: 'body'),
-    headers: any(named: 'headers')
-  ));
-  void mockRequest(dynamic data) => mockRequestCall().thenAnswer((_) async => data);
-  void mockRequestError(HttpError error) => mockRequestCall().thenThrow(error);
-
-  Map makeSurveyResultJson() => {
-    'surveyId': faker.guid.guid(),
-    'question': faker.randomGenerator.string(50),
-    'answers': [{
-      'image': faker.internet.httpUrl(),
-      'answer': faker.randomGenerator.string(20),
-      'percent': faker.randomGenerator.integer(100),
-      'count': faker.randomGenerator.integer(1000),
-      'isCurrentAccountAnswer': faker.randomGenerator.boolean()
-    }, {
-      'answer': faker.randomGenerator.string(20),
-      'percent': faker.randomGenerator.integer(100),
-      'count': faker.randomGenerator.integer(1000),
-      'isCurrentAccountAnswer': faker.randomGenerator.boolean()
-    }],
-    'date': faker.date.dateTime().toIso8601String(),
-  };
-
-  Map makeInvalidJson() => {
-    'invalid_key': 'invalid_value'
-  };
-
   setUp(() {
-    surveyResult = makeSurveyResultJson();
+    surveyResult = ApiFactory.makeSurveyResultJson();
     answer = faker.lorem.sentence();
     url = faker.internet.httpUrl();
     httpClient = HttpClientSpy();
-    mockRequest(surveyResult);
+    httpClient.mockRequest(surveyResult);
     sut = RemoteSaveSurveyResult(url: url, httpClient: httpClient);
   });
 
@@ -86,7 +56,7 @@ void main() {
   });
 
   test('5 - Should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {
-    mockRequest(makeInvalidJson());
+    httpClient.mockRequest(ApiFactory.makeInvalidJson());
 
     final future = sut.save(answer: answer);
 
@@ -94,7 +64,7 @@ void main() {
   });
 
   test('6 - Should throw AccessDeniedError if HttpClient returns 403', () async {
-    mockRequestError(HttpError.forbidden);
+    httpClient.mockRequestError(HttpError.forbidden);
 
     final future = sut.save(answer: answer);
 
@@ -102,7 +72,7 @@ void main() {
   });
 
   test('7 - Should throw UnexpectedError if HttpClient returns 404', () async {
-    mockRequestError(HttpError.notFound);
+    httpClient.mockRequestError(HttpError.notFound);
 
     final future = sut.save(answer: answer);
 
@@ -110,7 +80,7 @@ void main() {
   });
 
   test('8 - Should throw UnexpectedError if HttpClient returns 500', () async {
-    mockRequestError(HttpError.serverError);
+    httpClient.mockRequestError(HttpError.serverError);
 
     final future = sut.save(answer: answer);
 
