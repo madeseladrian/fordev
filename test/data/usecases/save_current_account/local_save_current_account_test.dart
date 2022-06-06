@@ -5,36 +5,29 @@ import 'package:test/test.dart';
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
 
-import 'package:fordev/data/cache/cache.dart';
 import 'package:fordev/data/usecases/usecases.dart';
-
-class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {}
+import '../../mocks/mocks.dart';
 
 void main() {
-  late SaveSecureCacheStorageSpy saveSecureCacheStorage;
   late LocalSaveCurrentAccount sut;
+  late SecureCacheStorageSpy secureCacheStorage;
   late AccountEntity account;
 
-  When mockSaveCall() => when(() => saveSecureCacheStorage.save(key: any(named: 'key'), value: any(named: 'value')));
-  void mockSave() => mockSaveCall().thenAnswer((_) async => _);
-  void mockSaveError() => mockSaveCall().thenThrow(Exception());
-
   setUp(() {
-    saveSecureCacheStorage = SaveSecureCacheStorageSpy();
-    sut = LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
+    secureCacheStorage = SecureCacheStorageSpy();
     account = AccountEntity(token: faker.guid.guid());
-    mockSave();
+    sut = LocalSaveCurrentAccount(saveSecureCacheStorage: secureCacheStorage);
   });
 
   test('1 - Should call SaveSecureCacheStorage with correct values', () async {
     await sut.save(account);
-    verify(() => saveSecureCacheStorage.save(
+    verify(() => secureCacheStorage.save(
       key: 'token', value: account.token
     ));
   });
 
   test('2 - Should throw UnexpectedError if SaveSecureCacheStorage throws', () async {
-    mockSaveError();
+    secureCacheStorage.mockSaveError();
     final future = sut.save(account);
     expect(future, throwsA(DomainError.unexpected));
   });
