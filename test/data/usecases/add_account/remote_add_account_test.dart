@@ -8,7 +8,7 @@ import 'package:fordev/domain/params/params.dart';
 import 'package:fordev/data/http/http.dart';
 import 'package:fordev/data/usecases/usecases.dart';
 
-class HttpClientSpy extends Mock implements HttpClient {}
+import '../../mocks/mocks.dart';
 
 void main() {
   late String url;
@@ -16,15 +16,6 @@ void main() {
   late RemoteAddAccount sut;
   late Map apiResult;
   late AddAccountParams params;
-
-  When mockRequestCall() => when(() => httpClient.request(
-    url: any(named: 'url'),
-    method: any(named: 'method'),
-    body: any(named: 'body')
-  ));
-  void mockRequest(dynamic data) => 
-    mockRequestCall().thenAnswer((_) async => data);
-  void mockError(HttpError error) => mockRequestCall().thenThrow(error);
 
   setUp(() {
     params = AddAccountParams(
@@ -36,7 +27,7 @@ void main() {
     apiResult = {"accessToken": faker.guid.guid()};
     url = faker.internet.httpUrl();
     httpClient = HttpClientSpy();
-    mockRequest(apiResult);
+    httpClient.mockRequest(apiResult);
     sut = RemoteAddAccount(url: url, httpClient: httpClient);
   });
  
@@ -60,31 +51,31 @@ void main() {
   });
 
   test('5 - Should throw UnexpectedError if HttpClient returns 400', () async {
-    mockError(HttpError.badRequest);
+    httpClient.mockRequestError(HttpError.badRequest);
     final future = sut.add(params);
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('6 - Should throw UnexpectedError if HttpClient returns 404', () async {
-    mockError(HttpError.notFound);
+    httpClient.mockRequestError(HttpError.notFound);
     final future = sut.add(params);
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('7 - Should throw UnexpectedError if HttpClient returns 500', () async {
-    mockError(HttpError.serverError);
+    httpClient.mockRequestError(HttpError.serverError);
     final future = sut.add(params);
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('8 - Should throw InvalidCredentialsError if HttpClient returns 403', () async {
-    mockError(HttpError.forbidden);
+    httpClient.mockRequestError(HttpError.forbidden);
     final future = sut.add(params);
     expect(future, throwsA(DomainError.emailInUse));
   });
 
   test('9 - Should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {
-    mockRequest({'invalid_key': 'invalid_value'});
+    httpClient.mockRequest({'invalid_key': 'invalid_value'});
     final future = sut.add(params);
     expect(future, throwsA(DomainError.unexpected));
   });
