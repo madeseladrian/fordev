@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -9,59 +7,24 @@ import 'package:network_image_mock/network_image_mock.dart';
 import 'package:fordev/ui/helpers/helpers.dart';
 import 'package:fordev/ui/pages/pages.dart';
 
-class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
+import '../helpers/helpers.dart';
+import '../mocks/mocks.dart';
 
 void main() {
   late SurveyResultPresenterSpy presenter;
-  late StreamController<SurveyResultViewModel?> surveyResultController;
-  late StreamController<bool> isSessionExpiredController;
-
-  SurveyResultViewModel makeSurveyResult() => const SurveyResultViewModel(
-    surveyId: 'Any id',
-    question: 'Question',
-    answers: [
-      SurveyAnswerViewModel(
-        image: 'Image 0',
-        answer: 'Answer 0',
-        isCurrentAnswer: true,
-        percent: '60%'
-      ),
-      SurveyAnswerViewModel(
-        answer: 'Answer 1',
-        isCurrentAnswer: false,
-        percent: '40%'
-      )
-    ]
-  );
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SurveyResultPresenterSpy();
-    surveyResultController = StreamController<SurveyResultViewModel?>();
-    isSessionExpiredController = StreamController<bool>();
-
-    when(() => presenter.save(answer: any(named: 'answer'))).thenAnswer((_) async => _);
-    when(() => presenter.loadData()).thenAnswer((_) async => _);
-    when(() => presenter.surveyResultStream).thenAnswer((_) => surveyResultController.stream);
-    when(() => presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
-
-    final surveyResultPage = GetMaterialApp(
-      initialRoute: '/survey_result/any_survey_id',
-      getPages: [
-        GetPage(
-          name: '/survey_result/any_survey_id',
-          page: () => SurveyResultPage(presenter: presenter),
-        ),
-        GetPage(name: '/login', page: () => const Scaffold(body: Text('fake login')))
-      ],
-    );
     await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(surveyResultPage);
+      await tester.pumpWidget(makePage(
+        path: '/survey_result/any_survey_id', 
+        page: () => SurveyResultPage(presenter: presenter)
+      ));
     });
   }
 
   tearDown(() {
-    surveyResultController.close();
-    isSessionExpiredController.close();
+    presenter.dispose();
   });
 
   testWidgets('1 - Should call LoadSurveyResult on page load', (WidgetTester tester) async {
@@ -76,12 +39,12 @@ void main() {
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    surveyResultController.addError(UIError.unexpected.description);
+    presenter.emitSurveyResultError(UIError.unexpected.description);
     await tester.pump();
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
-    surveyResultController.add(makeSurveyResult());
+    presenter.emitSurveyResult(ViewModelFactory.makeSurveyResult());
     await mockNetworkImagesFor(() async {
       await tester.pump();
     });
@@ -92,7 +55,7 @@ void main() {
   testWidgets('4 - Should present error if surveyResultStream fails', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.addError(UIError.unexpected.description);
+    presenter.emitSurveyResultError(UIError.unexpected.description);
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
@@ -102,7 +65,7 @@ void main() {
   testWidgets('5 - Should call LoadSurveyResult on reload button click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.addError(UIError.unexpected.description);
+    presenter.emitSurveyResultError(UIError.unexpected.description);
     await tester.pump();
     await tester.tap(find.text('Recarregar'));
 
@@ -112,7 +75,7 @@ void main() {
   testWidgets('6,7,8,9,10,11,12,13 - Should present valid data if surveyResultStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    presenter.emitSurveyResult(ViewModelFactory.makeSurveyResult());
     await mockNetworkImagesFor(() async {
       await tester.pump();
     });
@@ -133,7 +96,7 @@ void main() {
   testWidgets('14 - Should logout', (WidgetTester tester) async {
     await loadPage(tester);
 
-    isSessionExpiredController.add(true);
+    presenter.emitSessionExpired();
     await tester.pumpAndSettle();
     expect(Get.currentRoute, '/login');
     expect(find.text('fake login'), findsOneWidget);
@@ -142,7 +105,7 @@ void main() {
   testWidgets('15 - Should not logout', (WidgetTester tester) async {
     await loadPage(tester);
 
-    isSessionExpiredController.add(false);
+    presenter.emitSessionExpired(false);
     await tester.pump();
     expect(Get.currentRoute, '/survey_result/any_survey_id');
   });
@@ -150,7 +113,7 @@ void main() {
   testWidgets('16 - Should call save on list item click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    presenter.emitSurveyResult(ViewModelFactory.makeSurveyResult());
     await mockNetworkImagesFor(() async {
       await tester.pump();
     });
@@ -162,7 +125,7 @@ void main() {
   testWidgets('17 - Should not call save on current answer click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    presenter.emitSurveyResult(ViewModelFactory.makeSurveyResult());
     await mockNetworkImagesFor(() async {
       await tester.pump();
     });
