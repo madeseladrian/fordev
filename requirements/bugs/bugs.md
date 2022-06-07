@@ -5,5 +5,8 @@
 2. ✅ Como fazer um teste para testar cor. Teste faltando em surveys_page.md
 3. ✅ Descobrir como eliminar o StaceTrack no GextSurveysPresenter
 4. ✅ O isLoadingStream não funciona dentro de SurveysPage
-5. ⏰ Quando a tela de SurveysPage está sem internet, ela não carrega os dados do cache, é precisa clicar no botão para recarregar a tela
-6. ⏰ Substituir o Provider pelo GetX
+5. ✅ Mudar a foto do model das classes de SurveysPage
+6. ⏰ Mudar a foto do model das classes de SurveyResultPage
+7. ⏰ Quando a tela de SurveysPage está sem internet, ela não carrega os dados do cache, é precisa clicar no botão para recarregar a tela
+8. ⏰ Quando a tela de SurveyResultPage está sem internet, ela não carrega os dados do cache, é precisa clicar no botão para recarregar a tela
+9. ⏰ Substituir o Provider pelo GetX
