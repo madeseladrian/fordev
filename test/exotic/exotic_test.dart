@@ -138,6 +138,19 @@ class CarrouselWidgetTest extends StatelessWidget {
     );
   }
 }
+ 
+class GestureExample extends StatelessWidget {
+  const GestureExample({ Key? key }) : super(key: key);
+ 
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      key: const Key('keyboard'),
+      onTap: null,
+      child: const Center(child: Text('Mades')),
+    );
+  }
+}
 
 Widget makeTestable(Widget widget) => MaterialApp(home: widget);
 
@@ -181,5 +194,12 @@ void main() {
     final decoration = container.decoration as BoxDecoration;
     final color = decoration.color as Color;
     expect(color, Colors.red);
+  });
+
+  testWidgets('GestureExample on tap expect null', (WidgetTester tester) async {
+    await tester.pumpWidget(makeTestable(const GestureExample()));
+
+    final gesture = tester.widget<GestureDetector>(find.byKey(const Key('keyboard')));
+    expect(gesture.onTap, isNull);
   });
 }

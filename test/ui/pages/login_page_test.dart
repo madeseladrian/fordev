@@ -169,9 +169,18 @@ void main() {
 
   testWidgets('16 - Should present error message if authentication fails', (WidgetTester tester) async {
     await loadPage(tester);
-
-    presenter.emitMainError(UIError.invalidCredentials);
+    
+    await tester.showKeyboard(find.byKey(const Key('password-input-login')));
     await tester.pump();
+    final gestureDetector = find.byKey(const Key('keyboard-dismiss'));
+    await tester.tap(gestureDetector);
+    await tester.pump();
+    final button = find.byType(ElevatedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+    presenter.emitMainError(UIError.invalidCredentials);
+    await tester.pumpAndSettle();
 
     expect(find.text('Credenciais inválidas.'), findsOneWidget);
   });
@@ -179,9 +188,18 @@ void main() {
   testWidgets('17 - Should present error message if authentication throws', (WidgetTester tester) async {
     await loadPage(tester);
 
+    await tester.showKeyboard(find.byKey(const Key('password-input-login')));
+    await tester.pump();
+    final gestureDetector = find.byKey(const Key('keyboard-dismiss'));
+    await tester.tap(gestureDetector);
+    await tester.pump();
+    final button = find.byType(ElevatedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
     presenter.emitMainError(UIError.unexpected);
     await tester.pump();
-
+    
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
   });
   

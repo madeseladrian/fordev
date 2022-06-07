@@ -16,14 +16,15 @@ class PasswordInput extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 32),
           child: TextFormField(
-          decoration: InputDecoration(
-            labelText: R.string.password,
-            icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
-            errorText: snapshot.data?.description
+            key: const Key('password-input-login'),
+            decoration: InputDecoration(
+              labelText: R.string.password,
+              icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
+              errorText: snapshot.data?.description
+            ),
+            obscureText: true,
+            onChanged: presenter.validatePassword,
           ),
-          obscureText: true,
-          onChanged: presenter.validatePassword,
-        ),
         );
       }
     );
