@@ -42,11 +42,11 @@ with SessionManager implements SurveyResultPresenter {
     try {
       final surveyResult = await action();
       _surveyResult.subject.add(surveyResult.toViewModel());
-    } on DomainError catch(error) {
+    } on DomainError catch(error, stackTrace) {
       if (error == DomainError.accessDenied) {
         isSessionExpired = true;
       } else {
-        _surveyResult.subject.addError(UIError.unexpected.description);
+        _surveyResult.subject.addError(UIError.unexpected.description, stackTrace);
       }
     }
   }

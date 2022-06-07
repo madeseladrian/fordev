@@ -31,11 +31,11 @@ implements SurveysPresenter {
         date: DateFormat('dd MMM yyyy').format(survey.dateTime),
         didAnswer: survey.didAnswer)
       ).toList();
-    } on DomainError catch (error, staceTrack) {
+    } on DomainError catch (error, stackTrace) {
       if (error == DomainError.accessDenied) {
         isSessionExpired = true;
       } else {
-        _surveys.subject.addError(UIError.unexpected.description, staceTrack);
+        _surveys.subject.addError(UIError.unexpected.description, stackTrace);
       }
     }
   }

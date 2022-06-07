@@ -42,8 +42,8 @@ void main() {
   test('5 - Should emit correct events on failure', () async {
     loadSurveys.mockLoadError(DomainError.unexpected);
 
-    sut.surveysStream.listen(null, onError: expectAsync2((error, staceTrack) => 
-      staceTrack != null ? expect(error, UIError.unexpected.description) : null));
+    sut.surveysStream.listen(null, onError: expectAsync2((error, stackTrace) => 
+      stackTrace != null ? expect(error, UIError.unexpected.description) : null));
 
     await sut.loadData();
   });

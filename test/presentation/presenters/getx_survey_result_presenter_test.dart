@@ -57,10 +57,8 @@ void main() {
     test('5 - Should emit correct events on failure', () async {
       loadSurveyResult.mockLoadError(DomainError.unexpected);
 
-      //expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-      sut.surveyResultStream.listen(null, onError: expectAsync1((error) => 
-        expect(error, UIError.unexpected.description)
-      ));
+      sut.surveyResultStream.listen(null, onError: expectAsync2((error, stackTrace) => 
+        stackTrace != null ? expect(error, UIError.unexpected.description) : null));
 
       await sut.loadData();
     });
@@ -68,7 +66,6 @@ void main() {
     test('6 - Should emit correct events on access denied', () async {
       loadSurveyResult.mockLoadError(DomainError.accessDenied);
 
-      //expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
       expectLater(sut.isSessionExpiredStream, emits(true));
 
       await sut.loadData();
@@ -83,7 +80,6 @@ void main() {
     });
 
     test('8,9,10 - Should emit correct events on success', () async {
-      //expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
       expectLater(sut.surveyResultStream, emitsInOrder([
         ApiPresenter.mapToViewModel(loadResult),
         ApiPresenter.mapToViewModel(saveResult),
@@ -96,8 +92,8 @@ void main() {
     test('11 - Should emit correct events on failure', () async {
       saveSurveyResult.mockSaveError(DomainError.unexpected);
 
-      //expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-      sut.surveyResultStream.listen(null, onError: expectAsync1((error) => expect(error, UIError.unexpected.description)));
+      sut.surveyResultStream.listen(null, onError: expectAsync2((error, stackTrace) => 
+        stackTrace != null ? expect(error, UIError.unexpected.description) : null));
 
       await sut.save(answer: answer);
     });
@@ -105,7 +101,6 @@ void main() {
     test('12 - Should emit correct events on access denied', () async {
       saveSurveyResult.mockSaveError(DomainError.accessDenied);
 
-      //expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
       expectLater(sut.isSessionExpiredStream, emits(true));
 
       await sut.save(answer: answer);
