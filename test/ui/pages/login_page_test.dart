@@ -172,7 +172,7 @@ void main() {
     
     await tester.showKeyboard(find.byKey(const Key('password-input-login')));
     await tester.pump();
-    final gestureDetector = find.byKey(const Key('keyboard-dismiss'));
+    final gestureDetector = find.byKey(const Key('keyboard-dismiss-login'));
     await tester.tap(gestureDetector);
     await tester.pump();
     final button = find.byType(ElevatedButton);
@@ -190,7 +190,7 @@ void main() {
 
     await tester.showKeyboard(find.byKey(const Key('password-input-login')));
     await tester.pump();
-    final gestureDetector = find.byKey(const Key('keyboard-dismiss'));
+    final gestureDetector = find.byKey(const Key('keyboard-dismiss-login'));
     await tester.tap(gestureDetector);
     await tester.pump();
     final button = find.byType(ElevatedButton);
@@ -199,7 +199,7 @@ void main() {
     await tester.pump();
     presenter.emitMainError(UIError.unexpected);
     await tester.pump();
-    
+
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
   });
   

@@ -31,7 +31,7 @@ implements SurveysPresenter {
         date: DateFormat('dd MMM yyyy').format(survey.dateTime),
         didAnswer: survey.didAnswer)
       ).toList();
-    } on DomainError catch(error) {
+    } on DomainError catch (error) {
       if (error == DomainError.accessDenied) {
         isSessionExpired = true;
       } else {

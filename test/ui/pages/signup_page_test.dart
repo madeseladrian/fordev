@@ -250,6 +250,15 @@ void main() {
   testWidgets('25 - Should present error message if add account fails', (WidgetTester tester) async {
     await loadPage(tester);
 
+    await tester.showKeyboard(find.byKey(const Key('passwordConfirmation-input-signup')));
+    await tester.pump();
+    final gestureDetector = find.byKey(const Key('keyboard-dismiss-signup'));
+    await tester.tap(gestureDetector);
+    await tester.pump();
+    final button = find.byType(ElevatedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
     presenter.emitMainError(UIError.invalidCredentials);
     await tester.pump();
 
@@ -259,10 +268,19 @@ void main() {
   testWidgets('26 - Should present error message if add account throws', (WidgetTester tester) async {
     await loadPage(tester);
 
-    presenter.emitMainError(UIError.unexpected);
+    await tester.showKeyboard(find.byKey(const Key('passwordConfirmation-input-signup')));
+    await tester.pump();
+    final gestureDetector = find.byKey(const Key('keyboard-dismiss-signup'));
+    await tester.tap(gestureDetector);
+    await tester.pump();
+    final button = find.byType(ElevatedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+    presenter.emitMainError(UIError.emailInUse);
     await tester.pump();
 
-    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+    expect(find.text('O email já está em uso.'), findsOneWidget);
   });
   
   testWidgets('27 - Should change page', (WidgetTester tester) async {

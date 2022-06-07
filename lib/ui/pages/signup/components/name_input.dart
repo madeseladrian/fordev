@@ -14,6 +14,7 @@ class NameInput extends StatelessWidget {
       stream: presenter.nameErrorStream,
       builder: (context, snapshot) {
         return TextFormField(
+          key: const Key('name-input-signup'),
           decoration: InputDecoration(
             labelText: R.string.name,
             icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),

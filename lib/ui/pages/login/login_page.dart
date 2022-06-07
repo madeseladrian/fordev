@@ -32,7 +32,7 @@ with KeyboardManager, LoadingManager, UIErrorManager, NavigationManager {
           return Builder(
             builder: (context) {
               return GestureDetector(
-                key: const Key('keyboard-dismiss'),
+                key: const Key('keyboard-dismiss-login'),
                 onTap: () => hideKeyboard(context),
                 child: SingleChildScrollView(
                   child: Column(

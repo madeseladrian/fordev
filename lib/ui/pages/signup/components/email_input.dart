@@ -14,6 +14,7 @@ class EmailInput extends StatelessWidget {
       stream: presenter.emailErrorStream,
       builder: (context, snapshot) {
         return TextFormField(
+          key: const Key('email-input-signup'),
           decoration: InputDecoration(
             labelText: R.string.email,
             icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),

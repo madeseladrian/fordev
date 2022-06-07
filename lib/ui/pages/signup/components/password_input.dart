@@ -14,6 +14,7 @@ class PasswordInput extends StatelessWidget {
       stream: presenter.passwordErrorStream,
       builder: (context, snapshot) {
         return TextFormField(
+          key: const Key('password-input-signup'),
           decoration: InputDecoration(
             labelText: R.string.password,
             icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),

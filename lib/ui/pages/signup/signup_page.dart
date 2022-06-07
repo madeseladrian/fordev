@@ -22,45 +22,50 @@ with KeyboardManager, LoadingManager, UIErrorManager, NavigationManager {
           handleMainError(context, presenter.mainErrorStream);
           handleNavigation(presenter.navigateToStream, clear: true);
           
-          return GestureDetector(
-            onTap: () => hideKeyboard(context),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const LoginHeader(),
-                  Headline1(text: R.string.addAccount.toUpperCase(),),
-                  Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: ListenableProvider(
-                      create: (_) => presenter,
-                      child: Form(
-                        child: Column(
-                          children: [
-                            const NameInput(),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: EmailInput(),
+          return Builder(
+            builder: (context) {
+              return GestureDetector(
+                key: const Key('keyboard-dismiss-signup'),
+                onTap: () => hideKeyboard(context),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const LoginHeader(),
+                      Headline1(text: R.string.addAccount.toUpperCase(),),
+                      Padding(
+                        padding: const EdgeInsets.all(32),
+                        child: ListenableProvider(
+                          create: (_) => presenter,
+                          child: Form(
+                            child: Column(
+                              children: [
+                                const NameInput(),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: EmailInput(),
+                                ),
+                                const PasswordInput(),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 8, bottom: 32),
+                                  child: PasswordConfirmationInput(),
+                                ),
+                                const SignUpButton(),
+                                TextButton.icon(
+                                  onPressed: presenter.goToLogin,
+                                  icon: const Icon(Icons.exit_to_app),
+                                  label: Text(R.string.login)
+                                )
+                              ],
                             ),
-                            const PasswordInput(),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 8, bottom: 32),
-                              child: PasswordConfirmationInput(),
-                            ),
-                            const SignUpButton(),
-                            TextButton.icon(
-                              onPressed: presenter.goToLogin,
-                              icon: const Icon(Icons.exit_to_app),
-                              label: Text(R.string.login)
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  )
-                ],
-              ),
-            ),
+                          ),
+                        )
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
           );
         },
       ),
