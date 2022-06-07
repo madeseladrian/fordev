@@ -10,7 +10,7 @@ class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
 
   RemoteLoadSurveyResultWithLocalFallback({
     required this.remote,
-    required this.local,
+    required this.local
   });
 
   @override

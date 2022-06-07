@@ -16,11 +16,12 @@ class SurveysPage extends StatefulWidget {
   State<SurveysPage> createState() => _SurveysPageState();
 }
 
-class _SurveysPageState extends State<SurveysPage> with NavigationManager, SessionManager, RouteAware {
+class _SurveysPageState extends State<SurveysPage> 
+with NavigationManager, SessionManager, RouteAware {
   @override
   Widget build(BuildContext context) {
     Get.find<RouteObserver>().subscribe(this, ModalRoute.of(context) as PageRoute);
-    
+
     return Scaffold(
       appBar: AppBar(title: Text(R.string.surveys), centerTitle: true),
       body: Builder(
@@ -58,7 +59,7 @@ class _SurveysPageState extends State<SurveysPage> with NavigationManager, Sessi
   void didPopNext() {
     widget.presenter.loadData();
   }
-
+  
   @override
   void dispose() {
     Get.find<RouteObserver>().unsubscribe(this);

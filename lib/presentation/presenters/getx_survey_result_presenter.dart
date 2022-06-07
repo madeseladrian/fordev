@@ -34,7 +34,7 @@ with SessionManager implements SurveyResultPresenter {
   }
 
   @override
-  Future<void> save({ required String answer }) async {
+  Future<void> save({required String answer}) async {
     showResultOnAction(() => saveSurveyResult.save(answer: answer));
   }
 
