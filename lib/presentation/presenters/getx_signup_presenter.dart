@@ -113,11 +113,11 @@ implements SignUpPresenter {
       await saveCurrentAccount.save(accountEntity);
       navigateTo = '/surveys';
     } on DomainError catch (error) {
+      isLoading = false;
       switch (error) {
         case DomainError.emailInUse: mainError = UIError.emailInUse; break;
         default: mainError = UIError.unexpected; break;
       }
-      isLoading = false;
     }
   }
 

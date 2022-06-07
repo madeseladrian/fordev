@@ -9,7 +9,6 @@ class HttpAdapter implements HttpClient {
 
   HttpAdapter({required this.client});
 
-
   @override
   Future<dynamic> request({ required String url, required String method, Map? body, Map? headers }) async {
     final defaultHeaders = headers?.cast<String, String>() ?? {}..addAll({
