@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../../../helpers/helpers.dart';
 import '../signup_presenter.dart';
@@ -9,7 +9,7 @@ class PasswordConfirmationInput extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<SignUpPresenter>(context);
+    final presenter = Get.find<SignUpPresenter>();
     return StreamBuilder<UIError?>(
       stream: presenter.passwordConfirmationErrorStream,
       builder: (context, snapshot) {

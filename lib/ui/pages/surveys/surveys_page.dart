@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
@@ -20,6 +19,7 @@ class _SurveysPageState extends State<SurveysPage>
 with NavigationManager, SessionManager, RouteAware {
   @override
   Widget build(BuildContext context) {
+    Get.put(widget.presenter);
     Get.find<RouteObserver>().subscribe(this, ModalRoute.of(context) as PageRoute);
 
     return Scaffold(
@@ -40,10 +40,7 @@ with NavigationManager, SessionManager, RouteAware {
                 );
               }
               if (snapshot.hasData) {
-                return ListenableProvider(
-                  create: (_) => widget.presenter,
-                  child: SurveyItems(viewModels: snapshot.data)
-                );
+                return SurveyItems(viewModels: snapshot.data);
               }
               return const Center(
                 child: CircularProgressIndicator(),

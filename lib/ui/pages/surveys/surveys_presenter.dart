@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'survey_view_model.dart';
 
-abstract class SurveysPresenter implements Listenable {
+abstract class SurveysPresenter {
   Stream<bool> get isSessionExpiredStream;
   Stream<List<SurveyViewModel>> get surveysStream;
   Stream<String?> get navigateToStream;

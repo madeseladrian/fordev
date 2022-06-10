@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../surveys.dart';
 
@@ -10,7 +10,7 @@ class SurveyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<SurveysPresenter>(context);
+    final presenter = Get.find<SurveysPresenter>();
     return GestureDetector(
       onTap: () => presenter.goToSurveyResult(viewModel.id),
       child: Container(
