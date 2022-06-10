@@ -26,7 +26,8 @@ void main() {
   });
   
   test('4 - Should return error if email is invalid', () async {
-    final error = sut.validate({'any_field': 'madesgmail.com'});
-    expect(error, ValidationError.invalidField);
+    expect(sut.validate({'any_field': 'madesgmail.com'}), ValidationError.invalidField);
+
+    //expect(sut.validate({'any_field': 'Mades@gmail.com'}), ValidationError.invalidField);
   });
 }
